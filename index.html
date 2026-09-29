@@ -10,15 +10,54 @@
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
-html, body, #map {
-    margin: 0;
-    width: 100%;
-    height: 100%;
+html, body {
+margin: 0;
+height: 100%;
+}
+body {
+display: flex;
+}
+#sidebar {
+width: 300px;
+background: #f5f5f5;
+padding: 15px;
+border-right: 1px solid #ddd;
+font-family: Arial, sans-serif;
+}
+#map {
+flex: 1;
+height: 100vh;
+}
+input,
+select {
+width: 100%;
+margin-bottom: 10px;
+padding: 5px;
 }
 </style>
 
 </head>
 <body>
+
+<div id="sidebar">
+
+<h2>PATPEN</h2>
+
+<label>Recherche</label>
+<input type="text">
+
+<label>Catégorie</label>
+
+<select>
+<option>Toutes</option>
+<option>Puits</option>
+<option>Lavoir</option>
+<option>Fontaine</option>
+<option>Croix</option>
+<option>Four à pain</option>
+</select>
+
+</div>
 
 <div id="map"></div>
 
