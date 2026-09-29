@@ -4,15 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>PATPEN</title>
+<title>PATPEN - Carte</title>
 
 <link rel="stylesheet"
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
+
 html,body{
     margin:0;
-    padding:0;
     height:100%;
 }
 
@@ -20,9 +20,11 @@ html,body{
     width:100%;
     height:100vh;
 }
+
 </style>
 
 </head>
+
 <body>
 
 <div id="map"></div>
@@ -31,7 +33,7 @@ html,body{
 
 <script>
 
-const map = L.map'map').setView(
+const ap = L.map('map').setView(
     [47.482,-2.475],
     13
 );
@@ -47,7 +49,9 @@ L.marker(
     [47.482,-2.475]
 )
 .addTo(map)
-.bindPopup('PATPEN - Pénestin');
+.bindPopup(
+    '<b>PATPEN</b><br>Patrimoine & Mémoire de Pénestin'
+);
 
 </script>
 
