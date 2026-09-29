@@ -4,57 +4,95 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>PATPEN</title>
+<title>PATPEN - Patrimoine & Mémoire de Pénestin</title>
 
 <link rel="stylesheet"
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
-html, body {
-margin: 0;
-height: 100%;
+
+html,
+body{
+    margin:0;
+    height:100%;
 }
-body {
-display: flex;
+
+body{
+    display:flex;
 }
-#sidebar {
-width: 300px;
-background: #f5f5f5;
-padding: 15px;
-border-right: 1px solid #ddd;
-font-family: Arial, sans-serif;
+
+#sidebar{
+    width:300px;
+    min-width:300px;
+    background:#f5f5f5;
+    border-right:1px solid #ddd;
+    padding:15px;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
 }
-#map {
-flex: 1;
-height: 100vh;
+
+#sidebar h2{
+    margin-top:0;
 }
-input,
-select {
-width: 100%;
-margin-bottom: 10px;
-padding: 5px;
+
+#sidebar input,
+#sidebar select{
+    width:100%;
+    padding:8px;
+    margin-bottom:12px;
+    box-sizing:border-box;
 }
+
+#map{
+    flex:1;
+    height:100vh;
+}
+
 </style>
 
 </head>
+
 <body>
 
 <div id="sidebar">
 
 <h2>PATPEN</h2>
 
-<label>Recherche</label>
-<input type="text">
+<label for="search">Recherche</label>
+<input
+id="search"
+type="text"
+placeholder="Nom du lieu..."
+>
 
-<label>Catégorie</label>
+<label for="categorie">Catégorie</label>
 
-<select>
-<option>Toutes</option>
-<option>Puits</option>
-<option>Lavoir</option>
-<option>Fontaine</option>
-<option>Croix</option>
-<option>Four à pain</option>
+<select id="categorie">
+
+<option value="">
+Toutes
+</option>
+
+<option value="Puits">
+Puits
+</option>
+
+<option value="Lavoir">
+Lavoir
+</option>
+
+<option value="Fontaine">
+Fontaine
+</option>
+
+<option value="Croix">
+Croix
+</option>
+
+<option value="Four à pain">
+Four à pain
+</option>
+
 </select>
 
 </div>
@@ -65,47 +103,34 @@ padding: 5px;
 
 <script>
 
-// création de la carte
+// Carte centrée sur Pénestin
+
 const map = L.map('map').setView(
     [47.482, -2.475],
     13
 );
 
-// fond OpenStreetMap
+// Fond OpenStreetMap
+
 L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {
-        maxZoom: 19,
-        attribution: '&copy; OpenStreetMap'
+        maxZoom:19,
+        attribution:'© OpenStreetMap'
     }
 ).addTo(map);
 
-// marqueur de test
+// Marqueur de test
+
 L.marker(
     [47.482, -2.475]
 )
 .addTo(map)
 .bindPopup(
-    'PATPEN - Pénestin'
+    '<b>PATPEN</b><br>Patrimoine & Mémoire de Pénestin'
 );
 
 </script>
 
-<body>
-<div id="sidebar">
-<h2>PATPEN</h2>
-<label>Recherche</label>
-<input id="search">
-<label>Catégorie</label>
-<select id="categorie">
-<option>Toutes</option>
-<option>Puits</option>
-<option>Lavoir</option>
-<option>Fontaine</option>
-<option>Croix</option>
-<option>Four à pain</option>
-</select>
-</div>
-<div id="map"></div>
 </body>
 </html>
