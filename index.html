@@ -1,103 +1,56 @@
 <!DOCTYPE html>
-2
-<html>
-3
+<html lang="fr">
+
 <head>
-4
- 
-5
 <meta charset="utf-8">
-6
- 
-7
+
 <title>PATPEN</title>
-8
- 
-9
+
 <link rel="stylesheet"
-10
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-11
- 
-12
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
 <style>
-13
-html,body,#map{
-14
-margin:0;
-15
-width:100%;
-16
-height:100%;
-17
+html,
+body,
+#map {
+    height: 100%;
+    margin: 0;
 }
-18
 </style>
-19
- 
-20
+
 </head>
-21
- 
-22
+
 <body>
-23
- 
-24
+
 <div id="map"></div>
-25
- 
-26
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/script>
-27
- 
-28
-<script>
-29
- 
-30
-var map = L.map('map').setView(
-31
-[47.482,-2.475],
-32
-13
-33
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script
+
+var map = L.map('map');
+
+map.setView(
+    [47.482, -2.475],
+    13
 );
-34
- 
-35
-L.tileLayer(
-36
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-37
-{
-38
-maxZoom: 19,
-39
-attribution: '&copy; OpenStreetMap'
-40
-}
-41
-).addTo(map);
-42
- 
-43
-L.marker(
-44
-[47.482,-2.475]
-45
-)
-46
-.addTo(map)
-47
-.bindPopup('PATPEN - Pénestin');
-48
- 
-49
+
+var fond = L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        attribution: '© OpenStreetMap'
+    }
+);
+
+fond.addTo(map);
+
+var marqueur = L.marker(
+    [47.482, -2.475]
+);
+
+marqueur.addTo(map);
+
 </script>
-50
- 
-51
+
 </body>
-52
 </html>
