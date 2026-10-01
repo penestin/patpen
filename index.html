@@ -1,1 +1,240 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>PATPEN</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<style>
+html, body {
+    margin:0;
+    height:100%;
+}
+
+body{
+    display:flex;
+}
+
+#sidebar{
+    width:320px;
+    background:#f5f5f5;
+    border-right:1px solid #ddd;
+    padding:15px;
+    box-sizing:border-box;
+    overflow:auto;
+    font-family:Arial,sans-serif;
+}
+
+#map{
+    flex:1;
+    height:100vh;
+}
+
+input,select{
+    width:100%;
+    padding:8px;
+    margin-bottom:10px;
+}
+
+#log{
+    font-size:12px;
+}
+
+.photo-popup{
+    width:100%;
+    max-height:200px;
+    object-fit:cover;
+}
+</style>
+
+</head>
+
+<body>
+
+<div id="sidebar">
+
+<h2>PATPEN</h2>
+
+<label>Recherche</label>
+<input id="search" type="text">
+
+<label>Catégorie</label>
+
+<select id="categorie">
+<option value="">Toutes</option>
+<option value="Puits">Puits</option>
+<option value="Lavoir">Lavoir</option>
+<option value="Fontaine">Fontaine</option>
+<option value="Croix">Croix</option>
+<option value="Four à pain">Four à pain</option>
+</select>
+
+<div id="nbResultats"></div>
+
+<hr>
+
+<h3>Journal</h3>
+
+<div id="log">
+Chargement...
+</div>
+
+</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<script>
+
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQxz-pZWXUmcWB99nJPRKGJ2wxbYbBB4Y4Lq16nOEBtKm5peTr1ThCHfuHWvPJ5v1ScgZ7w0N9uqP-J/pub?gid=1723096786&single=true&output=csv";
+
+const map = L.map('map').setView(
+    [47.482,-2.475],
+    12
+);
+
+L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{
+    attribution:'© OpenStreetMap',
+    maxZoom:19
+}
+).addTo(map);
+
+function photoDrive(url){
+
+    if(!url) return "";
+
+    const match = url.match(/id=([^&]+)/);
+
+    if(match){
+        return "https://drive.google.com/thumbnail?id="
+            + match[1]
+            + "&sz=w800";
+    }
+
+    return "";
+}
+
+const markers = [];
+
+Papa.parse(CSV_URL, {
+
+    download:true,
+
+    header:true,
+
+    skipEmptyLines:true,
+
+    complete:function(results){
+
+        let nb = 0;
+
+        results.data.forEach(function(fiche){
+
+            const statut =
+            (fiche["Statut"] || "")
+            .trim()
+            .toLowerCase();
+
+            const afficher =
+            (fiche["Afficher carte"] || "")
+            .trim()
+            .toLowerCase();
+
+            if(statut !== "validé") return;
+            if(afficher !== "oui") return;
+
+            const lat =
+            parseFloat(
+            fiche["Latitude"]
+            );
+
+            const lng =
+            parseFloat(
+            fiche["Longitude"]
+            );
+
+            if(isNaN(lat) || isNaN(lng))
+                return;
+
+            const photo =
+            photoDrive(
+            fiche["Photos"] || ""
+            );
+
+            const marker =
+            L.circleMarker(
+                [lat,lng],
+                {
+                    radius:8,
+                    color:"brown",
+                    fillOpacity:1
+                }
+            ).addTo(map);
+
+            marker.fiche = fiche;
+
+            marker.bindPopup(
+            `
+            <div style="width:280px">
+
+            <h3>${fiche["Nom du lieu"]}</h3>
+
+            ${
+            photo
+            ?
+            `<img src="${photo}" class="photo-popup">`
+            :
+            ""
+            }
+
+            <b>Catégorie :</b>
+            ${fiche["Catégorie"]}
+
+            <br>
+
+            <b>Secteur :</b>
+            ${fiche["Secteur"]}
+
+            <br><br>
+
+            ${fiche["Description"]}
+
+            </div>
+            `
+            );
+
+            markers.push(marker);
+            nb++;
+
+        });
+
+        document
+        .getElementById("nbResultats")
+        .innerHTML =
+        "<b>" + nb +
+        "</b> élément(s)";
+
+        document
+        .getElementById("log")
+        .innerHTML =
+        "✅ CSV chargé";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
