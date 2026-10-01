@@ -4,22 +4,199 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>PATPEN TEST</title>
+<title>PATPEN</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
+html,body{
+    margin:0;
+    height:100%;
+}
+
 body{
+    display:flex;
+}
+
+#sidebar{
+    width:320px;
+    background:#f5f5f5;
+    border-right:1px solid #ddd;
+    padding:15px;
+    overflow:auto;
     font-family:Arial,sans-serif;
-    margin:30px;
+}
+
+#map{
+    flex:1;
+    height:100vh;
+}
+
+.photo-popup{
+    width:100%;
+    max-height:220px;
+    object-fit:cover;
 }
 </style>
 
 </head>
-
 <body>
 
-<h1>PATPEN TEST</h1>
+<div id="sidebar">
+<h1>PATPEN</h1>
+<div id="nbResultats">Chargement...</div>
+<div id="log"></div>
+</div>
 
-<p>Le fichier HTML fonctionne correctement.</p>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<script>
+
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQxz-pZWXUmcWB99nJPRKGJ2wxbYbBB4Y4Lq16nOEBtKm5peTr1ThCHfuHWvPJ5v1ScgZ7w0N9uqP-J/pub?gid=1723096786&single=true&output=csv";
+
+const map = L.map("map").setView(
+[47.482,-2.475],
+12
+);
+
+L.tileLayer(
+"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+{
+maxZoom:19,
+attribution:"© OpenStreetMap"
+}
+).addTo(map);
+
+function photoDrive(url){
+
+    if(!url) return "";
+
+    const match = url.match(/id=([^&]+)/);
+
+    if(!match) return "";
+
+    return "https://drive.google.com/thumbnail?id="
+        + match[1]
+        + "&sz=w800";
+}
+
+Papa.parse(CSV_URL,{
+
+    download:true,
+    header:true,
+    skipEmptyLines:true,
+
+    complete:function(results){
+
+        console.log(results.data);
+
+        let nb = 0;
+
+        results.data.forEach(function(fiche){
+
+            const statut =
+            (fiche["Statut"]||"")
+            .trim()
+            .toLowerCase();
+
+            const afficher =
+            (fiche["Afficher carte"]||"")
+            .trim()
+            .toLowerCase();
+
+            if(statut !== "validé") return;
+            if(afficher !== "oui") return;
+
+            const lat =
+            parseFloat(fiche["Latitude"]);
+
+            const lng =
+            parseFloat(fiche["Longitude"]);
+
+            if(isNaN(lat) || isNaN(lng))
+                return;
+
+            const nom =
+            fiche["Nom du lieu"] || "Sans nom";
+
+            const description =
+            fiche["Description"] || "";
+
+            const categorie =
+            fiche["Catégorie"] || "";
+
+            const secteur =
+            fiche["Secteur"] || "";
+
+            const photo =
+            photoDrive(
+            fiche["Photos"]
+            );
+
+            const marker =
+            L.circleMarker(
+                [lat,lng],
+                {
+                    radius:8,
+                    color:"brown",
+                    fillOpacity:1
+                }
+            ).addTo(map);
+
+            marker.bindPopup(
+            `
+            <div style="width:280px">
+
+            <h3>${nom}</h3>
+
+            ${
+                photo
+                ?
+                `<img src="${photo}" class="photo-popup">`
+                :
+                ""
+            }
+
+            <b>Catégorie :</b>
+            ${categorie}
+
+            <br>
+
+            <b>Secteur :</b>
+            ${secteur}
+
+            <br><br>
+
+            ${description}
+
+            </div>
+            `
+            );
+
+            nb++;
+
+        });
+
+        document
+        .getElementById("nbResultats")
+        .innerHTML =
+        nb + " élément(s)";
+
+        document
+        .getElementById("log")
+        .innerHTML =
+        "CSV chargé";
+
+    }
+
+});
+
+</script>
 
 </body>
 </html>
