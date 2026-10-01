@@ -1,63 +1,55 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>PATPEN - Patrimoine & Mémoire de Pénestin</title>
+<title>PATPEN</title>
 
 <link rel="stylesheet"
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
-
-html,
-body{
-margin:0;
-height:100%;
+html, body {
+    margin:0;
+    height:100%;
 }
 
 body{
-display:flex;
+    display:flex;
 }
 
 #sidebar{
-width:320px;
-background:#f5f5f5;
-border-right:1px solid #ddd;
-padding:15px;
-box-sizing:border-box;
-overflow:auto;
-font-family:Arial,sans-serif;
+    width:320px;
+    background:#f5f5f5;
+    border-right:1px solid #ddd;
+    padding:15px;
+    box-sizing:border-box;
+    overflow:auto;
+    font-family:Arial,sans-serif;
 }
 
 #map{
-flex:1;
-height:100vh;
+    flex:1;
+    height:100vh;
 }
 
-input,
-select{
-width:100%;
-padding:8px;
-margin-bottom:10px;
-box-sizing:border-box;
+input,select{
+    width:100%;
+    padding:8px;
+    margin-bottom:10px;
 }
 
 #log{
-font-size:12px;
-color:#444;
+    font-size:12px;
 }
 
 .photo-popup{
-width:100%;
-max-height:200px;
-object-fit:cover;
-border-radius:6px;
-margin-bottom:10px;
+    width:100%;
+    max-height:200px;
+    object-fit:cover;
 }
-
 </style>
 
 </head>
@@ -69,41 +61,17 @@ margin-bottom:10px;
 <h2>PATPEN</h2>
 
 <label>Recherche</label>
-
-<input
-id="search"
-type="text"
-placeholder="Nom du lieu..."
->
+<input id="search" type="text">
 
 <label>Catégorie</label>
 
 <select id="categorie">
-
-<option value="">
-Toutes
-</option>
-
-<option value="Puits">
-Puits
-</option>
-
-<option value="Lavoir">
-Lavoir
-</option>
-
-<option value="Fontaine">
-Fontaine
-</option>
-
-<option value="Croix">
-Croix
-</option>
-
-<option value="Four à pain">
-Four à pain
-</option>
-
+<option value="">Toutes</option>
+<option value="Puits">Puits</option>
+<option value="Lavoir">Lavoir</option>
+<option value="Fontaine">Fontaine</option>
+<option value="Croix">Croix</option>
+<option value="Four à pain">Four à pain</option>
 </select>
 
 <div id="nbResultats"></div>
@@ -122,383 +90,149 @@ Chargement...
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.jsscript>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
 <script>
-
-/* =====================================================
-CONFIG
-===================================================== */
 
 const CSV_URL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vQxz-pZWXUmcWB99nJPRKGJ2wxbYbBB4Y4Lq16nOEBtKm5peTr1ThCHfuHWvPJ5v1ScgZ7w0N9uqP-J/pub?gid=1723096786&single=true&output=csv";
 
-/* =====================================================
-CARTE
-===================================================== */
-
 const map = L.map('map').setView(
-[47.482,-2.475],
-12
+    [47.482,-2.475],
+    12
 );
 
 L.tileLayer(
 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 {
-attribution:'© OpenStreetMap',
-maxZoom:19
+    attribution:'© OpenStreetMap',
+    maxZoom:19
 }
 ).addTo(map);
 
-/* =====================================================
-VARIABLES
-===================================================== */
+function photoDrive(url){
 
-let tousLesPoints = [];
+    if(!url) return "";
 
-const erreurs = [];
+    const match = url.match(/id=([^&]+)/);
 
-/* =====================================================
-COULEURS
-===================================================== */
+    if(match){
+        return "https://drive.google.com/thumbnail?id="
+            + match[1]
+            + "&sz=w800";
+    }
 
-function couleurCategorie(cat){
-
-switch(cat){
-
-case "Puits":
-return "brown";
-
-case "Lavoir":
-return "blue";
-
-case "Fontaine":
-return "cyan";
-
-case "Croix":
-return "purple";
-
-case "Four à pain":
-return "orange";
-
-default:
-return "red";
-}
+    return "";
 }
 
-/* =====================================================
-PHOTOS DRIVE
-===================================================== */
-
-function convertirPhotoDrive(url){
-
-if(!url) return "";
-
-let match = url.match(/id=([^&]+)/);
-
-if(match){
-
-return "https://drive.google.com/thumbnail?id="
-+ match[1]
-+ "&sz=w800";
-
-}
-
-match = url.match(/\/d\/([^\/]+)/);
-
-if(match){
-
-return "https://drive.google.com/thumbnail?id="
-+ match[1]
-+ "&sz=w800";
-
-}
-
-return "";
-}
-
-/* =====================================================
-CHARGEMENT CSV
-===================================================== */
+const markers = [];
 
 Papa.parse(CSV_URL, {
 
-download:true,
+    download:true,
 
-header:true,
+    header:true,
 
-skipEmptyLines:true,
+    skipEmptyLines:true,
 
-complete:function(results){
+    complete:function(results){
 
-if(results.errors.length){
+        let nb = 0;
 
-results.errors.forEach(err => {
+        results.data.forEach(function(fiche){
 
-erreurs.push(
-"CSV ligne "
-+ err.row
-+ " : "
-+ err.message
-);
+            const statut =
+            (fiche["Statut"] || "")
+            .trim()
+            .toLowerCase();
 
-});
+            const afficher =
+            (fiche["Afficher carte"] || "")
+            .trim()
+            .toLowerCase();
 
-}
+            if(statut !== "validé") return;
+            if(afficher !== "oui") return;
 
-let nbValides = 0;
+            const lat =
+            parseFloat(
+            fiche["Latitude"]
+            );
 
-results.data.forEach(function(fiche,index){
+            const lng =
+            parseFloat(
+            fiche["Longitude"]
+            );
 
-const nom =
-(fiche["Nom du lieu"] || "").trim();
+            if(isNaN(lat) || isNaN(lng))
+                return;
 
-const categorie =
-(fiche["Catégorie"] || "").trim();
+            const photo =
+            photoDrive(
+            fiche["Photos"] || ""
+            );
 
-const secteur =
-(fiche["Secteur"] || "").trim();
+            const marker =
+            L.circleMarker(
+                [lat,lng],
+                {
+                    radius:8,
+                    color:"brown",
+                    fillOpacity:1
+                }
+            ).addTo(map);
 
-const description =
-(fiche["Description"] || "").trim();
+            marker.fiche = fiche;
 
-const statut =
-(fiche["Statut"] || "")
-.trim()
-.toLowerCase();
+            marker.bindPopup(
+            `
+            <div style="width:280px">
 
-const afficher =
-(fiche["Afficher carte"] || "")
-.trim()
-.toLowerCase();
+            <h3>${fiche["Nom du lieu"]}</h3>
 
-const lat =
-parseFloat(
-fiche["Latitude"]
-);
+            ${
+            photo
+            ?
+            `<img src="${photo}" class="photo-popup">`
+            :
+            ""
+            }
 
-const lng =
-parseFloat(
-fiche["Longitude"]
-);
+            <b>Catégorie :</b>
+            ${fiche["Catégorie"]}
 
-if(!nom){
+            <br>
 
-erreurs.push(
-"Ligne "
-+ (index+2)
-+ " : Nom manquant"
-);
+            <b>Secteur :</b>
+            ${fiche["Secteur"]}
 
-return;
-}
+            <br><br>
 
-if(isNaN(lat) || isNaN(lng)){
+            ${fiche["Description"]}
 
-erreurs.push(
-"Ligne "
-+ (index+2)
-+ " : Coordonnées invalides"
-);
+            </div>
+            `
+            );
 
-return;
-}
+            markers.push(marker);
+            nb++;
 
-if(statut !== "validé"){
-return;
-}
+        });
 
-if(afficher !== "oui"){
-return;
-}
+        document
+        .getElementById("nbResultats")
+        .innerHTML =
+        "<b>" + nb +
+        "</b> élément(s)";
 
-const marker =
-L.circleMarker(
-[lat,lng],
-{
-radius:8,
-color:
-couleurCategorie(
-categorie
-),
-fillOpacity:1
-}
-)
-.addTo(map);
+        document
+        .getElementById("log")
+        .innerHTML =
+        "✅ CSV chargé";
 
-const photo =
-convertirPhotoDrive(
-fiche["Photos"] || ""
-);
-
-marker.fiche = fiche;
-
-marker.bindPopup(
-
-`
-<div style="width:280px">
-
-<h3 style="margin-top:0;">
-${nom}
-</h3>
-
-${
-photo
-?
-`<img
-src="${photo}"
-class="photo-popup">`
-:
-""
-}
-
-<b>Catégorie :</b>
-${categorie}
-
-<br>
-
-<b>Secteur :</b>
-${secteur}
-
-<br>
-
-<b>État :</b>
-${fiche["État de conservation"] || ""}
-
-<br><br>
-
-${description}
-
-</div>
-`
-);
-
-tousLesPoints.push(marker);
-
-nbValides++;
+    }
 
 });
-
-document
-.getElementById("nbResultats")
-.innerHTML =
-
-"<b>"
-+
-nbValides +
-"</b> élément(s) affiché(s)";
-
-if(erreurs.length){
-
-let html =
-"<b>Erreurs :</b><br>";
-
-erreurs.forEach(e => {
-
-html +=
-"⚠️ "
-+ e +
-"<br>";
-
-});
-
-document
-.getElementById("log")
-.innerHTML = html;
-
-}
-else{
-
-document
-.getElementById("log")
-.innerHTML =
-"✅ Aucune erreur détectée";
-
-}
-
-},
-
-error:function(err){
-
-document
-.getElementById("log")
-.innerHTML =
-
-"❌ Erreur CSV :<br>"
-+ err.message;
-}
-
-});
-
-/* =====================================================
-FILTRES
-===================================================== */
-
-function filtrer(){
-
-const txt =
-document
-.getElementById("search")
-.value
-.toLowerCase();
-
-const cat =
-document
-.getElementById("categorie")
-.value;
-
-tousLesPoints.forEach(marker=>{
-
-const fiche = marker.fiche;
-
-let visible = true;
-
-const nom =
-(fiche["Nom du lieu"] || "")
-.toLowerCase();
-
-if(txt && !nom.includes(txt)){
-visible = false;
-}
-
-if(
-cat &&
-fiche["Catégorie"] !== cat
-){
-visible = false;
-}
-
-if(visible){
-
-if(!map.hasLayer(marker)){
-marker.addTo(map);
-}
-
-}else{
-
-if(map.hasLayer(marker)){
-map.removeLayer(marker);
-}
-
-}
-
-});
-
-}
-
-document
-.getElementById("search")
-.addEventListener(
-"keyup",
-filtrer
-);
-
-document
-.getElementById("categorie")
-.addEventListener(
-"change",
-filtrer
-);
 
 </script>
 
