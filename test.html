@@ -274,6 +274,17 @@ Papa.parse(CSV_URL,{
 });
 
 </script>
+/* Les popups passent au-dessus du bandeau */
+.leaflet-popup{
+    z-index:9999 !important;
+}
 
+.leaflet-pane{
+    z-index:500 !important;
+}
+
+.leaflet-popup-pane{
+    z-index:700 !important;
+}
 </body>
 </html>
