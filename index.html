@@ -1,17 +1,19 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>PATPEN</title>
+<title>PATPEN - Patrimoine & Mémoire de Pénestin</title>
 
 <link rel="stylesheet"
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
-html, body {
+
+html,
+body{
     margin:0;
     height:100%;
 }
@@ -35,21 +37,27 @@ body{
     height:100vh;
 }
 
-input,select{
+input,
+select{
     width:100%;
     padding:8px;
     margin-bottom:10px;
+    box-sizing:border-box;
 }
 
 #log{
     font-size:12px;
+    color:#444;
 }
 
 .photo-popup{
     width:100%;
     max-height:200px;
     object-fit:cover;
+    border-radius:6px;
+    margin-bottom:10px;
 }
+
 </style>
 
 </head>
@@ -61,17 +69,41 @@ input,select{
 <h2>PATPEN</h2>
 
 <label>Recherche</label>
-<input id="search" type="text">
+
+<input
+id="search"
+type="text"
+placeholder="Nom du lieu..."
+>
 
 <label>Catégorie</label>
 
 <select id="categorie">
-<option value="">Toutes</option>
-<option value="Puits">Puits</option>
-<option value="Lavoir">Lavoir</option>
-<option value="Fontaine">Fontaine</option>
-<option value="Croix">Croix</option>
-<option value="Four à pain">Four à pain</option>
+
+<option value="">
+Toutes
+</option>
+
+<option value="Puits">
+Puits
+</option>
+
+<option value="Lavoir">
+Lavoir
+</option>
+
+<option value="Fontaine">
+Fontaine
+</option>
+
+<option value="Croix">
+Croix
+</option>
+
+<option value="Four à pain">
+Four à pain
+</option>
+
 </select>
 
 <div id="nbResultats"></div>
@@ -90,12 +122,20 @@ Chargement...
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.jsscript>
 
 <script>
 
+/* =====================================================
+   CONFIG
+===================================================== */
+
 const CSV_URL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vQxz-pZWXUmcWB99nJPRKGJ2wxbYbBB4Y4Lq16nOEBtKm5peTr1ThCHfuHWvPJ5v1ScgZ7w0N9uqP-J/pub?gid=1723096786&single=true&output=csv";
+
+/* =====================================================
+   CARTE
+===================================================== */
 
 const map = L.map('map').setView(
     [47.482,-2.475],
@@ -103,29 +143,83 @@ const map = L.map('map').setView(
 );
 
 L.tileLayer(
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-{
-    attribution:'© OpenStreetMap',
-    maxZoom:19
-}
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        attribution:'© OpenStreetMap',
+        maxZoom:19
+    }
 ).addTo(map);
 
-function photoDrive(url){
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let tousLesPoints = [];
+
+const erreurs = [];
+
+/* =====================================================
+   COULEURS
+===================================================== */
+
+function couleurCategorie(cat){
+
+    switch(cat){
+
+        case "Puits":
+            return "brown";
+
+        case "Lavoir":
+            return "blue";
+
+        case "Fontaine":
+            return "cyan";
+
+        case "Croix":
+            return "purple";
+
+        case "Four à pain":
+            return "orange";
+
+        default:
+            return "red";
+    }
+}
+
+/* =====================================================
+   PHOTOS DRIVE
+===================================================== */
+
+function convertirPhotoDrive(url){
 
     if(!url) return "";
 
-    const match = url.match(/id=([^&]+)/);
+    let match = url.match(/id=([^&]+)/);
 
     if(match){
+
         return "https://drive.google.com/thumbnail?id="
             + match[1]
             + "&sz=w800";
+
+    }
+
+    match = url.match(/\/d\/([^\/]+)/);
+
+    if(match){
+
+        return "https://drive.google.com/thumbnail?id="
+            + match[1]
+            + "&sz=w800";
+
     }
 
     return "";
 }
 
-const markers = [];
+/* =====================================================
+   CHARGEMENT CSV
+===================================================== */
 
 Papa.parse(CSV_URL, {
 
@@ -137,102 +231,274 @@ Papa.parse(CSV_URL, {
 
     complete:function(results){
 
-        let nb = 0;
+        if(results.errors.length){
 
-        results.data.forEach(function(fiche){
+            results.errors.forEach(err => {
+
+                erreurs.push(
+                    "CSV ligne "
+                    + err.row
+                    + " : "
+                    + err.message
+                );
+
+            });
+
+        }
+
+        let nbValides = 0;
+
+        results.data.forEach(function(fiche,index){
+
+            const nom =
+                (fiche["Nom du lieu"] || "").trim();
+
+            const categorie =
+                (fiche["Catégorie"] || "").trim();
+
+            const secteur =
+                (fiche["Secteur"] || "").trim();
+
+            const description =
+                (fiche["Description"] || "").trim();
 
             const statut =
-            (fiche["Statut"] || "")
-            .trim()
-            .toLowerCase();
+                (fiche["Statut"] || "")
+                .trim()
+                .toLowerCase();
 
             const afficher =
-            (fiche["Afficher carte"] || "")
-            .trim()
-            .toLowerCase();
-
-            if(statut !== "validé") return;
-            if(afficher !== "oui") return;
+                (fiche["Afficher carte"] || "")
+                .trim()
+                .toLowerCase();
 
             const lat =
-            parseFloat(
-            fiche["Latitude"]
-            );
+                parseFloat(
+                    fiche["Latitude"]
+                );
 
             const lng =
-            parseFloat(
-            fiche["Longitude"]
-            );
+                parseFloat(
+                    fiche["Longitude"]
+                );
 
-            if(isNaN(lat) || isNaN(lng))
+            if(!nom){
+
+                erreurs.push(
+                    "Ligne "
+                    + (index+2)
+                    + " : Nom manquant"
+                );
+
                 return;
+            }
 
-            const photo =
-            photoDrive(
-            fiche["Photos"] || ""
-            );
+            if(isNaN(lat) || isNaN(lng)){
+
+                erreurs.push(
+                    "Ligne "
+                    + (index+2)
+                    + " : Coordonnées invalides"
+                );
+
+                return;
+            }
+
+            if(statut !== "validé"){
+                return;
+            }
+
+            if(afficher !== "oui"){
+                return;
+            }
 
             const marker =
-            L.circleMarker(
-                [lat,lng],
-                {
-                    radius:8,
-                    color:"brown",
-                    fillOpacity:1
-                }
-            ).addTo(map);
+                L.circleMarker(
+                    [lat,lng],
+                    {
+                        radius:8,
+                        color:
+                        couleurCategorie(
+                            categorie
+                        ),
+                        fillOpacity:1
+                    }
+                )
+                .addTo(map);
+
+            const photo =
+                convertirPhotoDrive(
+                    fiche["Photos"] || ""
+                );
 
             marker.fiche = fiche;
 
             marker.bindPopup(
+
             `
             <div style="width:280px">
 
-            <h3>${fiche["Nom du lieu"]}</h3>
+            <h3 style="margin-top:0;">
+            ${nom}
+            </h3>
 
             ${
             photo
             ?
-            `<img src="${photo}" class="photo-popup">`
+            `<img
+                src="${photo}"
+                class="photo-popup">`
             :
             ""
             }
 
             <b>Catégorie :</b>
-            ${fiche["Catégorie"]}
+            ${categorie}
 
             <br>
 
             <b>Secteur :</b>
-            ${fiche["Secteur"]}
+            ${secteur}
+
+            <br>
+
+            <b>État :</b>
+            ${fiche["État de conservation"] || ""}
 
             <br><br>
 
-            ${fiche["Description"]}
+            ${description}
 
             </div>
             `
             );
 
-            markers.push(marker);
-            nb++;
+            tousLesPoints.push(marker);
+
+            nbValides++;
 
         });
 
         document
         .getElementById("nbResultats")
         .innerHTML =
-        "<b>" + nb +
-        "</b> élément(s)";
+
+        "<b>"
+        +
+        nbValides +
+        "</b> élément(s) affiché(s)";
+
+        if(erreurs.length){
+
+            let html =
+            "<b>Erreurs :</b><br>";
+
+            erreurs.forEach(e => {
+
+                html +=
+                "⚠️ "
+                + e +
+                "<br>";
+
+            });
+
+            document
+            .getElementById("log")
+            .innerHTML = html;
+
+        }
+        else{
+
+            document
+            .getElementById("log")
+            .innerHTML =
+            "✅ Aucune erreur détectée";
+
+        }
+
+    },
+
+    error:function(err){
 
         document
         .getElementById("log")
         .innerHTML =
-        "✅ CSV chargé";
 
+        "❌ Erreur CSV :<br>"
+        + err.message;
     }
 
 });
+
+/* =====================================================
+   FILTRES
+===================================================== */
+
+function filtrer(){
+
+    const txt =
+    document
+    .getElementById("search")
+    .value
+    .toLowerCase();
+
+    const cat =
+    document
+    .getElementById("categorie")
+    .value;
+
+    tousLesPoints.forEach(marker=>{
+
+        const fiche = marker.fiche;
+
+        let visible = true;
+
+        const nom =
+            (fiche["Nom du lieu"] || "")
+            .toLowerCase();
+
+        if(txt && !nom.includes(txt)){
+            visible = false;
+        }
+
+        if(
+            cat &&
+            fiche["Catégorie"] !== cat
+        ){
+            visible = false;
+        }
+
+        if(visible){
+
+            if(!map.hasLayer(marker)){
+                marker.addTo(map);
+            }
+
+        }else{
+
+            if(map.hasLayer(marker)){
+                map.removeLayer(marker);
+            }
+
+        }
+
+    });
+
+}
+
+document
+.getElementById("search")
+.addEventListener(
+"keyup",
+filtrer
+);
+
+document
+.getElementById("categorie")
+.addEventListener(
+"change",
+filtrer
+);
 
 </script>
 
