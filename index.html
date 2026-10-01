@@ -163,14 +163,6 @@ Papa.parse(CSV_URL, {
             parseFloat(
             fiche["Longitude"]
             );
-const nom =
-(fiche["Nom du lieu"] || "").trim();
-const description =
-(fiche["Description"] || "").trim();
-const categorie =
-(fiche["Catégorie"] || "").trim();
-const secteur =
-(fiche["Secteur"] || "").trim();         
 
             if(isNaN(lat) || isNaN(lng))
                 return;
@@ -191,9 +183,13 @@ const secteur =
             ).addTo(map);
 
             marker.fiche = fiche;
+
             marker.bindPopup(
             `
-            <div style="width:280px"> <h3>${fiche["Nom du lieu"]}</h3>
+            <div style="width:280px">
+
+            <h3>${fiche["Nom du lieu"]}</h3>
+
             ${
             photo
             ?
@@ -201,41 +197,23 @@ const secteur =
             :
             ""
             }
+
             <b>Catégorie :</b>
             ${fiche["Catégorie"]}
+
             <br>
+
             <b>Secteur :</b>
             ${fiche["Secteur"]}
-            <br><br>
-            ${fiche["Description"]}
- </div>
-);  
-/**
- marker.bindPopup(
-<div style="width:280px">
-<h3>${nom}</h3>
 
-${
-photo
-?
-`<img src`
-11
-:
-""
-}
-<b>Catégorie :</b>
-${categorie}
-<br>
-<b>Secteur :</b>
-${secteur}
-<br><br>
-${description}
-</div>
-);
+            <br><br>
+
+            ${fiche["Description"]}
+
             </div>
             `
             );
-**/
+
             markers.push(marker);
             nb++;
 
@@ -247,17 +225,11 @@ ${description}
         "<b>" + nb +
         "</b> élément(s)";
 
-/**        document
+        document
         .getElementById("log")
         .innerHTML =
         "✅ CSV chargé";
-**/
-document.getElementById("log").innerHTML =
-"<pre>" + JSON.stringify(
-Object.keys(results.data[0]),
-null,
-) +
-"</pre>";
+
     }
 
 });
