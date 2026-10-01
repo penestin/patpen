@@ -191,11 +191,9 @@ const secteur =
             ).addTo(map);
 
             marker.fiche = fiche;
-/**
             marker.bindPopup(
             `
             <div style="width:280px"> <h3>${fiche["Nom du lieu"]}</h3>
-
             ${
             photo
             ?
@@ -203,19 +201,16 @@ const secteur =
             :
             ""
             }
-
             <b>Catégorie :</b>
             ${fiche["Catégorie"]}
-
             <br>
-
             <b>Secteur :</b>
             ${fiche["Secteur"]}
-
             <br><br>
-
             ${fiche["Description"]}
-**/            
+ </div>
+);  
+/**
  marker.bindPopup(
 <div style="width:280px">
 <h3>${nom}</h3>
@@ -240,7 +235,7 @@ ${description}
             </div>
             `
             );
-
+**/
             markers.push(marker);
             nb++;
 
