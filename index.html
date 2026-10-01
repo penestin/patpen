@@ -238,3 +238,6 @@ Papa.parse(CSV_URL, {
 
 </body>
 </html>
+complete:function(results){
+console.log(results.data[0]);
+console.log(Object.keys(results.data[0]));
