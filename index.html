@@ -194,9 +194,7 @@ const secteur =
 
             marker.bindPopup(
             `
-            <div style="width:280px">
-
-            <h3>${fiche["Nom du lieu"]}</h3>
+            <div style="width:280px"> <h3>${fiche["Nom du lieu"]}</h3>
 
             ${
             photo
@@ -217,7 +215,28 @@ const secteur =
             <br><br>
 
             ${fiche["Description"]}
+            
+ marker.bindPopup(
+<div style="width:280px">
+<h3>${nom}</h3>
 
+${
+photo
+?
+`<img src`
+11
+:
+""
+}
+<b>Catégorie :</b>
+${categorie}
+<br>
+<b>Secteur :</b>
+${secteur}
+<br><br>
+${description}
+</div>
+);
             </div>
             `
             );
