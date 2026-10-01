@@ -163,6 +163,14 @@ Papa.parse(CSV_URL, {
             parseFloat(
             fiche["Longitude"]
             );
+const nom =
+(fiche["Nom du lieu"] || "").trim();
+const description =
+(fiche["Description"] || "").trim();
+const categorie =
+(fiche["Catégorie"] || "").trim();
+const secteur =
+(fiche["Secteur"] || "").trim();         
 
             if(isNaN(lat) || isNaN(lng))
                 return;
