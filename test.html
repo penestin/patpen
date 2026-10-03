@@ -19,35 +19,13 @@ body{
     display:flex;
 }
 
-#map{
-    flex:1;
-    height:100vh;
-}
-
-.photo-popup{
-    width:100%;
-    max-height:220px;
-    object-fit:cover;
-}
-html,body{
-    margin:0;
-    height:100%;
-}
-
-body{
-    display:flex;
-    flex-direction:row;
-}
-
 #sidebar{
-       width:320px;
-    background:#efa949; 
-color:white; 
-border-right:1px solid #add19d;
-padding:15px;
-overflow:auto;
-font-family:Arial,sans-serif;
-box-sizing:border-box;
+    width:320px;
+    background:#f5f5f5;
+    border-right:1px solid #ddd;
+    padding:15px;
+    overflow:auto;
+    font-family:Arial,sans-serif;
 }
 
 #map{
@@ -60,7 +38,6 @@ box-sizing:border-box;
     max-height:220px;
     object-fit:cover;
 }
-
 /* RESPONSIVE */
 html,body{
     margin:0;
@@ -269,6 +246,10 @@ Papa.parse(CSV_URL,{
         "CSV chargé";
 
     }
+
+});
+
+</script>
 
 </body>
 </html>
