@@ -4,99 +4,83 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>PATPEN - Inventaire patrimonial</title>
+<title>PATPEN</title>
 
 <link rel="stylesheet"
-href="https://unpkg.com/leaflet/dist/leaflet.css">
-
-https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap
+href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 <style>
-*{
-box-sizing:border-box;
-}
+
+*{box-sizing:border-box;}
 
 body{
 margin:0;
-font-family:"Open Sans",sans-serif;
+font-family:Arial,sans-serif;
 background:#f5f2f8;
-color:#222;
 }
 
 .wrapper{
-max-width:1400px;
+max-width:1200px;
 margin:auto;
-padding:20px;
+padding:15px;
 display:flex;
-gap:20px;
+gap:15px;
 }
 
 .sidebar{
-width:260px;
-background:#fff;
+width:250px;
+background:white;
+padding:15px;
 border-radius:12px;
-padding:20px;
-position:sticky;
-top:20px;
-height:fit-content;
-box-shadow:0 2px 12px rgba(0,0,0,.1);
 }
 
 .content{
 flex:1;
-display:flex;
-justify-content:center;
 }
 
 .card{
-width:100%;
-max-width:900px;
-background:#fff;
+background:white;
+padding:20px;
 border-radius:12px;
-padding:24px;
-box-shadow:0 2px 12px rgba(0,0,0,.1);
-}
-
-.step{
-padding:10px;
-margin-bottom:6px;
-border-radius:8px;
-}
-
-.step.active{
-background:#f0e5ed;
-color:#9b4b82;
-font-weight:bold;
 }
 
 .page{display:none;}
 .page.active{display:block;}
 
+.step{
+padding:8px;
+margin-bottom:5px;
+border-radius:6px;
+}
+
+.step.active{
+background:#eee;
+font-weight:bold;
+}
+
 input,
 textarea,
 select{
 width:100%;
-padding:12px;
-margin-bottom:12px;
-border:1px solid #ddd;
-border-radius:8px;
-font-size:15px;
+padding:10px;
+margin:6px 0;
+border:1px solid #ccc;
+border-radius:6px;
 }
 
 button{
+padding:10px 14px;
+margin-top:5px;
+border:none;
+border-radius:6px;
 background:#9b4b82;
 color:white;
-border:none;
-padding:12px 18px;
-border-radius:8px;
 cursor:pointer;
 }
 
 #map{
-width:100%;
-height:400px;
+height:350px;
 border-radius:10px;
-margin-bottom:15px;
 }
 
 #preview{
@@ -104,9 +88,10 @@ display:grid;
 grid-template-columns:
 repeat(auto-fill,minmax(120px,1fr));
 gap:10px;
+margin-top:10px;
 }
 
-.thumb img{
+#preview img{
 width:100%;
 height:120px;
 object-fit:cover;
@@ -116,18 +101,17 @@ border-radius:8px;
 .buttons{
 display:flex;
 justify-content:space-between;
-gap:10px;
 margin-top:15px;
 }
 
 #json{
-background:#f5f5f5;
-padding:15px;
+background:#f0f0f0;
+padding:10px;
 border-radius:8px;
 overflow:auto;
 }
 
-@media(max-width:1024px){
+@media(max-width:800px){
 
 .wrapper{
 flex-direction:column;
@@ -135,30 +119,15 @@ flex-direction:column;
 
 .sidebar{
 width:100%;
-position:relative;
-}
-
-}
-
-@media(max-width:768px){
-
-.wrapper{
-padding:10px;
 }
 
 .buttons{
 flex-direction:column;
-}
-
-button{
-width:100%;
-}
-
-#map{
-height:300px;
+gap:10px;
 }
 
 }
+
 </style>
 </head>
 
@@ -167,20 +136,22 @@ height:300px;
 <div class="wrapper">
 
 <div class="sidebar">
+
 <h2>PATPEN</h2>
+
 <div id="steps"></div>
 
 <hr>
 
 <input
 type="file"
-id="importJSON"
+id="importJson"
 accept=".json">
 
 <button
 type="button"
-onclick="importFiche()">
-Importer une fiche
+onclick="importJSON()">
+Importer fiche
 </button>
 
 </div>
@@ -190,6 +161,8 @@ Importer une fiche
 <div class="card">
 
 <form id="f">
+
+<!-- PAGE 1 -->
 
 <div class="page active">
 
@@ -213,7 +186,214 @@ placeholder="Adresse">
 <button
 type="button"
 onclick="gps()">
-Utiliser ma position GPS
+Géolocalisation
 </button>
 
 </div>
+
+<!-- PAGE 2 -->
+
+<div class="page">
+
+<h2>2. Illustration</h2>
+
+<input
+type="file"
+id="photos"
+multiple
+accept="image/*">
+
+<div id="preview"></div>
+
+<textarea
+id="legende"
+placeholder="Légende"></textarea>
+
+<input
+id="credit"
+placeholder="Crédit photo">
+
+</div>
+
+<!-- PAGE 3 -->
+
+<div class="page">
+
+<h2>3. Désignation</h2>
+
+<select id="type">
+
+<option>Puits</option>
+<option>Fontaine</option>
+<option>Lavoir</option>
+<option>Four</option>
+<option>Moulin</option>
+<option>Croix</option>
+<option>Calvaire</option>
+<option>Arbre</option>
+
+</select>
+
+<input
+id="nom"
+placeholder="Nom">
+
+<input
+id="nomLocal"
+placeholder="Nom local">
+
+<input
+id="epoque"
+placeholder="Époque">
+
+</div>
+
+<!-- PAGE 4 -->
+
+<div class="page">
+
+<h2>4. Propriété</h2>
+
+<input
+id="proprietaire"
+placeholder="Propriétaire">
+
+<select id="acces">
+<option>Libre</option>
+<option>Restreint</option>
+<option>Privé</option>
+</select>
+
+</div>
+
+<!-- PAGE 5 -->
+
+<div class="page">
+
+<h2>5. Description</h2>
+
+<textarea
+id="description"
+placeholder="Description"></textarea>
+
+<input
+id="materiaux"
+placeholder="Matériaux">
+
+</div>
+
+<!-- PAGE 6 -->
+
+<div class="page">
+
+<h2>6. Historique</h2>
+
+<input
+id="periode"
+placeholder="Période">
+
+<textarea
+id="historique"
+placeholder="Historique"></textarea>
+
+</div>
+
+<!-- PAGE 7 -->
+
+<div class="page">
+
+<h2>7. Observations</h2>
+
+<textarea
+id="commentaires"
+placeholder="Commentaires"></textarea>
+
+<button
+type="button"
+onclick="exportJSON()">
+Télécharger JSON
+</button>
+
+<pre id="json"></pre>
+
+</div>
+
+</form>
+
+<div class="buttons">
+
+<button
+type="button"
+onclick="prev()">
+Précédent
+</button>
+
+<button
+type="button"
+onclick="next()">
+Suivant
+</button>
+
+</div>
+
+</div>
+</div>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+const pages=
+document.querySelectorAll(".page");
+
+const names=[
+"Localisation",
+"Illustration",
+"Désignation",
+"Propriété",
+"Description",
+"Historique",
+"Observations"
+];
+
+let cur=0;
+
+function renderSteps(){
+
+steps.innerHTML="";
+
+names.forEach((n,i)=>{
+
+const d=document.createElement("div");
+
+d.className=
+"step "+(i===cur?"active":"");
+
+d.textContent=
+(i+1)+". "+n;
+
+steps.appendChild(d);
+
+});
+
+}
+
+function show(){
+
+pages.forEach((p,i)=>{
+
+p.classList.toggle(
+"active",
+i===cur
+);
+
+});
+
+renderSteps();
+
+if(cur===6){
+
+document.getElementById("json")
+.textContent=
+JSON.stringify
