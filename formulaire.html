@@ -1,69 +1,149 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>PATPEN - Inventaire patrimonial</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"
+rel="stylesheet">
 
 <style>
+
+*{
+    box-sizing:border-box;
+}
+
 body{
     margin:0;
-    font-family:Arial,sans-serif;
-    background:#5665ba;
+    font-family:"Open Sans",sans-serif;
+    background:#f5f2f8;
+    color:#222;
+}
+
+/* ---------- Layout ---------- */
+
+.wrapper{
+    max-width:1400px;
+    margin:auto;
+    padding:20px;
+    display:flex;
+    gap:20px;
+    align-items:flex-start;
 }
 
 .sidebar{
-    position:fixed;
-    left:0;
-    top:0;
-    bottom:0;
-    width:250px;
+    width:260px;
+    flex-shrink:0;
+
     background:#fff;
+    border-radius:12px;
     padding:20px;
-    overflow:auto;
+
+    position:sticky;
+    top:20px;
+
+    box-shadow:
+    0 2px 12px rgba(0,0,0,.08);
 }
 
 .content{
-    margin-left:270px;
-    padding:20px;
+    flex:1;
+    display:flex;
+    justify-content:center;
 }
 
 .card{
+
+    width:100%;
+    max-width:850px;
+
     background:#fff;
-    padding:20px;
     border-radius:12px;
+
+    padding:24px;
+
+    box-shadow:
+    0 2px 12px rgba(0,0,0,.08);
+
+    overflow:hidden;
 }
+
+/* ---------- Etapes ---------- */
 
 .step{
-    padding:8px;
+    padding:10px 12px;
+    margin-bottom:8px;
+    border-radius:8px;
+    transition:0.2s;
 }
 
-.active{
-    font-weight:bold;
+.step.active{
+    background:#f0e5ed;
     color:#9b4b82;
+    font-weight:700;
 }
+
+/* ---------- Titres ---------- */
+
+h2{
+    margin-top:0;
+}
+
+/* ---------- Carte ---------- */
 
 #map{
-    height:350px;
+    height:400px;
+    width:100%;
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:15px;
 }
+
+/* ---------- Champs ---------- */
 
 input,
-textarea,
-select{
+select,
+textarea{
+
     width:100%;
-    padding:10px;
-    margin:6px 0;
+
+    padding:12px;
+
+    margin-bottom:12px;
+
+    border:1px solid #dadada;
+
+    border-radius:8px;
+
+    font-size:15px;
+
+    font-family:inherit;
 }
 
-button{
-    padding:10px 15px;
-    background:#9b4b82;
-    color:#fff;
-    border:none;
-    border-radius:6px;
+input:focus,
+select:focus,
+textarea:focus{
+
+    outline:none;
+
+    border-color:#9b4b82;
+
+    box-shadow:
+    0 0 0 3px rgba(155,75,130,.15);
 }
+
+textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+/* ---------- Pages ---------- */
 
 .page{
     display:none;
@@ -72,127 +152,139 @@ button{
 .page.active{
     display:block;
 }
+
+/* ---------- Boutons ---------- */
+
+.buttons{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    margin-top:20px;
+}
+
+button{
+    padding:12px 18px;
+    border:none;
+    border-radius:8px;
+
+    background:#9b4b82;
+    color:white;
+
+    font-size:15px;
+
+    cursor:pointer;
+}
+
+button:hover{
+    background:#83406d;
+}
+
+/* ---------- JSON ---------- */
+
+#json{
+    background:#f5f5f5;
+    padding:15px;
+    border-radius:8px;
+    overflow:auto;
+}
+
+/* ---------- Tablette ---------- */
+
+@media (max-width:1024px){
+
+    .wrapper{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        position:relative;
+        top:auto;
+    }
+
+    .content{
+        width:100%;
+    }
+
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width:768px){
+
+    body{
+        background:white;
+    }
+
+    .wrapper{
+        padding:10px;
+        gap:10px;
+    }
+
+    .card{
+        padding:16px;
+    }
+
+    #map{
+        height:300px;
+    }
+
+    .buttons{
+        flex-direction:column;
+    }
+
+    button{
+        width:100%;
+    }
+
+    input,
+    textarea,
+    select{
+        font-size:16px;
+    }
+}
+
 </style>
 
 </head>
 
 <body>
 
-<div class="sidebar">
-    <h2>PATPEN</h2>
-    <div id="steps"></div>
-</div>
+<div class="wrapper">
 
-<div class="content">
+    <div class="sidebar">
 
-<div class="card">
+        <h2>PATPEN</h2>
 
-<form id="f">
+        <div id="steps"></div>
 
-<div class="page active">
+    </div>
 
-<h2>1. Localisation</h2>
+    <div class="content">
 
-<div id="map"></div>
+        <div class="card">
 
-<input id="lat" placeholder="Latitude">
-<input id="lng" placeholder="Longitude">
+            <form id="f">
 
-<input placeholder="Commune" value="Pénestin">
-<input placeholder="Lieu-dit">
-<input placeholder="Adresse">
+                <!-- toutes tes pages ici -->
 
-</div>
+            </form>
 
-<div class="page">
+            <div class="buttons">
 
-<h2>2. Illustration</h2>
+                <button onclick="prev()" type="button">
+                    Précédent
+                </button>
 
-<input type="file" multiple>
+                <button onclick="next()" type="button">
+                    Suivant
+                </button>
 
-<textarea placeholder="Légende"></textarea>
+            </div>
 
-<input placeholder="Crédit photo">
+        </div>
 
-</div>
-
-<div class="page">
-
-<h2>3. Désignation</h2>
-
-<select>
-<option>Puits</option>
-<option>Fontaine</option>
-<option>Lavoir</option>
-<option>Four</option>
-<option>Moulin</option>
-<option>Arbre</option>    
-</select>
-
-<input placeholder="Nom">
-<input placeholder="Nom local">
-<input placeholder="Époque">
-
-</div>
-
-<div class="page">
-
-<h2>4. Propriété</h2>
-
-<input placeholder="Propriétaire">
-
-<select>
-<option>Libre</option>
-<option>Restreint</option>
-</select>
-
-</div>
-
-<div class="page">
-
-<h2>5. Description</h2>
-
-<textarea placeholder="Description"></textarea>
-
-<input placeholder="Matériaux">
-
-</div>
-
-<div class="page">
-
-<h2>6. Historique</h2>
-
-<input placeholder="Période">
-
-<textarea placeholder="Historique"></textarea>
-
-</div>
-
-<div class="page">
-
-<h2>7. Observations</h2>
-
-<textarea placeholder="Commentaires"></textarea>
-
-<pre id="json"></pre>
-
-</div>
-
-</form>
-
-<div style="margin-top:15px">
-
-<button onclick="prev()">
-Précédent
-</button>
-
-<button onclick="next()">
-Suivant
-</button>
-
-</div>
-
-</div>
+    </div>
 
 </div>
 
@@ -200,122 +292,16 @@ Suivant
 
 <script>
 
-const names = [
-'Localisation',
-'Illustration',
-'Désignation',
-'Propriété',
-'Description',
-'Historique',
-'Observations'
-];
+/* correction affichage Leaflet
+après changement d'étape */
 
-let cur = 0;
+function refreshMap(){
 
-const pages =
-document.querySelectorAll('.page');
-
-const steps =
-document.getElementById('steps');
-
-function renderSteps(){
-
-steps.innerHTML='';
-
-names.forEach((n,i)=>{
-
-    let d =
-    document.createElement('div');
-
-    d.className =
-    'step ' + (i===cur?'active':'');
-
-    d.textContent =
-    (i+1)+'. '+n;
-
-    steps.appendChild(d);
-
-});
+    setTimeout(()=>{
+        map.invalidateSize();
+    },200);
 
 }
-
-function show(){
-
-pages.forEach((p,i)=>
-p.classList.toggle(
-'active',
-i===cur
-));
-
-renderSteps();
-
-if(cur===6){
-
-document.getElementById('json')
-.textContent =
-JSON.stringify(
-Object.fromEntries(
-new FormData(
-document.getElementById('f')
-)
-),
-null,
-2
-);
-
-}
-
-}
-
-function next(){
-
-if(cur<6){
-
-cur++;
-
-show();
-
-}
-
-}
-
-function prev(){
-
-if(cur>0){
-
-cur--;
-
-show();
-
-}
-
-}
-
-renderSteps();
-
-var map =
-L.map('map')
-.setView([47.483,-2.48],14);
-
-L.tileLayer(
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-).addTo(map);
-
-let m =
-L.marker([47.483,-2.48])
-.addTo(map);
-
-map.on('click',e=>{
-
-m.setLatLng(e.latlng);
-
-lat.value =
-e.latlng.lat.toFixed(6);
-
-lng.value =
-e.latlng.lng.toFixed(6);
-
-});
 
 </script>
 
