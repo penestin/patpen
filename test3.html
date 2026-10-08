@@ -1,1 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
+<title>PATPEN</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<style>
+
+html,body{
+    margin:0;
+    padding:0;
+    height:100%;
+}
+
+body{
+    display:flex;
+    flex-direction:row;
+}
+
+/* PANNEAU GAUCHE */
+
+#sidebar{
+    width:220px;
+    min-width:220px;
+    background:#205ba4;
+    border-right:1px solid #ddd;
+    padding:15px;
+    overflow:auto;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+    color:white;
+}
+
+#sidebar h1{
+    margin-top:0;
+    color:white;
+}
+
+#btnFormulaire{
+    width:100%;
+    padding:12px;
+    margin-top:20px;
+
+    background:white;
+    color:#205ba4;
+
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+#btnFormulaire:hover{
+    background:#e6eef9;
+}
+
+/* CARTE */
+
+#map{
+    flex:1;
+    height:100vh;
+}
+
+.photo-popup{
+    width:100%;
+    max-height:220px;
+    object-fit:cover;
+}
+
+/* FENÊTRE FORMULAIRE */
+
+#fenetreFormulaire{
+    display:none;
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 25px rgba(0,0,0,0.4);
+    z-index:9999;
+    width:90%;
+    max-width:500px;
+    color:black;
+}
+
+#overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.5);
+    z-index:9998;
+}
+
+#fenetreFormulaire input,
+#fenetreFormulaire textarea{
+    width:100%;
+    box-sizing:border-box;
+    padding:8px;
+}
+
+.btn-action{
+    padding:10px 15px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.btn-enregistrer{
+    background:#205ba4;
+    color:white;
+}
+
+.btn
