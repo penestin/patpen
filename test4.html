@@ -238,11 +238,14 @@ const icons = {
 };
 });
 
-const marker = L.marker(
-    [lat, lng],
+const categorie = item.categorie;
+
+L.marker(
+    [item.latitude,item.longitude],
     {
-        icon: wellIcon
+        icon: icons[categorie]
     }
+).addTo(map);
 ).addTo(map);
 
             marker.bindPopup(
