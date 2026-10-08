@@ -198,52 +198,17 @@ Papa.parse(CSV_URL,{
                 fiche["Photos"]
             );
 
-const icons = {
-
-    "Puits": L.icon({
-        iconUrl: "images/puit.png",
-        iconSize: [48,48],
-        iconAnchor: [24,48]
-    }),
-
-    "Fontaine": L.icon({
-        iconUrl: "images/fontaine.png",
-        iconSize: [48,48],
-        iconAnchor: [24,48]
-    }),
-
-    "Lavoir": L.icon({
-        iconUrl: "images/lavoir.png",
-        iconSize: [48,48],
-        iconAnchor: [24,48]
-    }),
-
-    "Four": L.icon({
-        iconUrl: "images/four.png",
-        iconSize: [48,48],
-        iconAnchor: [24,48]
-    }),
-
-    "Moulin": L.icon({
-        iconUrl: "images/moulin.png",
-        iconSize: [48,48],
-        iconAnchor: [24,48]
-    }),
-
-    "Arbre": L.icon({
-        iconUrl: "images/arbre.png",
-        iconSize: [48,48],
-        iconAnchor: [24,48]
-    })
-};
+const wellIcon = L.icon({
+    iconUrl: 'puit.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40]
 });
 
-const categorie = item.categorie;
-
-L.marker(
-    [item.latitude,item.longitude],
+const marker = L.marker(
+    [lat, lng],
     {
-        icon: icons[categorie]
+        icon: wellIcon
     }
 ).addTo(map);
 
