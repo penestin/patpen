@@ -11,7 +11,7 @@
 body{
     margin:0;
     font-family:Arial,sans-serif;
-    background:#f5f2f4;
+    background:#5665ba;
 }
 
 .sidebar{
@@ -124,8 +124,9 @@ button{
 <option>Puits</option>
 <option>Fontaine</option>
 <option>Lavoir</option>
-<option>Calvaire</option>
+<option>Four</option>
 <option>Moulin</option>
+<option>Arbre</option>    
 </select>
 
 <input placeholder="Nom">
@@ -238,4 +239,85 @@ names.forEach((n,i)=>{
 
 }
 
+function show(){
 
+pages.forEach((p,i)=>
+p.classList.toggle(
+'active',
+i===cur
+));
+
+renderSteps();
+
+if(cur===6){
+
+document.getElementById('json')
+.textContent =
+JSON.stringify(
+Object.fromEntries(
+new FormData(
+document.getElementById('f')
+)
+),
+null,
+2
+);
+
+}
+
+}
+
+function next(){
+
+if(cur<6){
+
+cur++;
+
+show();
+
+}
+
+}
+
+function prev(){
+
+if(cur>0){
+
+cur--;
+
+show();
+
+}
+
+}
+
+renderSteps();
+
+var map =
+L.map('map')
+.setView([47.483,-2.48],14);
+
+L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+).addTo(map);
+
+let m =
+L.marker([47.483,-2.48])
+.addTo(map);
+
+map.on('click',e=>{
+
+m.setLatLng(e.latlng);
+
+lat.value =
+e.latlng.lat.toFixed(6);
+
+lng.value =
+e.latlng.lng.toFixed(6);
+
+});
+
+</script>
+
+</body>
+</html>
