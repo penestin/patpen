@@ -1,1 +1,364 @@
+<!DOCTYPE html>
+<html lang="fr">
 
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PATPEN - Inventaire patrimonial</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#aad3df;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:30px;
+    box-sizing:border-box;
+}
+
+/* Boîte principale */
+
+.app{
+    width:90%;
+    min-width:1100px;
+    max-width:1400px;
+
+    min-height:1400px;
+    max-height:1800px;
+
+    background:#ffffff;
+    border-radius:20px;
+    overflow:hidden;
+
+    display:flex;
+
+    box-shadow:0 12px 40px rgba(0,0,0,0.15);
+}
+
+.sidebar{
+    width:250px;
+    background:#f7f7f7;
+    padding:20px;
+    overflow:auto;
+    border-right:1px solid #ddd;
+}
+
+.content{
+    flex:1;
+    padding:20px;
+}
+
+.card{
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+}
+
+.step{
+    padding:8px;
+}
+
+.active{
+    font-weight:bold;
+    color:#9b4b82;
+}
+
+#map{
+    height:350px;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:10px;
+    margin:6px 0;
+    box-sizing:border-box;
+}
+
+button{
+    padding:10px 15px;
+    background:#9b4b82;
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#7e3c69;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+h2{
+    color:#2c3e50;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="sidebar">
+        <h2>PATPEN</h2>
+        <div id="steps"></div>
+    </div>
+
+    <div class="content">
+
+        <div class="card">
+
+            <form id="f">
+
+                <div class="page active">
+
+                    <h2>1. Localisation</h2>
+
+                    <div id="map"></div>
+
+                    <input id="lat" placeholder="Latitude">
+                    <input id="lng" placeholder="Longitude">
+
+                    <input placeholder="Commune" value="Pénestin">
+                    <input placeholder="Lieu-dit">
+                    <input placeholder="Adresse">
+
+                </div>
+
+                <div class="page">
+
+                    <h2>2. Illustration</h2>
+
+                    <input type="file" multiple>
+
+                    <textarea placeholder="Légende"></textarea>
+
+                    <input placeholder="Crédit photo">
+
+                </div>
+
+                <div class="page">
+
+                    <h2>3. Désignation</h2>
+
+                    <select>
+                        <option>Puits</option>
+                        <option>Fontaine</option>
+                        <option>Lavoir</option>
+                        <option>Four</option>
+                        <option>Moulin</option>
+                        <option>Arbre</option>
+                    </select>
+
+                    <input placeholder="Nom">
+                    <input placeholder="Nom local">
+                    <input placeholder="Époque">
+
+                </div>
+
+                <div class="page">
+
+                    <h2>4. Propriété</h2>
+
+                    <input placeholder="Propriétaire">
+
+                    <select>
+                        <option>Libre</option>
+                        <option>Restreint</option>
+                    </select>
+
+                </div>
+
+                <div class="page">
+
+                    <h2>5. Description</h2>
+
+                    <textarea placeholder="Description"></textarea>
+
+                    <input placeholder="Matériaux">
+
+                </div>
+
+                <div class="page">
+
+                    <h2>6. Historique</h2>
+
+                    <input placeholder="Période">
+
+                    <textarea placeholder="Historique"></textarea>
+
+                </div>
+
+                <div class="page">
+
+                    <h2>7. Observations</h2>
+
+                    <textarea placeholder="Commentaires"></textarea>
+
+                    <pre id="json"></pre>
+
+                </div>
+
+            </form>
+
+            <div style="margin-top:15px">
+
+                <button onclick="prev()">
+                    Précédent
+                </button>
+
+                <button onclick="next()">
+                    Suivant
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+const names = [
+'Localisation',
+'Illustration',
+'Désignation',
+'Propriété',
+'Description',
+'Historique',
+'Observations'
+];
+
+let cur = 0;
+
+const pages =
+document.querySelectorAll('.page');
+
+const steps =
+document.getElementById('steps');
+
+function renderSteps(){
+
+    steps.innerHTML='';
+
+    names.forEach((n,i)=>{
+
+        let d =
+        document.createElement('div');
+
+        d.className =
+        'step ' + (i===cur ? 'active' : '');
+
+        d.textContent =
+        (i+1)+'. '+n;
+
+        steps.appendChild(d);
+
+    });
+
+}
+
+function show(){
+
+    pages.forEach((p,i)=>
+        p.classList.toggle(
+            'active',
+            i===cur
+        )
+    );
+
+    renderSteps();
+
+    if(cur===6){
+
+        document.getElementById('json')
+        .textContent =
+        JSON.stringify(
+            Object.fromEntries(
+                new FormData(
+                    document.getElementById('f')
+                )
+            ),
+            null,
+            2
+        );
+
+    }
+
+}
+
+function next(){
+
+    if(cur<6){
+
+        cur++;
+        show();
+
+    }
+
+}
+
+function prev(){
+
+    if(cur>0){
+
+        cur--;
+        show();
+
+    }
+
+}
+
+renderSteps();
+
+var map =
+L.map('map')
+.setView([47.483,-2.48],14);
+
+L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{
+    attribution:'© OpenStreetMap'
+}
+).addTo(map);
+
+let m =
+L.marker([47.483,-2.48])
+.addTo(map);
+
+map.on('click',e=>{
+
+    m.setLatLng(e.latlng);
+
+    lat.value =
+    e.latlng.lat.toFixed(6);
+
+    lng.value =
+    e.latlng.lng.toFixed(6);
+
+});
+
+</script>
+
+</body>
+</html>
