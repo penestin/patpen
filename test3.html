@@ -117,4 +117,237 @@ body{
     color:white;
 }
 
-.btn
+.btn-fermer{
+    background:#666;
+    color:white;
+}
+
+/* RESPONSIVE */
+
+@media screen and (max-width:768px){
+
+    body{
+        flex-direction:column;
+    }
+
+    #sidebar{
+        width:100%;
+        min-width:100%;
+        height:auto;
+        border-right:none;
+        border-bottom:1px solid #ddd;
+    }
+
+    #map{
+        width:100%;
+        height:calc(100vh - 140px);
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="sidebar">
+
+    <h1>PATPEN</h1>
+
+    <button id="btnFormulaire">
+        ➕ Ajouter une fiche
+    </button>
+
+</div>
+
+<div id="map"></div>
+
+<div id="overlay"></div>
+
+<div id="fenetreFormulaire">
+
+    <h2>Nouvelle fiche</h2>
+
+    <form>
+
+        <label>Nom du lieu</label><br>
+        <input type="text"><br><br>
+
+        <label>Description</label><br>
+        <textarea rows="5"></textarea><br><br>
+
+        <button
+            type="submit"
+            class="btn-action btn-enregistrer">
+            Enregistrer
+        </button>
+
+        <button
+            type="button"
+            class="btn-action btn-fermer"
+            onclick="fermerFormulaire()">
+            Fermer
+        </button>
+
+    </form>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<script>
+
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQxz-pZWXUmcWB99nJPRKGJ2wxbYbBB4Y4Lq16nOEBtKm5peTr1ThCHfuHWvPJ5v1ScgZ7w0N9uqP-J/pub?gid=1723096786&single=true&output=csv";
+
+const map = L.map("map").setView(
+    [47.482,-2.475],
+    12
+);
+
+L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+        maxZoom:19,
+        attribution:"© OpenStreetMap"
+    }
+).addTo(map);
+
+function photoDrive(url){
+
+    if(!url) return "";
+
+    const match = url.match(/id=([^&]+)/);
+
+    if(!match) return "";
+
+    return "https://drive.google.com/thumbnail?id="
+        + match[1]
+        + "&sz=w800";
+}
+
+Papa.parse(CSV_URL,{
+
+    download:true,
+    header:true,
+    skipEmptyLines:true,
+
+    complete:function(results){
+
+        let nb = 0;
+
+        results.data.forEach(function(fiche){
+
+            const statut =
+            (fiche["Statut"]||"")
+            .trim()
+            .toLowerCase();
+
+            const afficher =
+            (fiche["Afficher carte"]||"")
+            .trim()
+            .toLowerCase();
+
+            if(statut !== "validé") return;
+            if(afficher !== "oui") return;
+
+            const lat =
+            parseFloat(fiche["Latitude"]);
+
+            const lng =
+            parseFloat(fiche["Longitude"]);
+
+            if(isNaN(lat) || isNaN(lng))
+                return;
+
+            const nom =
+            fiche["Nom du lieu"] || "Sans nom";
+
+            const description =
+            fiche["Description"] || "";
+
+            const categorie =
+            fiche["Catégorie"] || "";
+
+            const secteur =
+            fiche["Secteur"] || "";
+
+            const photo =
+            photoDrive(
+                fiche["Photos"]
+            );
+
+            const marker =
+            L.circleMarker(
+                [lat,lng],
+                {
+                    radius:8,
+                    color:"brown",
+                    fillOpacity:1
+                }
+            ).addTo(map);
+
+            marker.bindPopup(
+            `
+            <div style="width:280px">
+
+                <h3>${nom}</h3>
+
+                ${
+                    photo
+                    ?
+                    `<img src="${photo}" class="photo-popup">`
+                    :
+                    ""
+                }
+
+                <b>Catégorie :</b> ${categorie}
+                <br>
+
+                <b>Secteur :</b> ${secteur}
+
+                <br><br>
+
+                ${description}
+
+            </div>
+            `
+            );
+
+            nb++;
+
+        });
+
+        console.log(nb + " fiche(s) affichée(s)");
+
+    }
+
+});
+
+function ouvrirFormulaire(){
+
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("fenetreFormulaire").style.display = "block";
+
+}
+
+function fermerFormulaire(){
+
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("fenetreFormulaire").style.display = "none";
+
+}
+
+document
+.getElementById("btnFormulaire")
+.addEventListener("click", ouvrirFormulaire);
+
+document
+.getElementById("overlay")
+.addEventListener("click", fermerFormulaire);
+
+</script>
+
+</body>
+</html>
