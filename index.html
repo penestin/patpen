@@ -10,25 +10,55 @@
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
+
 html,body{
     margin:0;
+    padding:0;
     height:100%;
 }
 
 body{
     display:flex;
+    flex-direction:row;
 }
 
+/* PANNEAU GAUCHE */
+
 #sidebar{
-    width:320px;
-    min-width:320px;
-    background:#add19d;
+    width:220px;
+    min-width:220px;
+    background:#205ba4;
     border-right:1px solid #ddd;
     padding:15px;
     overflow:auto;
     box-sizing:border-box;
     font-family:Arial,sans-serif;
+    color:white;
 }
+
+#sidebar h1{
+    margin-top:0;
+    color:white;
+}
+
+#btnFormulaire{
+    width:100%;
+    padding:12px;
+    margin-top:20px;
+    background:white;
+    color:#205ba4;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    font-size:15px;
+    cursor:pointer;
+}
+
+#btnFormulaire:hover{
+    background:#e6eef9;
+}
+
+/* CARTE */
 
 #map{
     flex:1;
@@ -40,15 +70,45 @@ body{
     max-height:220px;
     object-fit:cover;
 }
-</style>
 
+/* RESPONSIVE */
+
+@media screen and (max-width:768px){
+
+    body{
+        flex-direction:column;
+    }
+
+    #sidebar{
+        width:100%;
+        min-width:100%;
+        height:auto;
+        border-right:none;
+        border-bottom:1px solid #ddd;
+    }
+
+    #map{
+        width:100%;
+        height:calc(100vh - 140px);
+    }
+
+}
+
+</style>
 </head>
+
 <body>
 
 <div id="sidebar">
-<h1>PATPEN</h1>
-<div id="nbResultats">Chargement...</div>
-<div id="log"></div>
+
+    <h1>PATPEN</h1>
+
+    <button
+        id="btnFormulaire"
+        onclick="window.location.href='formulaire.html';">
+        ➕ Ajouter une fiche
+    </button>
+
 </div>
 
 <div id="map"></div>
@@ -62,16 +122,16 @@ const CSV_URL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vQxz-pZWXUmcWB99nJPRKGJ2wxbYbBB4Y4Lq16nOEBtKm5peTr1ThCHfuHWvPJ5v1ScgZ7w0N9uqP-J/pub?gid=1723096786&single=true&output=csv";
 
 const map = L.map("map").setView(
-[47.482,-2.475],
-12
+    [47.482,-2.475],
+    12
 );
 
 L.tileLayer(
-"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-{
-maxZoom:19,
-attribution:"© OpenStreetMap"
-}
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+        maxZoom:19,
+        attribution:"© OpenStreetMap"
+    }
 ).addTo(map);
 
 function photoDrive(url){
@@ -95,19 +155,17 @@ Papa.parse(CSV_URL,{
 
     complete:function(results){
 
-        console.log(results.data);
-
         let nb = 0;
 
         results.data.forEach(function(fiche){
 
             const statut =
-            (fiche["Statut"]||"")
+            (fiche["Statut"] || "")
             .trim()
             .toLowerCase();
 
             const afficher =
-            (fiche["Afficher carte"]||"")
+            (fiche["Afficher carte"] || "")
             .trim()
             .toLowerCase();
 
@@ -137,7 +195,7 @@ Papa.parse(CSV_URL,{
 
             const photo =
             photoDrive(
-            fiche["Photos"]
+                fiche["Photos"]
             );
 
             const marker =
@@ -146,6 +204,7 @@ Papa.parse(CSV_URL,{
                 {
                     radius:8,
                     color:"brown",
+                    fillColor:"brown",
                     fillOpacity:1
                 }
             ).addTo(map);
@@ -154,27 +213,22 @@ Papa.parse(CSV_URL,{
             `
             <div style="width:280px">
 
-            <h3>${nom}</h3>
+                <h3>${nom}</h3>
 
-            ${
-                photo
-                ?
-                `<img src="${photo}" class="photo-popup">`
-                :
-                ""
-            }
+                ${
+                    photo
+                    ? `<img src="${photo}" class="photo-popup">`
+                    : ""
+                }
 
-            <b>Catégorie :</b>
-            ${categorie}
+                <b>Catégorie :</b> ${categorie}
+                <br>
 
-            <br>
+                <b>Secteur :</b> ${secteur}
 
-            <b>Secteur :</b>
-            ${secteur}
+                <br><br>
 
-            <br><br>
-
-            ${description}
+                ${description}
 
             </div>
             `
@@ -184,15 +238,7 @@ Papa.parse(CSV_URL,{
 
         });
 
-        document
-        .getElementById("nbResultats")
-        .innerHTML =
-        nb + " élément(s)";
-
-        document
-        .getElementById("log")
-        .innerHTML =
-        "CSV chargé";
+        console.log(nb + " fiche(s) affichée(s)");
 
     }
 
