@@ -198,16 +198,19 @@ Papa.parse(CSV_URL,{
                 fiche["Photos"]
             );
 
-            const marker =
-            L.circleMarker(
-                [lat,lng],
-                {
-                    radius:8,
-                    color:"brown",
-                    fillColor:"brown",
-                    fillOpacity:1
-                }
-            ).addTo(map);
+const wellIcon = L.icon({
+    iconUrl: 'puit.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40]
+});
+
+const marker = L.marker(
+    [lat, lng],
+    {
+        icon: wellIcon
+    }
+).addTo(map);
 
             marker.bindPopup(
             `
