@@ -1,1 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PATPEN - Inventaire patrimonial</title>
 
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:35px;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#a9c8d6;
+}
+
+/* =======================
+   CONTAINER PRINCIPAL
+======================= */
+
+.app{
+    width:1260px;
+    max-width:95vw;
+    min-height:920px;
+
+    margin:auto;
+
+    background:#ffffff;
+
+    border-radius:24px;
+
+    overflow:hidden;
+
+    display:flex;
+
+    box-shadow:
+    0 15px 40px rgba(0,0,0,.15);
+}
+
+/* =======================
+   SIDEBAR
+======================= */
+
+.sidebar{
+    width:180px;
+    background:#f7f7f7;
+
+    border-right:1px solid #ddd;
+
+    padding:16px;
+
+    flex-shrink:0;
+}
+
+/* =======================
+   LOGO
+======================= */
+
+.logo-box{
+    text-align:center;
+
+    margin-bottom:20px;
+
+    padding-bottom:18px;
+
+    border-bottom:1px solid #ddd;
+}
+
+.logo{
+    width:70px;
+    height:auto;
+    display:block;
+    margin:auto;
+}
+
+.logo-title{
+    margin-top:10px;
+
+    font-size:14px;
+    font-weight:bold;
+}
+
+.subtitle{
+    font-size:11px;
+    color:#666;
+    margin-top:4px;
+}
+
+/* =======================
+   ETAPES
+======================= */
+
+.step{
+    padding:9px 0;
+
+    font-size:14px;
+
+    color:#222;
+
+    line-height:1.4;
+}
+
+.step.active{
+    color:#a04d82;
+    font-weight:bold;
+}
+
+/* =======================
+   CONTENU
+======================= */
+
+.content{
+    flex:1;
+    padding:40px;
+}
+
+.card{
+    max-width:720px;
+    margin:auto;
+    background:#fff;
+}
+
+/* =======================
+   TITRES
+======================= */
+
+h2{
+    margin-top:0;
+    margin-bottom:20px;
+
+    font-size:52px;
+    color:#2f4159;
+}
+
+.step-number{
+    display:none;
+}
+
+/* =======================
+   CARTE
+======================= */
+
+#map{
+    height:480px;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    margin-bottom:15px;
+}
+
+/* =======================
+   CHAMPS
+======================= */
+
+input,
+select,
+textarea{
+    width:100%;
+
+    margin:8px 0;
+
+    padding:14px;
+
+    border:1px solid #bdbdbd;
+
+    border-radius:4px;
+
+    font-size:16px;
+}
+
+textarea{
+    min-height:120px;
+}
+
+/* =======================
+   BOUTONS
+======================= */
+
+button{
+    background:#a64c85;
+
+    color:white;
+
+    border:none;
+
+    border-radius:6px;
+
+    padding:12px 20px;
+
+    cursor:pointer;
+
+    font-size:16px;
+}
+
+button:hover{
+    background:#87406b;
+}
+
+/* =======================
+   PAGES
+======================= */
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+/* =======================
+   RESPONSIVE
+======================= */
+
+@media(max-width:900px){
+
+    .app{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        border-right:none;
+        border-bottom:1px solid #ddd;
+    }
+
+    .content{
+        padding:20px;
+    }
+
+    h2{
+        font-size:36px;
+    }
+
+    #map{
+        height:350px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="logo-box">
+
+            <img
+            src="images/logo-patpen.png"
+            alt="PATPEN"
+            class="logo">
+
+                  <div class="subtitle">
+                Patrimoine & Mémoire
+            </div>
+
+        </div>
+
+        <div id="steps"></div>
+
+    </div>
+
+    <!-- CONTENU -->
+
+    <div class="content">
+
+        <div class="card">
+
+            <form id="f">
+
+                <div class="page active">
+
+                    <h2>1 Localisation</h2>
+
+                    <div id="map"></div>
+
+                    <input id="lat" placeholder="Latitude">
+                    <input id="lng" placeholder="Longitude">
+
+                    <input
+                    placeholder="Commune"
+                    value="Pénestin">
+
+                    <input placeholder="Lieu-dit">
+
+                    <input placeholder="Adresse">
+
+                </div>
+
+                <div class="page">
+
+                    <h2>2 Illustration</h2>
+
+                    <input type="file" multiple>
+
+                    <textarea placeholder="Légende"></textarea>
+
+                    <input placeholder="Crédit photo">
+
+                </div>
+
+                <div class="page">
+
+                    <h2>3 Désignation</h2>
+
+                    <select>
+                        <option>Puits</option>
+                        <option>Fontaine</option>
+                        <option>Lavoir</option>
+                        <option>Four</option>
+                        <option>Moulin</option>
+                        <option>Arbre remarquable</option>
+                        <option>Autres</option>
+                    </select>
+
+                    <input placeholder="Nom">
+
+                    <input placeholder="Nom local">
+
+                    <input placeholder="Époque">
+
+                </div>
+
+                <div class="page">
+
+                    <h2>4 Propriété</h2>
+
+                    <input placeholder="Propriétaire">
+
+                    <select
