@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -8,25 +9,49 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 <style>
+
 body{
     margin:0;
     font-family:Arial,sans-serif;
-    background:#5665ba;
+    background:#aad3df;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:30px;
+    box-sizing:border-box;
+}
+
+/* Boîte principale */
+
+.app{
+    width:90%;
+    min-width:350px;
+    max-width:1000px;
+
+    min-height:800px;
+    max-height:1000px;
+
+    background:#ffffff;
+    border-radius:20px;
+    overflow:hidden;
+
+    display:flex;
+
+    box-shadow:0 12px 40px rgba(0,0,0,0.15);
 }
 
 .sidebar{
-    position:fixed;
-    left:0;
-    top:0;
-    bottom:0;
-    width:250px;
-    background:#fff;
+    width:15%;
+    min-width:80px;
+    max-width:250px;
+    background:#f7f7f7;
     padding:20px;
     overflow:auto;
+    border-right:1px solid #ddd;
 }
 
 .content{
-    margin-left:270px;
+    flex:1;
     padding:20px;
 }
 
@@ -37,9 +62,15 @@ body{
 }
 
 .step{
-    padding:8px;
+    padding:8px 4px;
+    font-size:12px;
+    word-break:break-word;
 }
-
+.sidebar h2{
+    font-size:16px;
+    text-align:center;
+    margin-top:0;
+}
 .active{
     font-weight:bold;
     color:#9b4b82;
@@ -47,6 +78,8 @@ body{
 
 #map{
     height:350px;
+    border-radius:10px;
+    overflow:hidden;
 }
 
 input,
@@ -55,6 +88,7 @@ select{
     width:100%;
     padding:10px;
     margin:6px 0;
+    box-sizing:border-box;
 }
 
 button{
@@ -63,6 +97,11 @@ button{
     color:#fff;
     border:none;
     border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#7e3c69;
 }
 
 .page{
@@ -72,127 +111,135 @@ button{
 .page.active{
     display:block;
 }
-</style>
 
+h2{
+    color:#2c3e50;
+}
+
+</style>
 </head>
 
 <body>
 
-<div class="sidebar">
-    <h2>PATPEN</h2>
-    <div id="steps"></div>
-</div>
+<div class="app">
 
-<div class="content">
+    <div class="sidebar">
+        <h2>PATPEN</h2>
+        <div id="steps"></div>
+    </div>
 
-<div class="card">
+    <div class="content">
 
-<form id="f">
+        <div class="card">
 
-<div class="page active">
+            <form id="f">
 
-<h2>1. Localisation</h2>
+                <div class="page active">
 
-<div id="map"></div>
+                    <h2>1. Localisation</h2>
 
-<input id="lat" placeholder="Latitude">
-<input id="lng" placeholder="Longitude">
+                    <div id="map"></div>
 
-<input placeholder="Commune" value="Pénestin">
-<input placeholder="Lieu-dit">
-<input placeholder="Adresse">
+                    <input id="lat" placeholder="Latitude">
+                    <input id="lng" placeholder="Longitude">
 
-</div>
+                    <input placeholder="Commune" value="Pénestin">
+                    <input placeholder="Lieu-dit">
+                    <input placeholder="Adresse">
 
-<div class="page">
+                </div>
 
-<h2>2. Illustration</h2>
+                <div class="page">
 
-<input type="file" multiple>
+                    <h2>2. Illustration</h2>
 
-<textarea placeholder="Légende"></textarea>
+                    <input type="file" multiple>
 
-<input placeholder="Crédit photo">
+                    <textarea placeholder="Légende"></textarea>
 
-</div>
+                    <input placeholder="Crédit photo">
 
-<div class="page">
+                </div>
 
-<h2>3. Désignation</h2>
+                <div class="page">
 
-<select>
-<option>Puits</option>
-<option>Fontaine</option>
-<option>Lavoir</option>
-<option>Four</option>
-<option>Moulin</option>
-<option>Arbre</option>    
-</select>
+                    <h2>3. Désignation</h2>
 
-<input placeholder="Nom">
-<input placeholder="Nom local">
-<input placeholder="Époque">
+                    <select>
+                        <option>Puits</option>
+                        <option>Fontaine</option>
+                        <option>Lavoir</option>
+                        <option>Four</option>
+                        <option>Moulin</option>
+                        <option>Arbre</option>
+                    </select>
 
-</div>
+                    <input placeholder="Nom">
+                    <input placeholder="Nom local">
+                    <input placeholder="Époque">
 
-<div class="page">
+                </div>
 
-<h2>4. Propriété</h2>
+                <div class="page">
 
-<input placeholder="Propriétaire">
+                    <h2>4. Propriété</h2>
 
-<select>
-<option>Libre</option>
-<option>Restreint</option>
-</select>
+                    <input placeholder="Propriétaire">
 
-</div>
+                    <select>
+                        <option>Libre</option>
+                        <option>Restreint</option>
+                    </select>
 
-<div class="page">
+                </div>
 
-<h2>5. Description</h2>
+                <div class="page">
 
-<textarea placeholder="Description"></textarea>
+                    <h2>5. Description</h2>
 
-<input placeholder="Matériaux">
+                    <textarea placeholder="Description"></textarea>
 
-</div>
+                    <input placeholder="Matériaux">
 
-<div class="page">
+                </div>
 
-<h2>6. Historique</h2>
+                <div class="page">
 
-<input placeholder="Période">
+                    <h2>6. Historique</h2>
 
-<textarea placeholder="Historique"></textarea>
+                    <input placeholder="Période">
 
-</div>
+                    <textarea placeholder="Historique"></textarea>
 
-<div class="page">
+                </div>
 
-<h2>7. Observations</h2>
+                <div class="page">
 
-<textarea placeholder="Commentaires"></textarea>
+                    <h2>7. Observations</h2>
 
-<pre id="json"></pre>
+                    <textarea placeholder="Commentaires"></textarea>
 
-</div>
+                    <pre id="json"></pre>
 
-</form>
+                </div>
 
-<div style="margin-top:15px">
+            </form>
 
-<button onclick="prev()">
-Précédent
-</button>
+            <div style="margin-top:15px">
 
-<button onclick="next()">
-Suivant
-</button>
+                <button onclick="prev()">
+                    Précédent
+                </button>
 
-</div>
+                <button onclick="next()">
+                    Suivant
+                </button>
 
-</div>
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
@@ -220,74 +267,73 @@ document.getElementById('steps');
 
 function renderSteps(){
 
-steps.innerHTML='';
+    steps.innerHTML='';
 
-names.forEach((n,i)=>{
+    names.forEach((n,i)=>{
 
-    let d =
-    document.createElement('div');
+        let d =
+        document.createElement('div');
 
-    d.className =
-    'step ' + (i===cur?'active':'');
+        d.className =
+        'step ' + (i===cur ? 'active' : '');
 
-    d.textContent =
-    (i+1)+'. '+n;
+        d.textContent =
+        (i+1)+'. '+n;
 
-    steps.appendChild(d);
+        steps.appendChild(d);
 
-});
+    });
 
 }
 
 function show(){
 
-pages.forEach((p,i)=>
-p.classList.toggle(
-'active',
-i===cur
-));
+    pages.forEach((p,i)=>
+        p.classList.toggle(
+            'active',
+            i===cur
+        )
+    );
 
-renderSteps();
+    renderSteps();
 
-if(cur===6){
+    if(cur===6){
 
-document.getElementById('json')
-.textContent =
-JSON.stringify(
-Object.fromEntries(
-new FormData(
-document.getElementById('f')
-)
-),
-null,
-2
-);
+        document.getElementById('json')
+        .textContent =
+        JSON.stringify(
+            Object.fromEntries(
+                new FormData(
+                    document.getElementById('f')
+                )
+            ),
+            null,
+            2
+        );
 
-}
+    }
 
 }
 
 function next(){
 
-if(cur<6){
+    if(cur<6){
 
-cur++;
+        cur++;
+        show();
 
-show();
-
-}
+    }
 
 }
 
 function prev(){
 
-if(cur>0){
+    if(cur>0){
 
-cur--;
+        cur--;
+        show();
 
-show();
-
-}
+    }
 
 }
 
@@ -298,7 +344,10 @@ L.map('map')
 .setView([47.483,-2.48],14);
 
 L.tileLayer(
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{
+    attribution:'© OpenStreetMap'
+}
 ).addTo(map);
 
 let m =
@@ -307,13 +356,13 @@ L.marker([47.483,-2.48])
 
 map.on('click',e=>{
 
-m.setLatLng(e.latlng);
+    m.setLatLng(e.latlng);
 
-lat.value =
-e.latlng.lat.toFixed(6);
+    lat.value =
+    e.latlng.lat.toFixed(6);
 
-lng.value =
-e.latlng.lng.toFixed(6);
+    lng.value =
+    e.latlng.lng.toFixed(6);
 
 });
 
