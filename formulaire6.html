@@ -1,1 +1,478 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
+<title>PATPEN - Inventaire patrimonial</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+
+*{box-sizing:border-box;}
+
+body{
+    margin:0;
+    padding:20px;
+    font-family:Arial,sans-serif;
+    background:#aad3df;
+}
+
+.app{
+    max-width:1200px;
+    margin:auto;
+    background:#fff;
+    border-radius:20px;
+    overflow:hidden;
+    display:flex;
+    min-height:850px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+
+.sidebar{
+    width:220px;
+    min-width:220px;
+    background:#f7f7f7;
+    border-right:1px solid #ddd;
+    padding:20px;
+}
+
+.logo-box{
+    text-align:center;
+    margin-bottom:20px;
+    padding-bottom:15px;
+    border-bottom:1px solid #ddd;
+}
+
+.logo{
+    width:120px;
+    height:auto;
+    display:block;
+    margin:0 auto 10px;
+}
+
+.subtitle{
+    font-size:13px;
+    color:#666;
+}
+
+.step{
+    font-size:12px;
+    padding:8px 0;
+}
+
+.step.active{
+    font-weight:bold;
+    color:#9b4b82;
+}
+
+.content{
+    flex:1;
+    padding:25px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+h2{
+    margin-top:0;
+    color:#2c3e50;
+}
+
+#map{
+    height:400px;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:10px;
+    margin:6px 0;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+textarea{
+    min-height:120px;
+}
+
+.bottom-actions{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    margin-top:20px;
+    padding-top:20px;
+    border-top:1px solid #ddd;
+}
+
+.btn-prev,
+.btn-next,
+.btn-sheet{
+    min-width:180px;
+    height:48px;
+    border:none;
+    border-radius:8px;
+    color:white;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.btn-prev{
+    background:#8c8c8c;
+}
+
+.btn-next{
+    background:#9b4b82;
+}
+
+.btn-sheet{
+    background:#1976d2;
+}
+
+@media(max-width:768px){
+
+    .sidebar{
+        width:180px;
+        min-width:180px;
+    }
+
+    .logo{
+        width:90px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="sidebar">
+
+        <div class="logo-box">
+
+            <img
+                src="images/logo-patpen.png"
+                alt="PATPEN"
+                class="logo">
+
+            <div class="subtitle">
+                Patrimoine &amp; Mémoire
+            </div>
+
+        </div>
+
+        <div id="steps"></div>
+
+    </div>
+
+    <div class="content">
+
+        <form id="f">
+
+            <div class="page active">
+
+       <input id="lat" name="latitude" placeholder="Latitude">
+                <input id="lng" name="longitude" placeholder="Longitude">
+
+                <input name="commune" value="Pénestin">
+                <input name="lieudit" placeholder="Lieu-dit">
+                <input name="adresse" placeholder="Adresse">
+
+            </div>
+
+            <div class="page">
+
+                <h2>Illustration</h2>
+
+                <input type="file" multiple name="photos">
+
+                <textarea
+                    name="legende"
+                    placeholder="Légende"></textarea>
+
+            </div>
+
+            <div class="page">
+
+                <h2>Désignation</h2>
+
+                <select name="categorie">
+                    <option>Puits</option>
+                    <option>Fontaine</option>
+                    <option>Lavoir</option>
+                    <option>Four</option>
+                    <option>Calvaire</option>
+                    <option>Moulin</option>
+                    <option>Arbre remarquable</option>
+                    <option>Autres</option>
+                </select>
+
+                <input name="nom" placeholder="Nom">
+
+            </div>
+
+            <div class="page">
+
+                <h2>Propriété</h2>
+
+                <input
+                    name="proprietaire"
+                    placeholder="Propriétaire">
+
+            </div>
+
+            <div class="page">
+
+                <h2>Description</h2>
+
+                <textarea
+                    name="description"></textarea>
+
+            </div>
+
+            <div class="page">
+
+                <h2>Historique</h2>
+
+                <textarea
+                    name="historique"></textarea>
+
+            </div>
+
+            <div class="page">
+
+                <h2>Observations</h2>
+
+                <textarea
+                    name="observations"></textarea>
+
+            </div>
+
+        </form>
+
+        <div class="bottom-actions">
+
+            <button
+                type="button"
+                class="btn-prev"
+                onclick="prev()">
+                Précédent
+            </button>
+
+            <button
+                type="button"
+                class="btn-next"
+                onclick="next()">
+                Suivant
+            </button>
+
+            <button
+                type="button"
+                class="btn-sheet"
+                onclick="sendSheets()">
+                Envoyer vers Google Sheets
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+const APPS_SCRIPT_URL =
+"https://script.google.com/macros/s/EXEMPLE123456789/exec";
+
+const names = [
+"Localisation",
+"Illustration",
+"Désignation",
+"Propriété",
+"Description",
+"Historique",
+"Observations"
+];
+
+let cur = 0;
+
+const pages =
+document.querySelectorAll(".page");
+
+const steps =
+document.getElementById("steps");
+
+function renderSteps(){
+
+    steps.innerHTML="";
+
+    names.forEach((n,i)=>{
+
+        const d =
+        document.createElement("div");
+
+        d.className =
+        "step " +
+        (i===cur ? "active" : "");
+
+        d.textContent =
+        (i+1)+". "+n;
+
+        steps.appendChild(d);
+
+    });
+
+}
+
+function show(){
+
+    pages.forEach((p,i)=>{
+
+        p.classList.toggle(
+            "active",
+            i===cur
+        );
+
+    });
+
+    renderSteps();
+
+}
+
+function next(){
+
+    if(cur<6){
+
+        cur++;
+
+        show();
+    }
+
+}
+
+function prev(){
+
+    if(cur>0){
+
+        cur--;
+
+        show();
+    }
+
+}
+
+function buildJSON(){
+
+    const data = {};
+
+    document
+    .querySelectorAll(
+        "#f input,#f textarea,#f select"
+    )
+    .forEach(el=>{
+
+        if(!el.name) return;
+
+        if(el.type==="file"){
+
+            data[el.name] =
+            [...el.files]
+            .map(f=>f.name);
+
+        }else{
+
+            data[el.name] =
+            el.value;
+
+        }
+
+    });
+
+    return data;
+
+}
+
+async function sendSheets(){
+
+    try{
+
+        await fetch(
+            APPS_SCRIPT_URL,
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+                body:JSON.stringify(
+                    buildJSON()
+                )
+            }
+        );
+
+        alert(
+            "Fiche PATPEN envoyée."
+        );
+
+    }catch(err){
+
+        alert(
+            "Erreur lors de l'envoi."
+        );
+
+    }
+
+}
+
+/* Carte */
+
+const map =
+L.map("map")
+.setView([47.483,-2.48],14);
+
+L.tileLayer(
+"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+{
+attribution:"© OpenStreetMap"
+}
+).addTo(map);
+
+const marker =
+L.marker([47.483,-2.48])
+.addTo(map);
+
+map.on("click",e=>{
+
+    marker.setLatLng(
+        e.latlng
+    );
+
+    lat.value =
+    e.latlng.lat.toFixed(6);
+
+    lng.value =
+    e.latlng.lng.toFixed(6);
+
+});
+
+show();
+
+</script>
+
+</body>
+</html>
