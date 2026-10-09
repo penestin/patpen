@@ -161,4 +161,472 @@ h2{
 
 /* =========================
    CHAMPS
-====
+========================= */
+
+input,
+textarea,
+select{
+
+    width:100%;
+
+    padding:14px;
+
+    margin:8px 0;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+    font-size:16px;
+}
+
+textarea{
+
+    min-height:120px;
+}
+
+/* =========================
+   BOUTONS
+========================= */
+
+button{
+
+    background:#9b4b82;
+
+    color:white;
+
+    border:none;
+
+    border-radius:6px;
+
+    padding:12px 16px;
+
+    cursor:pointer;
+}
+
+button:hover{
+
+    background:#7c3e68;
+}
+
+/* =========================
+   PAGES
+========================= */
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+/* =========================
+   JSON
+========================= */
+
+#json{
+
+    background:#f5f5f5;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+    padding:15px;
+
+    margin-top:15px;
+
+    white-space:pre-wrap;
+
+    overflow:auto;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+    body{
+        padding:10px;
+    }
+
+    .sidebar{
+
+        width:180px;
+        min-width:180px;
+    }
+
+    .logo{
+
+        width:100px;
+    }
+
+    .subtitle{
+
+        font-size:11px;
+    }
+
+    h2{
+
+        font-size:42px;
+    }
+
+    #map{
+
+        height:300px;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="logo-box">
+
+            <img
+            src="images/logo-patpen.png"
+            alt="PATPEN"
+            class="logo">
+
+            <div class="subtitle">
+                Patrimoine &amp; Mémoire de Pénestin
+            </div>
+
+        </div>
+
+        <div id="steps"></div>
+
+    </div>
+
+    <!-- CONTENU -->
+
+    <div class="content">
+
+        <div class="card">
+
+   div class="page active">
+
+                    <h2>Localisation</h2>
+
+                    <div id="map"></div>
+
+                    <input id="lat" name="latitude" placeholder="Latitude">
+
+                    <input id="lng" name="longitude" placeholder="Longitude">
+
+                    <input
+                    name="commune"
+                    value="Pénestin"
+                    placeholder="Commune">
+
+                    <input
+                    name="lieudit"
+                    placeholder="Lieu-dit">
+
+                    <input
+                    name="adresse"
+                    placeholder="Adresse">
+
+                </div>
+
+                <!-- PAGE 2 -->
+
+                <div class="page">
+
+                    <h2>Illustration</h2>
+
+                    <input
+                    type="file"
+                    name="photos"
+                    multiple>
+
+                    <textarea
+                    name="legende"
+                    placeholder="Légende"></textarea>
+
+                    <input
+                    name="credit_photo"
+                    placeholder="Crédit photo">
+
+                </div>
+
+                <!-- PAGE 3 -->
+
+                <div class="page">
+
+                    <h2>Désignation</h2>
+
+                    <select name="categorie">
+
+                        <option>Puits</option>
+                        <option>Fontaine</option>
+                        <option>Lavoir</option>
+                        <option>Four</option>
+                        <option>Moulin</option>
+                        <option>Arbre remarquable</option>
+                        <option>Calvaire</option>
+                        <option>Autres</option>
+
+                    </select>
+
+                    <input name="nom" placeholder="Nom">
+
+                    <input name="nom_local" placeholder="Nom local">
+
+                    <input name="epoque" placeholder="Époque">
+
+                </div>
+
+                <!-- PAGE 4 -->
+
+                <div class="page">
+
+                    <h2>Propriété</h2>
+
+                    <input
+                    name="proprietaire"
+                    placeholder="Propriétaire">
+
+                    <select name="acces">
+
+                        <option>Libre</option>
+                        <option>Restreint</option>
+
+                    </select>
+
+                </div>
+
+                <!-- PAGE 5 -->
+
+                <div class="page">
+
+                    <h2>Description</h2>
+
+                    <textarea
+                    name="description"
+                    placeholder="Description"></textarea>
+
+                    <input
+                    name="materiaux"
+                    placeholder="Matériaux">
+
+                </div>
+
+                <!-- PAGE 6 -->
+
+                <div class="page">
+
+                    <h2>Historique</h2>
+
+                    <input
+                    name="periode"
+                    placeholder="Période">
+
+                    <textarea
+                    name="historique"
+                    placeholder="Historique"></textarea>
+
+                </div>
+
+                <!-- PAGE 7 -->
+
+                <div class="page">
+
+                    <h2>Observations</h2>
+
+                    <textarea
+                    name="observations"
+                    placeholder="Commentaires"></textarea>
+
+                    <h3>JSON généré</h3>
+
+                    <pre id="json"></pre>
+
+                </div>
+
+            </form>
+
+            <div style="margin-top:20px;display:flex;gap:10px;">
+
+                <button
+                type="button"
+                onclick="prev()">
+                Précédent
+                </button>
+
+                <button
+                type="button"
+                onclick="next()">
+                Suivant
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+const names=[
+'Localisation',
+'Illustration',
+'Désignation',
+'Propriété',
+'Description',
+'Historique',
+'Observations'
+];
+
+let cur=0;
+
+const pages=
+document.querySelectorAll('.page');
+
+const steps=
+document.getElementById('steps');
+
+function renderSteps(){
+
+    steps.innerHTML='';
+
+    names.forEach((n,i)=>{
+
+        const d=
+        document.createElement('div');
+
+        d.className=
+        'step ' + (i===cur ? 'active' : '');
+
+        d.textContent=
+        (i+1)+'. '+n;
+
+        steps.appendChild(d);
+
+    });
+}
+
+function buildJSON(){
+
+    const form=
+    document.getElementById('f');
+
+    const data={};
+
+    form.querySelectorAll(
+    'input,textarea,select'
+    ).forEach(el=>{
+
+        if(!el.name) return;
+
+        if(el.type==='file'){
+
+            data[el.name]=
+            [...el.files]
+            .map(f=>f.name);
+
+        }else{
+
+            data[el.name]=
+            el.value;
+        }
+
+    });
+
+    return data;
+}
+
+function show(){
+
+    pages.forEach((p,i)=>{
+
+        p.classList.toggle(
+        'active',
+        i===cur
+        );
+
+    });
+
+    renderSteps();
+
+    if(cur===6){
+
+        document.getElementById('json')
+        .textContent=
+        JSON.stringify(
+            buildJSON(),
+            null,
+            2
+        );
+    }
+}
+
+function next(){
+
+    if(cur<6){
+
+        cur++;
+        show();
+    }
+}
+
+function prev(){
+
+    if(cur>0){
+
+        cur--;
+        show();
+    }
+}
+
+renderSteps();
+
+/* LEAFLET */
+
+const map=
+L.map("map")
+.setView([47.483,-2.48],14);
+
+L.tileLayer(
+"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+{
+attribution:"© OpenStreetMap"
+}
+).addTo(map);
+
+const marker=
+L.marker([47.483,-2.48])
+.addTo(map);
+
+map.on("click",e=>{
+
+    marker.setLatLng(e.latlng);
+
+    document.getElementById("lat").value=
+    e.latlng.lat.toFixed(6);
+
+    document.getElementById("lng").value=
+    e.latlng.lng.toFixed(6);
+
+});
+
+show();
+
+</script>
+
+</body>
+</html>
