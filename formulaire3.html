@@ -1,570 +1,164 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>PATPEN - Inventaire patrimonial</title>
 
-<link rel="stylesheet"
+<link
+rel="stylesheet"
 href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 <style>
 
-{
+*{
     box-sizing:border-box;
 }
 
 body{
     margin:0;
-    padding:35px;
-    font-family:Arial,Helvetica,sans-serif;
-    background:#a9c8d6;
+    padding:20px;
+    background:#aad3df;
+    font-family:Arial,sans-serif;
 }
 
+/* =========================
+   CONTENEUR PRINCIPAL
+========================= */
+
 .app{
-    width:1260px;
-    max-width:95vw;
-    min-height:920px;
+    max-width:1400px;
+    min-height:900px;
+
     margin:auto;
-    background:#fff;
-    border-radius:24px;
+
+    background:white;
+
+    border-radius:25px;
+
     overflow:hidden;
+
     display:flex;
-    box-shadow:0 15px 40px rgba(0,0,0,.15);
-}
-<!-- /////////////////////////////////* Class -CSS-logo*/////// -->
 
-    
+    box-shadow:0 12px 40px rgba(0,0,0,.15);
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
 .sidebar{
-    width:180px;
-    background:#f7f7f7;
+
+    width:220px;
+    min-width:220px;
+
+    background:#f8f8f8;
+
     border-right:1px solid #ddd;
-    padding:16px;
-}
 
-.logo-box{
-    text-align:center;
-    margin-bottom:20px;
-    padding-bottom:18px;
-    border-bottom:1px solid #ddd;
-}
-
-.logo{
-    display:block;
-    width:110px;
-    max-width:100%;
-    height:auto;
-    margin:0 auto 10px auto;
-
-}
-
-.logo{
-    width:70px;
-    height:auto;
-    display:block;
-    margin:auto;
-}
-
-.logo-title{
-    margin-top:10px;
-    font-size:16px;
-    font-weight:bold;
-}
-
-.subtitle{
-    font-size:11px;
-    color:#666;
-}
-
-.step{
-    padding:9px 0;
-    font-size:14px;
-}
-
-.step.active{
-    color:#a04d82;
-    font-weight:bold;
-}
-
-.content{
-    flex:1;
-    padding:40px;
-}
-
-.card{
-    max-width:760px;
-    margin:auto;
-}
-
-h2{
-    margin-top:0;
-    margin-bottom:20px;
-    font-size:52px;
-    color:#2f4159;
-}
-
-#map{
-    height:480px;
-    border-radius:18px;
-    overflow:hidden;
-    margin-bottom:15px;
-}
-
-input,
-textarea,
-select{
-    width:100%;
-    margin:8px 0;
-    padding:14px;
-    border:1px solid #bdbdbd;
-    border-radius:4px;
-    font-size:16px;
-}
-
-textarea{
-    min-height:120px;
-}
-
-button{
-    background:#a64c85;
-    color:white;
-    border:none;
-    padding:12px 20px;
-    border-radius:6px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#87406b;
-}
-
-.page{
-    display:none;
-}
-
-.page.active{
-    display:block;
-}
-
-#json{
-    margin-top:20px;
-    background:#f5f5f5;
-    border:1px solid #ddd;
-    border-radius:8px;
-    padding:15px;
-    white-space:pre-wrap;
-    overflow:auto;
-    max-height:500px;
-    font-size:13px;
-}
-
-@media(max-width:900px){
-
-.app{
-    flex-direction:column;
-}
-
-.sidebar{
-    width:100%;
-    border-right:none;
-    border-bottom:1px solid #ddd;
-}
-
-.content{
     padding:20px;
 }
 
+/* =========================
+   LOGO
+========================= */
+
+.logo-box{
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+    padding-bottom:20px;
+
+    border-bottom:1px solid #ddd;
+}
+
+.logo{
+
+    width:140px;
+
+    max-width:100%;
+
+    height:auto;
+
+    display:block;
+
+    margin:0 auto 10px auto;
+}
+
+.subtitle{
+
+    font-size:13px;
+
+    color:#666;
+
+    line-height:1.4;
+}
+
+/* =========================
+   ETAPES
+========================= */
+
+.step{
+
+    padding:12px 0;
+
+    font-size:15px;
+
+    color:#222;
+}
+
+.step.active{
+
+    color:#9b4b82;
+
+    font-weight:bold;
+}
+
+/* =========================
+   CONTENU
+========================= */
+
+.content{
+
+    flex:1;
+
+    padding:35px;
+}
+
+.card{
+
+    max-width:850px;
+}
+
 h2{
-    font-size:36px;
+
+    font-size:64px;
+
+    color:#2c3e50;
+
+    margin-top:0;
+    margin-bottom:25px;
 }
 
+/* =========================
+   CARTE
+========================= */
+
+#map{
+
+    height:520px;
+
+    border-radius:16px;
+
+    margin-bottom:20px;
+
+    overflow:hidden;
 }
 
-</style>
-
-</head>
-
-<body>
-
-<div class="app">
-<!-- /////////////////////////////////* logo*/////// -->
-<!-- =========================
-     SIDEBAR
-========================= -->
-
-<div class="sidebar">
-
-    <div class="logo-box">
-
-        <img
-            src="images/logo-patpen-250.png"
-            alt="Logo PATPEN"
-            class       <div class="subtitle">
-            Patrimoine &amp; Mémoire de Pénestin
-        </div>
-
-    </div>
-
-    <div id="steps"></div>
-
-</div>
-    </div>
-
-</div>
-
-<div class="logo-title">
-PATPEN
-</div>
-
-<div class="subtitle">
-Patrimoine & Mémoire de Pénestin
-</div>
-
-</div>
-
-<div id="steps"></div>
-
-</div>
-
-<div class="content">
-
-<div class="card">
-
-<form id="f">
-
-<!-- PAGE 1 -->
-
-<div class="page active">
-
-<h2>1 Localisation</h2>
-
-<div id="map"></div>
-
-<input id="lat"
-name="latitude"
-placeholder="Latitude">
-
-<input id="lng"
-name="longitude"
-placeholder="Longitude">
-
-<input
-name="commune"
-value="Pénestin"
-placeholder="Commune">
-
-<input
-name="lieudit"
-placeholder="Lieu-dit">
-
-<input
-name="adresse"
-placeholder="Adresse">
-
-</div>
-
-<!-- PAGE 2 -->
-
-<div class="page">
-
-<h2>2 Illustration</h2>
-
-<input
-type="file"
-name="photos"
-multiple>
-
-<textarea
-name="legende"
-placeholder="Légende"></textarea>
-
-<input
-name="credit_photo"
-placeholder="Crédit photo">
-
-</div>
-
-<!-- PAGE 3 -->
-
-<div class="page">
-
-<h2>3 Désignation</h2>
-
-<select name="categorie">
-<option>Puits</option>
-<option>Fontaine</option>
-<option>Lavoir</option>
-<option>Four</option>
-<option>Moulin</option>
-<option>Arbre remarquable</option>
-<option>Calvaire</option>
-<option>Autres</option>
-</select>
-
-<input name="nom" placeholder="Nom">
-
-<input name="nom_local" placeholder="Nom local">
-
-<input name="epoque" placeholder="Époque">
-
-</div>
-
-<!-- PAGE 4 -->
-
-<div class="page">
-
-<h2>4 Propriété</h2>
-
-<input
-name="proprietaire"
-placeholder="Propriétaire">
-
-<select name="acces">
-<option>Libre</option>
-<option>Restreint</option>
-</select>
-
-</div>
-
-<!-- PAGE 5 -->
-
-<div class="page">
-
-<h2>5 Description</h2>
-
-<textarea
-name="description"
-placeholder="Description"></textarea>
-
-<input
-name="materiaux"
-placeholder="Matériaux">
-
-</div>
-
-<!-- PAGE 6 -->
-
-<div class="page">
-
-<h2>6 Historique</h2>
-
-<input
-name="periode"
-placeholder="Période">
-
-<textarea
-name="historique"
-placeholder="Historique"></textarea>
-
-</div>
-
-<!-- PAGE 7 -->
-
-<div class="page">
-
-<h2>7 Observations</h2>
-
-<textarea
-name="observations"
-placeholder="Commentaires"></textarea>
-
-<h3>Aperçu JSON</h3>
-
-<pre id="json"></pre>
-
-</div>
-
-</form>
-
-<div style="margin-top:20px">
-
-<button type="button" onclick="prev()">
-Précédent
-</button>
-
-<button type="button" onclick="next()">
-Suivant
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-<script>
-
-const names=[
-'Localisation',
-'Illustration',
-'Désignation',
-'Propriété',
-'Description',
-'Historique',
-'Observations'
-];
-
-let cur=0;
-
-const pages=
-document.querySelectorAll('.page');
-
-const steps=
-document.getElementById('steps');
-
-function renderSteps(){
-
-steps.innerHTML='';
-
-names.forEach((n,i)=>{
-
-const d=document.createElement('div');
-
-d.className=
-'step '+(i===cur?'active':'');
-
-d.innerHTML=
-'<strong>'+(i+1)+'.</strong> '+n;
-
-steps.appendChild(d);
-
-});
-
-}
-
-function buildJSON(){
-
-const form=
-document.getElementById('f');
-
-const data={};
-
-form.querySelectorAll(
-'input,textarea,select'
-).forEach(field=>{
-
-if(!field.name) return;
-
-if(field.type==='file'){
-
-data[field.name]=
-[...field.files]
-.map(f=>f.name);
-
-}
-else{
-
-data[field.name]=
-field.value;
-
-}
-
-});
-
-return data;
-
-}
-
-function show(){
-
-pages.forEach((p,i)=>{
-
-p.classList.toggle(
-'active',
-i===cur
-);
-
-});
-
-renderSteps();
-
-if(cur===6){
-
-document
-.getElementById('json')
-.textContent=
-JSON.stringify(
-buildJSON(),
-null,
-2
-);
-
-}
-
-}
-
-function next(){
-
-if(cur<6){
-
-cur++;
-show();
-
-}
-
-}
-
-function prev(){
-
-if(cur>0){
-
-cur--;
-show();
-
-}
-
-}
-
-renderSteps();
-
-/* LEAFLET */
-
-const map=
-L.map('map')
-.setView(
-[47.483,-2.48],
-14
-);
-
-L.tileLayer(
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-{
-attribution:'© OpenStreetMap'
-}
-).addTo(map);
-
-const marker=
-L.marker([47.483,-2.48])
-.addTo(map);
-
-map.on('click',e=>{
-
-marker.setLatLng(
-e.latlng
-);
-
-document
-.getElementById('lat')
-.value=
-e.latlng.lat
-.toFixed(6);
-
-document
-.getElementById('lng')
-.value=
-e.latlng.lng
-.toFixed(6);
-
-});
-
-show();
-
-</script>
-
-</body>
-</html>
+/* =========================
+   CHAMPS
+====
