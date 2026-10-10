@@ -22,21 +22,16 @@ body{
     padding:30px;
     box-sizing:border-box;
 }
-/* Boîte principale */
+
 .app{
-   width:90%;
+    width:90%;
     min-width:380px;
     max-width:900px;
-
     min-height:800px;
-    max-height:900px;
-
     background:#ffffff;
     border-radius:15px;
     overflow:hidden;
-
     display:flex;
-
     box-shadow:0 12px 40px rgba(0,0,0,0.15);
 }
 
@@ -56,7 +51,7 @@ body{
 }
 
 .card{
-     background:#fff;
+    background:#fff;
     padding:20px;
     border-radius:12px;
 }
@@ -66,6 +61,7 @@ body{
     font-size:11px;
     word-break:break-word;
 }
+
 .sidebar h2{
     font-size:16px;
     text-align:center;
@@ -95,7 +91,7 @@ select{
 button{
     padding:10px 10px;
     background:#9b4b82;
-    color:#fff;
+    color:white;
     border:none;
     border-radius:6px;
     cursor:pointer;
@@ -118,6 +114,7 @@ button:hover{
     padding:10px;
     border-radius:8px;
     overflow:auto;
+    font-size:13px;
 }
 
 .success{
@@ -158,16 +155,15 @@ button:hover{
 <div class="card">
 
 <div id="success" class="success">
-Contribution enregistrée avec succès.
+✅ Contribution enregistrée dans PATPEN.
 </div>
 
 <div id="error" class="error">
-Erreur lors de l'envoi.
+❌ Impossible d'envoyer la contribution.
 </div>
 
 <form id="f">
-
-<!-- 1 -->
+<!-- PAGE 1 -->
 
 <div class="page active">
 
@@ -175,47 +171,55 @@ Erreur lors de l'envoi.
 
 <div id="map"></div>
 
-<input id="lat"
-       name="latitude"
-       placeholder="Latitude"
-       readonly>
+<input
+id="lat"
+name="latitude"
+placeholder="Latitude"
+readonly>
 
-<input id="lng"
-       name="longitude"
-       placeholder="Longitude"
-       readonly>
+<input
+id="lng"
+name="longitude"
+placeholder="Longitude"
+readonly>
 
-<input name="commune"
-       value="Pénestin"
-       placeholder="Commune">
+<input
+name="commune"
+value="Pénestin"
+placeholder="Commune">
 
-<input name="lieudit"
-       placeholder="Lieu-dit">
+<input
+name="lieudit"
+placeholder="Lieu-dit">
 
-<input name="adresse"
-       placeholder="Adresse">
+<input
+name="adresse"
+placeholder="Adresse">
 
 </div>
 
-<!-- 2 -->
+<!-- PAGE 2 -->
 
 <div class="page">
 
 <h2>2. Illustration</h2>
 
-<input type="file"
-       name="photos"
-       multiple>
+<input
+type="file"
+name="photos"
+multiple>
 
-<textarea name="legende"
-          placeholder="Légende"></textarea>
+<textarea
+name="legende"
+placeholder="Légende"></textarea>
 
-<input name="credit_photo"
-       placeholder="Crédit photo">
+<input
+name="credit_photo"
+placeholder="Crédit photo">
 
 </div>
 
-<!-- 3 -->
+<!-- PAGE 3 -->
 
 <div class="page">
 
@@ -232,25 +236,29 @@ Erreur lors de l'envoi.
 
 </select>
 
-<input name="nom"
-       placeholder="Nom">
+<input
+name="nom"
+placeholder="Nom du patrimoine">
 
-<input name="nom_local"
-       placeholder="Nom local">
+<input
+name="nom_local"
+placeholder="Nom local">
 
-<input name="epoque"
-       placeholder="Époque">
+<input
+name="epoque"
+placeholder="Époque">
 
 </div>
 
-<!-- 4 -->
+<!-- PAGE 4 -->
 
 <div class="page">
 
 <h2>4. Propriété</h2>
 
-<input name="proprietaire"
-       placeholder="Propriétaire">
+<input
+name="proprietaire"
+placeholder="Propriétaire">
 
 <select name="acces">
 
@@ -260,43 +268,47 @@ Erreur lors de l'envoi.
 </select>
 
 </div>
-
-<!-- 5 -->
+<!-- PAGE 5 -->
 
 <div class="page">
 
 <h2>5. Description</h2>
 
-<textarea name="description"
-          placeholder="Description"></textarea>
+<textarea
+name="description"
+placeholder="Description"></textarea>
 
-<input name="materiaux"
-       placeholder="Matériaux">
+<input
+name="materiaux"
+placeholder="Matériaux">
 
 </div>
 
-<!-- 6 -->
+<!-- PAGE 6 -->
 
 <div class="page">
 
 <h2>6. Historique</h2>
 
-<input name="periode"
-       placeholder="Période">
+<input
+name="periode"
+placeholder="Période">
 
-<textarea name="historique"
-          placeholder="Historique"></textarea>
+<textarea
+name="historique"
+placeholder="Historique"></textarea>
 
 </div>
 
-<!-- 7 -->
+<!-- PAGE 7 -->
 
 <div class="page">
 
 <h2>7. Observations</h2>
 
-<textarea name="commentaires"
-          placeholder="Commentaires"></textarea>
+<textarea
+name="commentaires"
+placeholder="Commentaires"></textarea>
 
 <button
 type="button"
@@ -314,12 +326,20 @@ Envoyer la contribution
 
 <div style="margin-top:15px">
 
-<button onclick="prev()">
+<button
+type="button"
+onclick="prev()">
+
 Précédent
+
 </button>
 
-<button onclick="next()">
+<button
+type="button"
+onclick="next()">
+
 Suivant
+
 </button>
 
 </div>
@@ -338,38 +358,38 @@ const WEBAPP_URL =
 "https://script.google.com/macros/s/AKfycbyS5upmnHbfLttMDhkq2Ejf2MrT5G_dDlSxUD5Zv6cKUHBGKCc2Ga_pr71Ar5KHJixZHQ/exec";
 
 const names = [
-'Localisation',
-'Illustration',
-'Désignation',
-'Propriété',
-'Description',
-'Historique',
-'Observations'
+"Localisation",
+"Illustration",
+"Désignation",
+"Propriété",
+"Description",
+"Historique",
+"Observations"
 ];
 
 let cur = 0;
 
 const pages =
-document.querySelectorAll('.page');
+document.querySelectorAll(".page");
 
 const steps =
-document.getElementById('steps');
+document.getElementById("steps");
 
 function renderSteps(){
 
-    steps.innerHTML='';
+    steps.innerHTML = "";
 
     names.forEach((n,i)=>{
 
         const d =
-        document.createElement('div');
+        document.createElement("div");
 
         d.className =
-        'step ' +
-        (i===cur ? 'active' : '');
+        "step " +
+        (i===cur ? "active" : "");
 
         d.textContent =
-        (i+1)+'. '+n;
+        (i+1)+". "+n;
 
         steps.appendChild(d);
 
@@ -381,7 +401,7 @@ function show(){
 
     pages.forEach((p,i)=>
         p.classList.toggle(
-            'active',
+            "active",
             i===cur
         )
     );
@@ -393,12 +413,12 @@ function show(){
         const data =
         Object.fromEntries(
             new FormData(
-                document.getElementById('f')
+                document.getElementById("f")
             )
         );
 
         document
-        .getElementById('json')
+        .getElementById("json")
         .textContent =
         JSON.stringify(
             data,
@@ -433,44 +453,42 @@ function prev(){
 }
 
 renderSteps();
-
 const map =
-L.map('map')
+L.map("map")
 .setView(
     [47.483,-2.48],
     14
 );
 
 L.tileLayer(
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-{
-attribution:'© OpenStreetMap'
-}
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+        attribution:"© OpenStreetMap"
+    }
 ).addTo(map);
 
 let marker =
 L.marker(
     [47.483,-2.48]
-)
-.addTo(map);
+).addTo(map);
 
 document.getElementById("lat").value =
-47.483000;
+"47.483000";
 
 document.getElementById("lng").value =
--2.480000;
+"-2.480000";
 
-map.on('click',e=>{
+map.on("click", e => {
 
-document.getElementById("lat").value =
-e.latlng.lat.toFixed(6);
+    document.getElementById("lat").value =
+    e.latlng.lat.toFixed(6);
 
-document.getElementById("lng").value =
-e.latlng.lng.toFixed(6);
+    document.getElementById("lng").value =
+    e.latlng.lng.toFixed(6);
 
-marker.setLatLng(
-e.latlng
-);
+    marker.setLatLng(
+        e.latlng
+    );
 
 });
 
@@ -478,64 +496,79 @@ document
 .getElementById("sendBtn")
 .addEventListener(
 "click",
-async ()=>{
+async () => {
 
-const data =
-Object.fromEntries(
-new FormData(
-document.getElementById("f")
-)
-);
+    const form =
+    document.getElementById("f");
 
-try{
+    const data =
+    Object.fromEntries(
+        new FormData(form)
+    );
 
-await fetch(
-  WEBAPP_URL,
-  {
-    method: "POST",
-    mode: "no-cors",
-    body: JSON.stringify(data)
-  }
-);
+    try {
 
-const result = await response.text();
-console.log(result);
-document
-.getElementById("success")
-.style.display = "block";
+        await fetch(
+            WEBAPP_URL,
+            {
+                method:"POST",
+                mode:"no-cors",
+                body:JSON.stringify(data)
+            }
+        );
 
-document
-.getElementById("error")
-.style.display = "none";
+        document.getElementById("success")
+        .innerHTML =
+        "✅ Contribution enregistrée dans PATPEN.";
 
-document
-.getElementById("success")
-.style.display =
-"block";
+        document.getElementById("success")
+        .style.display =
+        "block";
 
-document
-.getElementById("error")
-.style.display =
-"none";
+        document.getElementById("error")
+        .style.display =
+        "none";
 
-}
-catch(error){
+        console.log(
+            "Contribution envoyée"
+        );
 
-console.error(error);
+        form.reset();
 
-document
-.getElementById("error")
-.style.display =
-"block";
+        document.getElementById("lat").value =
+        "47.483000";
 
-document
-.getElementById("success")
-.style.display =
-"none";
+        document.getElementById("lng").value =
+        "-2.480000";
 
-}
+        marker.setLatLng(
+            [47.483,-2.48]
+        );
+
+        cur = 0;
+        show();
+
+        document.getElementById("json")
+        .textContent = "";
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        document.getElementById("success")
+        .style.display =
+        "none";
+
+        document.getElementById("error")
+        .style.display =
+        "block";
+
+    }
 
 });
+
+show();
 
 </script>
 
