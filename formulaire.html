@@ -489,13 +489,11 @@ document.getElementById("f")
 
 try{
 
-const response = await fetch(
+await fetch(
   WEBAPP_URL,
   {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    mode: "no-cors",
     body: JSON.stringify(data)
   }
 );
