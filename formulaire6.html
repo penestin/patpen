@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -11,66 +12,93 @@ href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 <style>
 
-*{box-sizing:border-box;}
-
 body{
     margin:0;
-    padding:20px;
     font-family:Arial,sans-serif;
     background:#aad3df;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:30px;
+    box-sizing:border-box;
 }
 
 .app{
-    max-width:1200px;
-    margin:auto;
-    background:#fff;
-    border-radius:20px;
+    width:90%;
+    min-width:380px;
+    max-width:900px;
+    min-height:800px;
+    background:#ffffff;
+    border-radius:15px;
     overflow:hidden;
     display:flex;
-    min-height:850px;
-    box-shadow:0 10px 30px rgba(0,0,0,.15);
+    box-shadow:0 12px 40px rgba(0,0,0,0.15);
 }
 
 .sidebar{
-    width:220px;
-    min-width:220px;
+    width:15%;
+    min-width:70px;
+    max-width:200px;
     background:#f7f7f7;
+    padding:10px;
+    overflow:auto;
     border-right:1px solid #ddd;
-    padding:20px;
-}
-
-.logo-box{
-    text-align:center;
-    margin-bottom:20px;
-    padding-bottom:15px;
-    border-bottom:1px solid #ddd;
-}
-
-.logo{
-    width:120px;
-    height:auto;
-    display:block;
-    margin:0 auto 10px;
-}
-
-.subtitle{
-    font-size:13px;
-    color:#666;
-}
-
-.step{
-    font-size:12px;
-    padding:8px 0;
-}
-
-.step.active{
-    font-weight:bold;
-    color:#9b4b82;
 }
 
 .content{
     flex:1;
-    padding:25px;
+    padding:10px;
+}
+
+.card{
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+}
+
+.step{
+    padding:6px 2px;
+    font-size:11px;
+    word-break:break-word;
+}
+
+.sidebar h2{
+    font-size:16px;
+    text-align:center;
+    margin-top:0;
+}
+
+.active{
+    font-weight:bold;
+    color:#9b4b82;
+}
+
+#map{
+    height:380px;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:10px;
+    margin:6px 0;
+    box-sizing:border-box;
+}
+
+button{
+    padding:10px 10px;
+    background:#9b4b82;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#7e3c69;
 }
 
 .page{
@@ -81,75 +109,30 @@ body{
     display:block;
 }
 
-h2{
-    margin-top:0;
-    color:#2c3e50;
+#json{
+    background:#f3f3f3;
+    padding:10px;
+    border-radius:8px;
+    overflow:auto;
+    font-size:13px;
 }
 
-#map{
-    height:400px;
-    border-radius:10px;
+.success{
+    display:none;
+    background:#dff0d8;
+    color:#3c763d;
+    padding:10px;
+    border-radius:6px;
     margin-bottom:10px;
 }
 
-input,
-textarea,
-select{
-    width:100%;
+.error{
+    display:none;
+    background:#f2dede;
+    color:#a94442;
     padding:10px;
-    margin:6px 0;
-    border:1px solid #ccc;
     border-radius:6px;
-}
-
-textarea{
-    min-height:120px;
-}
-
-.bottom-actions{
-    display:flex;
-    justify-content:center;
-    gap:12px;
-    margin-top:20px;
-    padding-top:20px;
-    border-top:1px solid #ddd;
-}
-
-.btn-prev,
-.btn-next,
-.btn-sheet{
-    min-width:180px;
-    height:48px;
-    border:none;
-    border-radius:8px;
-    color:white;
-    cursor:pointer;
-    font-size:15px;
-}
-
-.btn-prev{
-    background:#8c8c8c;
-}
-
-.btn-next{
-    background:#9b4b82;
-}
-
-.btn-sheet{
-    background:#1976d2;
-}
-
-@media(max-width:768px){
-
-    .sidebar{
-        width:180px;
-        min-width:180px;
-    }
-
-    .logo{
-        width:90px;
-    }
-
+    margin-bottom:10px;
 }
 
 </style>
@@ -159,136 +142,211 @@ textarea{
 
 <div class="app">
 
-    <div class="sidebar">
+<div class="sidebar">
 
-        <div class="logo-box">
+<h2>PATPEN</h2>
 
-            <img
-                src="images/logo-patpen.png"
-                alt="PATPEN"
-                class="logo">
+<div id="steps"></div>
 
-            <div class="subtitle">
-                Patrimoine &amp; Mémoire
-            </div>
+</div>
 
-        </div>
+<div class="content">
 
-        <div id="steps"></div>
+<div class="card">
 
-    </div>
+<div id="success" class="success">
+✅ Contribution enregistrée dans PATPEN.
+</div>
 
-    <div class="content">
+<div id="error" class="error">
+❌ Impossible d'envoyer la contribution.
+</div>
 
-        <form id="f">
+<form id="f">
+<!-- PAGE 1 -->
 
-            <div class="page active">
+<div class="page active">
 
-       <input id="lat" name="latitude" placeholder="Latitude">
-                <input id="lng" name="longitude" placeholder="Longitude">
+<h2>1. Localisation</h2>
 
-                <input name="commune" value="Pénestin">
-                <input name="lieudit" placeholder="Lieu-dit">
-                <input name="adresse" placeholder="Adresse">
+<div id="map"></div>
 
-            </div>
+<input
+id="lat"
+name="latitude"
+placeholder="Latitude"
+readonly>
 
-            <div class="page">
+<input
+id="lng"
+name="longitude"
+placeholder="Longitude"
+readonly>
 
-                <h2>Illustration</h2>
+<input
+name="commune"
+value="Pénestin"
+placeholder="Commune">
 
-                <input type="file" multiple name="photos">
+<input
+name="lieudit"
+placeholder="Lieu-dit">
 
-                <textarea
-                    name="legende"
-                    placeholder="Légende"></textarea>
+<input
+name="adresse"
+placeholder="Adresse">
 
-            </div>
+</div>
 
-            <div class="page">
+<!-- PAGE 2 -->
 
-                <h2>Désignation</h2>
+<div class="page">
 
-                <select name="categorie">
-                    <option>Puits</option>
-                    <option>Fontaine</option>
-                    <option>Lavoir</option>
-                    <option>Four</option>
-                    <option>Calvaire</option>
-                    <option>Moulin</option>
-                    <option>Arbre remarquable</option>
-                    <option>Autres</option>
-                </select>
+<h2>2. Illustration</h2>
 
-                <input name="nom" placeholder="Nom">
+<input
+type="file"
+name="photos"
+multiple>
 
-            </div>
+<textarea
+name="legende"
+placeholder="Légende"></textarea>
 
-            <div class="page">
+<input
+name="credit_photo"
+placeholder="Crédit photo">
 
-                <h2>Propriété</h2>
+</div>
 
-                <input
-                    name="proprietaire"
-                    placeholder="Propriétaire">
+<!-- PAGE 3 -->
 
-            </div>
+<div class="page">
 
-            <div class="page">
+<h2>3. Désignation</h2>
 
-                <h2>Description</h2>
+<select name="categorie">
 
-                <textarea
-                    name="description"></textarea>
+<option>Puits</option>
+<option>Fontaine</option>
+<option>Lavoir</option>
+<option>Four</option>
+<option>Moulin</option>
+<option>Arbre</option>
 
-            </div>
+</select>
 
-            <div class="page">
+<input
+name="nom"
+placeholder="Nom du patrimoine">
 
-                <h2>Historique</h2>
+<input
+name="nom_local"
+placeholder="Nom local">
 
-                <textarea
-                    name="historique"></textarea>
+<input
+name="epoque"
+placeholder="Époque">
 
-            </div>
+</div>
 
-            <div class="page">
+<!-- PAGE 4 -->
 
-                <h2>Observations</h2>
+<div class="page">
 
-                <textarea
-                    name="observations"></textarea>
+<h2>4. Propriété</h2>
 
-            </div>
+<input
+name="proprietaire"
+placeholder="Propriétaire">
 
-        </form>
+<select name="acces">
 
-        <div class="bottom-actions">
+<option>Libre</option>
+<option>Restreint</option>
 
-            <button
-                type="button"
-                class="btn-prev"
-                onclick="prev()">
-                Précédent
-            </button>
+</select>
 
-            <button
-                type="button"
-                class="btn-next"
-                onclick="next()">
-                Suivant
-            </button>
+</div>
+<!-- PAGE 5 -->
 
-            <button
-                type="button"
-                class="btn-sheet"
-                onclick="sendSheets()">
-                Envoyer vers Google Sheets
-            </button>
+<div class="page">
 
-        </div>
+<h2>5. Description</h2>
 
-    </div>
+<textarea
+name="description"
+placeholder="Description"></textarea>
+
+<input
+name="materiaux"
+placeholder="Matériaux">
+
+</div>
+
+<!-- PAGE 6 -->
+
+<div class="page">
+
+<h2>6. Historique</h2>
+
+<input
+name="periode"
+placeholder="Période">
+
+<textarea
+name="historique"
+placeholder="Historique"></textarea>
+
+</div>
+
+<!-- PAGE 7 -->
+
+<div class="page">
+
+<h2>7. Observations</h2>
+
+<textarea
+name="commentaires"
+placeholder="Commentaires"></textarea>
+
+<button
+type="button"
+id="sendBtn">
+
+Envoyer la contribution
+
+</button>
+
+<pre id="json"></pre>
+
+</div>
+
+</form>
+
+<div style="margin-top:15px">
+
+<button
+type="button"
+onclick="prev()">
+
+Précédent
+
+</button>
+
+<button
+type="button"
+onclick="next()">
+
+Suivant
+
+</button>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
@@ -296,8 +354,8 @@ textarea{
 
 <script>
 
-const APPS_SCRIPT_URL =
-"https://script.google.com/macros/s/EXEMPLE123456789/exec";
+const WEBAPP_URL =
+"https://script.google.com/macros/s/AKfycbyS5upmnHbfLttMDhkq2Ejf2MrT5G_dDlSxUD5Zv6cKUHBGKCc2Ga_pr71Ar5KHJixZHQ/exec";
 
 const names = [
 "Localisation",
@@ -319,7 +377,7 @@ document.getElementById("steps");
 
 function renderSteps(){
 
-    steps.innerHTML="";
+    steps.innerHTML = "";
 
     names.forEach((n,i)=>{
 
@@ -341,132 +399,172 @@ function renderSteps(){
 
 function show(){
 
-    pages.forEach((p,i)=>{
-
+    pages.forEach((p,i)=>
         p.classList.toggle(
             "active",
             i===cur
-        );
-
-    });
+        )
+    );
 
     renderSteps();
+
+    if(cur===6){
+
+        const data =
+        Object.fromEntries(
+            new FormData(
+                document.getElementById("f")
+            )
+        );
+
+        document
+        .getElementById("json")
+        .textContent =
+        JSON.stringify(
+            data,
+            null,
+            2
+        );
+
+    }
 
 }
 
 function next(){
 
-    if(cur<6){
+    if(cur < pages.length-1){
 
         cur++;
-
         show();
+
     }
 
 }
 
 function prev(){
 
-    if(cur>0){
+    if(cur > 0){
 
         cur--;
-
         show();
-    }
-
-}
-
-function buildJSON(){
-
-    const data = {};
-
-    document
-    .querySelectorAll(
-        "#f input,#f textarea,#f select"
-    )
-    .forEach(el=>{
-
-        if(!el.name) return;
-
-        if(el.type==="file"){
-
-            data[el.name] =
-            [...el.files]
-            .map(f=>f.name);
-
-        }else{
-
-            data[el.name] =
-            el.value;
-
-        }
-
-    });
-
-    return data;
-
-}
-
-async function sendSheets(){
-
-    try{
-
-        await fetch(
-            APPS_SCRIPT_URL,
-            {
-                method:"POST",
-                headers:{
-                    "Content-Type":
-                    "application/json"
-                },
-                body:JSON.stringify(
-                    buildJSON()
-                )
-            }
-        );
-
-        alert(
-            "Fiche PATPEN envoyée."
-        );
-
-    }catch(err){
-
-        alert(
-            "Erreur lors de l'envoi."
-        );
 
     }
 
 }
 
-/* Carte */
-
+renderSteps();
 const map =
 L.map("map")
-.setView([47.483,-2.48],14);
+.setView(
+    [47.483,-2.48],
+    14
+);
 
 L.tileLayer(
-"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-{
-attribution:"© OpenStreetMap"
-}
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+        attribution:"© OpenStreetMap"
+    }
 ).addTo(map);
 
-const marker =
-L.marker([47.483,-2.48])
-.addTo(map);
+let marker =
+L.marker(
+    [47.483,-2.48]
+).addTo(map);
 
-map.on("click",e=>{
+document.getElementById("lat").value =
+"47.483000";
+
+document.getElementById("lng").value =
+"-2.480000";
+
+map.on("click", e => {
+
+    document.getElementById("lat").value =
+    e.latlng.lat.toFixed(6);
+
+    document.getElementById("lng").value =
+    e.latlng.lng.toFixed(6);
 
     marker.setLatLng(
         e.latlng
     );
 
-    lat.value =
-    e.latlng.lat.toFixed(6);
+});
 
-    lng.value =
-    e.latlng.lng.toFixed(6);
+document
+.getElementById("sendBtn")
+.addEventListener(
+"click",
+async () => {
+
+    const form =
+    document.getElementById("f");
+
+    const data =
+    Object.fromEntries(
+        new FormData(form)
+    );
+
+    try {
+
+        await fetch(
+            WEBAPP_URL,
+            {
+                method:"POST",
+                mode:"no-cors",
+                body:JSON.stringify(data)
+            }
+        );
+
+        document.getElementById("success")
+        .innerHTML =
+        "✅ Contribution enregistrée dans PATPEN.";
+
+        document.getElementById("success")
+        .style.display =
+        "block";
+
+        document.getElementById("error")
+        .style.display =
+        "none";
+
+        console.log(
+            "Contribution envoyée"
+        );
+
+        form.reset();
+
+        document.getElementById("lat").value =
+        "47.483000";
+
+        document.getElementById("lng").value =
+        "-2.480000";
+
+        marker.setLatLng(
+            [47.483,-2.48]
+        );
+
+        cur = 0;
+        show();
+
+        document.getElementById("json")
+        .textContent = "";
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        document.getElementById("success")
+        .style.display =
+        "none";
+
+        document.getElementById("error")
+        .style.display =
+        "block";
+
+    }
 
 });
 
