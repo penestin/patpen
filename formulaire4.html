@@ -477,16 +477,18 @@ await fetch(
 WEBAPP_URL,
 {
 method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
+mode:"no-cors",
 body:JSON.stringify(data)
 }
 );
 
-if(!response.ok){
-throw new Error();
-}
+document
+.getElementById("success")
+.style.display = "block";
+
+document
+.getElementById("error")
+.style.display = "none";
 
 document
 .getElementById("success")
