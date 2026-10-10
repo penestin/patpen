@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PATPEN - Contribution</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<title>PATPEN - Inventaire patrimonial</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 <style>
 
@@ -13,62 +16,109 @@ body{
     margin:0;
     font-family:Arial,sans-serif;
     background:#aad3df;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
     padding:30px;
+    box-sizing:border-box;
 }
 
-.container{
+.app{
+    width:90%;
     max-width:900px;
-    margin:auto;
-    background:white;
+    min-height:800px;
+    background:#fff;
     border-radius:15px;
-    padding:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,.15);
+    overflow:hidden;
+    display:flex;
+    box-shadow:0 12px 40px rgba(0,0,0,.15);
+}
+
+.sidebar{
+    width:180px;
+    background:#f7f7f7;
+    padding:10px;
+    border-right:1px solid #ddd;
+}
+
+.content{
+    flex:1;
+    padding:15px;
+}
+
+.card{
+    background:#fff;
+}
+
+.step{
+    padding:6px;
+    font-size:12px;
+}
+
+.active{
+    font-weight:bold;
+    color:#9b4b82;
 }
 
 #map{
-    height:400px;
+    height:380px;
     border-radius:10px;
-    margin-bottom:15px;
+    overflow:hidden;
 }
 
-input,textarea,select{
+input,
+textarea,
+select{
     width:100%;
     padding:10px;
-    margin-bottom:10px;
+    margin:6px 0;
     box-sizing:border-box;
 }
 
 button{
-    padding:12px 18px;
+    padding:10px 15px;
     background:#9b4b82;
-    color:white;
+    color:#fff;
     border:none;
     border-radius:6px;
     cursor:pointer;
 }
 
 button:hover{
-    background:#7f3d6a;
+    background:#7e3c69;
 }
 
-h2{
-    color:#2c3e50;
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+#json{
+    background:#f3f3f3;
+    padding:10px;
+    border-radius:8px;
+    overflow:auto;
 }
 
 .success{
+    display:none;
     background:#dff0d8;
     color:#3c763d;
     padding:10px;
     border-radius:6px;
-    display:none;
+    margin-bottom:10px;
 }
 
 .error{
+    display:none;
     background:#f2dede;
     color:#a94442;
     padding:10px;
     border-radius:6px;
-    display:none;
+    margin-bottom:10px;
 }
 
 </style>
@@ -76,101 +126,190 @@ h2{
 
 <body>
 
-<div class="container">
+<div class="app">
 
-<h1>PATPEN</h1>
-<p>Inventaire du Patrimoine et de la Mémoire de Pénestin</p>
+<div class="sidebar">
+
+<h2>PATPEN</h2>
+
+<div id="steps"></div>
+
+</div>
+
+<div class="content">
+
+<div class="card">
 
 <div id="success" class="success">
 Contribution enregistrée avec succès.
 </div>
 
 <div id="error" class="error">
-Erreur d'envoi.
+Erreur lors de l'envoi.
 </div>
 
 <form id="f">
 
-<h2>Localisation</h2>
+<!-- 1 -->
+
+<div class="page active">
+
+<h2>1. Localisation</h2>
 
 <div id="map"></div>
 
-<input id="lat" name="latitude" placeholder="Latitude" readonly>
-<input id="lng" name="longitude" placeholder="Longitude" readonly>
+<input id="lat"
+       name="latitude"
+       placeholder="Latitude"
+       readonly>
 
-<input name="commune" value="Pénestin">
+<input id="lng"
+       name="longitude"
+       placeholder="Longitude"
+       readonly>
 
-<input name="lieudit" placeholder="Lieu-dit">
+<input name="commune"
+       value="Pénestin"
+       placeholder="Commune">
 
-<input name="adresse" placeholder="Adresse">
+<input name="lieudit"
+       placeholder="Lieu-dit">
 
-<h2>Désignation</h2>
+<input name="adresse"
+       placeholder="Adresse">
 
-<select name="categorie" required>
+</div>
 
-<option value="">Choisir...</option>
+<!-- 2 -->
+
+<div class="page">
+
+<h2>2. Illustration</h2>
+
+<input type="file"
+       name="photos"
+       multiple>
+
+<textarea name="legende"
+          placeholder="Légende"></textarea>
+
+<input name="credit_photo"
+       placeholder="Crédit photo">
+
+</div>
+
+<!-- 3 -->
+
+<div class="page">
+
+<h2>3. Désignation</h2>
+
+<select name="categorie">
+
 <option>Puits</option>
 <option>Fontaine</option>
 <option>Lavoir</option>
 <option>Four</option>
 <option>Moulin</option>
-<option>Arbre remarquable</option>
-<option>Calvaire</option>
-<option>Croix</option>
-<option>Chapelle</option>
-<option>Mégalithe</option>
-<option>Patrimoine bâti</option>
+<option>Arbre</option>
 
 </select>
 
-<input name="nom" placeholder="Nom">
+<input name="nom"
+       placeholder="Nom">
 
-<input name="nom_local" placeholder="Nom local">
+<input name="nom_local"
+       placeholder="Nom local">
 
-<input name="epoque" placeholder="Époque">
+<input name="epoque"
+       placeholder="Époque">
 
-<h2>Propriété</h2>
+</div>
 
-<input name="proprietaire" placeholder="Propriétaire">
+<!-- 4 -->
+
+<div class="page">
+
+<h2>4. Propriété</h2>
+
+<input name="proprietaire"
+       placeholder="Propriétaire">
 
 <select name="acces">
+
 <option>Libre</option>
 <option>Restreint</option>
+
 </select>
 
-<h2>Description</h2>
+</div>
 
-<textarea
-name="description"
-rows="5"
-placeholder="Description">
-</textarea>
+<!-- 5 -->
 
-<input name="materiaux" placeholder="Matériaux">
+<div class="page">
 
-<h2>Historique</h2>
+<h2>5. Description</h2>
 
-<input name="periode" placeholder="Période">
+<textarea name="description"
+          placeholder="Description"></textarea>
 
-<textarea
-name="historique"
-rows="5"
-placeholder="Historique">
-</textarea>
+<input name="materiaux"
+       placeholder="Matériaux">
 
-<h2>Observations</h2>
+</div>
 
-<textarea
-name="commentaires"
-rows="5"
-placeholder="Commentaires">
-</textarea>
+<!-- 6 -->
 
-<button type="submit">
+<div class="page">
+
+<h2>6. Historique</h2>
+
+<input name="periode"
+       placeholder="Période">
+
+<textarea name="historique"
+          placeholder="Historique"></textarea>
+
+</div>
+
+<!-- 7 -->
+
+<div class="page">
+
+<h2>7. Observations</h2>
+
+<textarea name="commentaires"
+          placeholder="Commentaires"></textarea>
+
+<button
+type="button"
+id="sendBtn">
+
 Envoyer la contribution
+
 </button>
 
+<pre id="json"></pre>
+
+</div>
+
 </form>
+
+<div style="margin-top:15px">
+
+<button onclick="prev()">
+Précédent
+</button>
+
+<button onclick="next()">
+Suivant
+</button>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
@@ -179,21 +318,123 @@ Envoyer la contribution
 <script>
 
 const WEBAPP_URL =
-https://script.google.com/macros/s/AKfycbyS5upmnHbfLttMDhkq2Ejf2MrT5G_dDlSxUD5Zv6cKUHBGKCc2Ga_pr71Ar5KHJixZHQ/exec;
+"VOTRE_URL_APPS_SCRIPT";
+
+const names = [
+'Localisation',
+'Illustration',
+'Désignation',
+'Propriété',
+'Description',
+'Historique',
+'Observations'
+];
+
+let cur = 0;
+
+const pages =
+document.querySelectorAll('.page');
+
+const steps =
+document.getElementById('steps');
+
+function renderSteps(){
+
+    steps.innerHTML='';
+
+    names.forEach((n,i)=>{
+
+        const d =
+        document.createElement('div');
+
+        d.className =
+        'step ' +
+        (i===cur ? 'active' : '');
+
+        d.textContent =
+        (i+1)+'. '+n;
+
+        steps.appendChild(d);
+
+    });
+
+}
+
+function show(){
+
+    pages.forEach((p,i)=>
+        p.classList.toggle(
+            'active',
+            i===cur
+        )
+    );
+
+    renderSteps();
+
+    if(cur===6){
+
+        const data =
+        Object.fromEntries(
+            new FormData(
+                document.getElementById('f')
+            )
+        );
+
+        document
+        .getElementById('json')
+        .textContent =
+        JSON.stringify(
+            data,
+            null,
+            2
+        );
+
+    }
+
+}
+
+function next(){
+
+    if(cur < pages.length-1){
+
+        cur++;
+        show();
+
+    }
+
+}
+
+function prev(){
+
+    if(cur > 0){
+
+        cur--;
+        show();
+
+    }
+
+}
+
+renderSteps();
 
 const map =
-L.map("map")
-.setView([47.483,-2.48],14);
+L.map('map')
+.setView(
+    [47.483,-2.48],
+    14
+);
 
 L.tileLayer(
-"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 {
-attribution:"© OpenStreetMap"
+attribution:'© OpenStreetMap'
 }
 ).addTo(map);
 
 let marker =
-L.marker([47.483,-2.48])
+L.marker(
+    [47.483,-2.48]
+)
 .addTo(map);
 
 document.getElementById("lat").value =
@@ -202,9 +443,7 @@ document.getElementById("lat").value =
 document.getElementById("lng").value =
 -2.480000;
 
-map.on("click", function(e){
-
-marker.setLatLng(e.latlng);
+map.on('click',e=>{
 
 document.getElementById("lat").value =
 e.latlng.lat.toFixed(6);
@@ -212,23 +451,28 @@ e.latlng.lat.toFixed(6);
 document.getElementById("lng").value =
 e.latlng.lng.toFixed(6);
 
+marker.setLatLng(
+e.latlng
+);
+
 });
 
 document
-.getElementById("f")
-.addEventListener("submit",
-async function(e){
-
-e.preventDefault();
+.getElementById("sendBtn")
+.addEventListener(
+"click",
+async ()=>{
 
 const data =
 Object.fromEntries(
-new FormData(this)
+new FormData(
+document.getElementById("f")
+)
 );
 
 try{
 
-const r =
+const response =
 await fetch(
 WEBAPP_URL,
 {
@@ -240,32 +484,34 @@ body:JSON.stringify(data)
 }
 );
 
-if(!r.ok){
+if(!response.ok){
 throw new Error();
 }
 
 document
 .getElementById("success")
-.style.display="block";
+.style.display =
+"block";
 
 document
 .getElementById("error")
-.style.display="none";
-
-this.reset();
+.style.display =
+"none";
 
 }
-catch(err){
+catch(error){
+
+console.error(error);
 
 document
 .getElementById("error")
-.style.display="block";
+.style.display =
+"block";
 
 document
 .getElementById("success")
-.style.display="none";
-
-console.error(err);
+.style.display =
+"none";
 
 }
 
