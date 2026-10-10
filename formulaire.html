@@ -4,9 +4,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>PATPEN - Inventaire patrimonial</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
 <style>
 
@@ -20,11 +22,9 @@ body{
     padding:30px;
     box-sizing:border-box;
 }
-
 /* Boîte principale */
-
 .app{
-    width:90%;
+   width:90%;
     min-width:380px;
     max-width:900px;
 
@@ -56,7 +56,7 @@ body{
 }
 
 .card{
-    background:#fff;
+     background:#fff;
     padding:20px;
     border-radius:12px;
 }
@@ -71,6 +71,7 @@ body{
     text-align:center;
     margin-top:0;
 }
+
 .active{
     font-weight:bold;
     color:#9b4b82;
@@ -112,8 +113,29 @@ button:hover{
     display:block;
 }
 
-h2{
-    color:#2c3e50;
+#json{
+    background:#f3f3f3;
+    padding:10px;
+    border-radius:8px;
+    overflow:auto;
+}
+
+.success{
+    display:none;
+    background:#dff0d8;
+    color:#3c763d;
+    padding:10px;
+    border-radius:6px;
+    margin-bottom:10px;
+}
+
+.error{
+    display:none;
+    background:#f2dede;
+    color:#a94442;
+    padding:10px;
+    border-radius:6px;
+    margin-bottom:10px;
 }
 
 </style>
@@ -123,129 +145,197 @@ h2{
 
 <div class="app">
 
-    <div class="sidebar">
-        <h2>PATPEN</h2>
-        <div id="steps"></div>
-    </div>
+<div class="sidebar">
 
-    <div class="content">
+<h2>PATPEN</h2>
 
-        <div class="card">
+<div id="steps"></div>
 
-            <form id="f">
+</div>
 
-                <div class="page active">
+<div class="content">
 
-                    <h2>1. Localisation</h2>
+<div class="card">
 
-                    <div id="map"></div>
+<div id="success" class="success">
+Contribution enregistrée avec succès.
+</div>
 
-                    <input id="lat" placeholder="Latitude">
-                    <input id="lng" placeholder="Longitude">
+<div id="error" class="error">
+Erreur lors de l'envoi.
+</div>
 
-                    <input placeholder="Commune" value="Pénestin">
-                    <input placeholder="Lieu-dit">
-                    <input placeholder="Adresse">
+<form id="f">
 
-                </div>
+<!-- 1 -->
 
-                <div class="page">
+<div class="page active">
 
-                    <h2>2. Illustration</h2>
+<h2>1. Localisation</h2>
 
-                    <input type="file" multiple>
+<div id="map"></div>
 
-                    <textarea placeholder="Légende"></textarea>
+<input id="lat"
+       name="latitude"
+       placeholder="Latitude"
+       readonly>
 
-                    <input placeholder="Crédit photo">
+<input id="lng"
+       name="longitude"
+       placeholder="Longitude"
+       readonly>
 
-                </div>
+<input name="commune"
+       value="Pénestin"
+       placeholder="Commune">
 
-                <div class="page">
+<input name="lieudit"
+       placeholder="Lieu-dit">
 
-                    <h2>3. Désignation</h2>
+<input name="adresse"
+       placeholder="Adresse">
 
-                    <select>
-                        <option>Puits</option>
-                        <option>Fontaine</option>
-                        <option>Lavoir</option>
-                        <option>Four</option>
-                        <option>Moulin</option>
-                        <option>Arbre</option>
-                    </select>
+</div>
 
-                    <input placeholder="Nom">
-                    <input placeholder="Nom local">
-                    <input placeholder="Époque">
+<!-- 2 -->
 
-                </div>
+<div class="page">
 
-                <div class="page">
+<h2>2. Illustration</h2>
 
-                    <h2>4. Propriété</h2>
+<input type="file"
+       name="photos"
+       multiple>
 
-                    <input placeholder="Propriétaire">
+<textarea name="legende"
+          placeholder="Légende"></textarea>
 
-                    <select>
-                        <option>Libre</option>
-                        <option>Restreint</option>
-                    </select>
+<input name="credit_photo"
+       placeholder="Crédit photo">
 
-                </div>
+</div>
 
-                <div class="page">
+<!-- 3 -->
 
-                    <h2>5. Description</h2>
+<div class="page">
 
-                    <textarea placeholder="Description"></textarea>
+<h2>3. Désignation</h2>
 
-                    <input placeholder="Matériaux">
+<select name="categorie">
 
-                </div>
+<option>Puits</option>
+<option>Fontaine</option>
+<option>Lavoir</option>
+<option>Four</option>
+<option>Moulin</option>
+<option>Arbre</option>
 
-                <div class="page">
+</select>
 
-                    <h2>6. Historique</h2>
+<input name="nom"
+       placeholder="Nom">
 
-                    <input placeholder="Période">
+<input name="nom_local"
+       placeholder="Nom local">
 
-                    <textarea placeholder="Historique"></textarea>
+<input name="epoque"
+       placeholder="Époque">
 
-                </div>
+</div>
 
-                <div class="page">
+<!-- 4 -->
 
-                    <h2>7. Observations</h2>
+<div class="page">
 
-                    <textarea placeholder="Commentaires"></textarea>
+<h2>4. Propriété</h2>
 
-                    <pre id="json"></pre>
+<input name="proprietaire"
+       placeholder="Propriétaire">
 
-                </div>
+<select name="acces">
 
-            </form>
+<option>Libre</option>
+<option>Restreint</option>
 
-            <div style="margin-top:15px">
+</select>
 
-                <button onclick="prev()">
-                    Précédent
-                </button>
+</div>
 
-                <button onclick="next()">
-                    Suivant
-                </button>
+<!-- 5 -->
 
-            </div>
+<div class="page">
 
-        </div>
+<h2>5. Description</h2>
 
-    </div>
+<textarea name="description"
+          placeholder="Description"></textarea>
+
+<input name="materiaux"
+       placeholder="Matériaux">
+
+</div>
+
+<!-- 6 -->
+
+<div class="page">
+
+<h2>6. Historique</h2>
+
+<input name="periode"
+       placeholder="Période">
+
+<textarea name="historique"
+          placeholder="Historique"></textarea>
+
+</div>
+
+<!-- 7 -->
+
+<div class="page">
+
+<h2>7. Observations</h2>
+
+<textarea name="commentaires"
+          placeholder="Commentaires"></textarea>
+
+<button
+type="button"
+id="sendBtn">
+
+Envoyer la contribution
+
+</button>
+
+<pre id="json"></pre>
+
+</div>
+
+</form>
+
+<div style="margin-top:15px">
+
+<button onclick="prev()">
+Précédent
+</button>
+
+<button onclick="next()">
+Suivant
+</button>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
+
+const WEBAPP_URL =
+"https://script.google.com/macros/s/AKfycbyS5upmnHbfLttMDhkq2Ejf2MrT5G_dDlSxUD5Zv6cKUHBGKCc2Ga_pr71Ar5KHJixZHQ/exec";
 
 const names = [
 'Localisation',
@@ -271,11 +361,12 @@ function renderSteps(){
 
     names.forEach((n,i)=>{
 
-        let d =
+        const d =
         document.createElement('div');
 
         d.className =
-        'step ' + (i===cur ? 'active' : '');
+        'step ' +
+        (i===cur ? 'active' : '');
 
         d.textContent =
         (i+1)+'. '+n;
@@ -299,14 +390,18 @@ function show(){
 
     if(cur===6){
 
-        document.getElementById('json')
+        const data =
+        Object.fromEntries(
+            new FormData(
+                document.getElementById('f')
+            )
+        );
+
+        document
+        .getElementById('json')
         .textContent =
         JSON.stringify(
-            Object.fromEntries(
-                new FormData(
-                    document.getElementById('f')
-                )
-            ),
+            data,
             null,
             2
         );
@@ -317,7 +412,7 @@ function show(){
 
 function next(){
 
-    if(cur<6){
+    if(cur < pages.length-1){
 
         cur++;
         show();
@@ -328,7 +423,7 @@ function next(){
 
 function prev(){
 
-    if(cur>0){
+    if(cur > 0){
 
         cur--;
         show();
@@ -339,30 +434,105 @@ function prev(){
 
 renderSteps();
 
-var map =
+const map =
 L.map('map')
-.setView([47.483,-2.48],14);
+.setView(
+    [47.483,-2.48],
+    14
+);
 
 L.tileLayer(
 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 {
-    attribution:'© OpenStreetMap'
+attribution:'© OpenStreetMap'
 }
 ).addTo(map);
 
-let m =
-L.marker([47.483,-2.48])
+let marker =
+L.marker(
+    [47.483,-2.48]
+)
 .addTo(map);
+
+document.getElementById("lat").value =
+47.483000;
+
+document.getElementById("lng").value =
+-2.480000;
 
 map.on('click',e=>{
 
-    m.setLatLng(e.latlng);
+document.getElementById("lat").value =
+e.latlng.lat.toFixed(6);
 
-    lat.value =
-    e.latlng.lat.toFixed(6);
+document.getElementById("lng").value =
+e.latlng.lng.toFixed(6);
 
-    lng.value =
-    e.latlng.lng.toFixed(6);
+marker.setLatLng(
+e.latlng
+);
+
+});
+
+document
+.getElementById("sendBtn")
+.addEventListener(
+"click",
+async ()=>{
+
+const data =
+Object.fromEntries(
+new FormData(
+document.getElementById("f")
+)
+);
+
+try{
+
+const response =
+await fetch(
+WEBAPP_URL,
+{
+method:"POST",
+mode:"no-cors",
+body:JSON.stringify(data)
+}
+);
+
+document
+.getElementById("success")
+.style.display = "block";
+
+document
+.getElementById("error")
+.style.display = "none";
+
+document
+.getElementById("success")
+.style.display =
+"block";
+
+document
+.getElementById("error")
+.style.display =
+"none";
+
+}
+catch(error){
+
+console.error(error);
+
+document
+.getElementById("error")
+.style.display =
+"block";
+
+document
+.getElementById("success")
+.style.display =
+"none";
+
+}
 
 });
 
