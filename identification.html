@@ -1,1 +1,102 @@
+<div class="form-step" id="step-contributeur">
 
+  <h2>👤 Vos coordonnées</h2>
+
+  <p>
+    Avant de contribuer à l'inventaire participatif du patrimoine de Pénestin,
+    merci de renseigner vos coordonnées.
+  </p>
+
+  <div class="form-group">
+    <label for="nom">Nom *</label>
+    <input type="text" id="nom" name="nom" required>
+  </div>
+
+  <div class="form-group">
+    <label for="prenom">Prénom *</label>
+    <input type="text" id="prenom" name="prenom" required>
+  </div>
+
+  <div class="form-group">
+    <label for="email">Adresse e-mail *</label>
+    <input type="email" id="email" name="email" required>
+  </div>
+
+  <div class="form-group">
+    <label for="telephone">Téléphone (facultatif)</label>
+    <input type="tel" id="telephone" name="telephone">
+  </div>
+
+  <div class="form-group">
+    <label for="association">Association ou organisme (facultatif)</label>
+    <input type="text" id="association" name="association">
+  </div>
+
+  <div class="rgpd-box">
+
+    <h3>Protection des données personnelles</h3>
+
+    <p>
+      Les informations recueillies sont enregistrées par la commune de
+      Pénestin dans le cadre du projet PATPEN, inventaire participatif du
+      patrimoine local.
+    </p>
+
+    <p>
+      Ces données sont utilisées uniquement pour identifier l'auteur de la
+      contribution, permettre les échanges nécessaires à sa validation et
+      assurer le suivi du projet.
+    </p>
+
+    <p>
+      Elles ne sont ni vendues ni communiquées à des tiers non autorisés.
+    </p>
+
+    <p>
+      Conformément au Règlement Général sur la Protection des Données (RGPD)
+      et à la loi Informatique et Libertés, vous disposez d'un droit d'accès,
+      de rectification, d'effacement et de limitation du traitement de vos
+      données.
+    </p>
+
+    <p>
+      Pour toute question concernant vos données personnelles, vous pouvez
+      contacter la mairie de Pénestin.
+    </p>
+
+  </div>
+
+  <div class="consentements">
+
+    <label class="checkbox">
+      <input type="checkbox"
+             id="consentementRGPD"
+             name="consentementRGPD"
+             required>
+      J'accepte que mes données personnelles soient enregistrées et utilisées
+      dans le cadre du projet PATPEN. *
+    </label>
+
+    <label class="checkbox">
+      <input type="checkbox"
+             id="autorisationContact"
+             name="autorisationContact">
+      J'accepte d'être recontacté pour obtenir des précisions sur ma contribution.
+    </label>
+
+    <label class="checkbox">
+      <input type="checkbox"
+             id="autorisationPublication"
+             name="autorisationPublication">
+      J'autorise la publication de mon nom comme contributeur sur le site PATPEN.
+    </label>
+
+  </div>
+
+  <div class="button-group">
+    <button type="button" onclick="passerEtapeSuivante()">
+      Continuer vers la fiche patrimoniale →
+    </button>
+  </div>
+
+</div>
