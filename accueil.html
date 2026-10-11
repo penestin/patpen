@@ -1,1 +1,638 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
+<title>PATPEN - Contribution patrimoniale</title>
+
+<style>
+
+:root{
+ --vert:#2c7a3f;
+ --vert-clair:#eaf6ec;
+ --texte:#333;
+ --ombre:0 4px 18px rgba(0,0,0,.12);
+}
+
+*{
+ box-sizing:border-box;
+ margin:0;
+ padding:0;
+}
+
+body{
+ font-family:"Segoe UI",Arial,sans-serif;
+ background:#eef2f4;
+ color:var(--texte);
+ padding:20px;
+}
+
+.carte{
+ max-width:900px;
+ margin:auto;
+ background:white;
+ padding:30px;
+ border-radius:14px;
+ box-shadow:var(--ombre);
+}
+
+.entete{
+ text-align:center;
+ margin-bottom:25px;
+}
+
+.entete h1{
+ color:var(--vert);
+ margin-bottom:8px;
+}
+
+.section{
+ margin-bottom:20px;
+}
+
+.form-group{
+ margin-bottom:15px;
+}
+
+label{
+ display:block;
+ margin-bottom:5px;
+ font-weight:600;
+}
+
+input, textarea, select{
+ width:100%;
+ padding:12px;
+ border:1px solid #ccc;
+ border-radius:8px;
+ font-size:1rem;
+}
+
+textarea{
+ min-height:140px;
+}
+
+.rgpd{
+ background:var(--vert-clair);
+ border-left:5px solid var(--vert);
+ padding:15px;
+ border-radius:8px;
+}
+
+.checkbox{
+ margin-top:10px;
+}
+
+.checkbox input{
+ width:auto;
+ margin-right:8px;
+}
+
+.boutons{
+ display:flex;
+ gap:10px;
+ flex-wrap:wrap;
+ margin-top:20px;
+}
+
+.btn{
+ border:none;
+ border-radius:8px;
+ padding:12px 20px;
+ cursor:pointer;
+}
+
+.btn-principal{
+ background:var(--vert);
+ color:#fff;
+}
+
+.btn-secondaire{
+ background:#eee;
+}
+
+.btn-danger{
+ background:#d9534f;
+ color:white;
+}
+
+.message{
+ margin-top:20px;
+ font-weight:bold;
+}
+
+.apercu{
+ background:#f6f6f6;
+ padding:15px;
+ border-radius:8px;
+}
+
+@media(max-width:768px){
+
+ .boutons{
+   flex-direction:column;
+ }
+
+ .btn{
+   width:100%;
+ }
+
+}
+
+</style>
+</head>
+<body>
+
+<!-- ETAPE 1 -->
+
+<div id="etape1" class="carte">
+
+<div class="entete">
+<h1>🏛️ PATPEN</h1>
+<p>Inventaire Participatif du Patrimoine de Pénestin</p>
+</div>
+
+<div class="section">
+
+<h2>👤 Vos coordonnées</h2>
+
+<div class="form-group">
+<label>Nom *</label>
+<input type="text" id="nom">
+</div>
+
+<div class="form-group">
+<label>Prénom *</label>
+<input type="text" id="prenom">
+</div>
+
+<div class="form-group">
+<label>Email *</label>
+<input type="email" id="email">
+</div>
+
+<div class="form-group">
+<label>Téléphone</label>
+<input type="text" id="telephone">
+</div>
+
+<div class="form-group">
+<label>Association</label>
+<input type="text" id="association">
+</div>
+
+<div class="rgpd">
+
+<p>
+Les données sont utilisées uniquement dans le cadre du projet PATPEN.
+</p>
+
+<label class="checkbox">
+<input type="checkbox" id="consentementRGPD">
+J'accepte le traitement de mes données personnelles. *
+</label>
+
+<label class="checkbox">
+<input type="checkbox" id="autorisationContact">
+J'accepte d'être recontacté.
+</label>
+
+<label class="checkbox">
+<input type="checkbox" id="autorisationPublication">
+J'autorise la publication de mon nom.
+</label>
+
+</div>
+
+<div class="boutons">
+
+<button class="btn btn-principal"
+onclick="continuer()">
+Continuer →
+</button>
+
+<button class="btn btn-secondaire"
+onclick="chargerCoordonnees()">
+Recharger
+</button>
+
+<button class="btn btn-danger"
+onclick="oublierCoordonnees()">
+Oublier
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ETAPE 2 -->
+
+<div id="etape2"
+class="carte"
+style="display:none;">
+
+<div class="entete">
+<h1>🏛️ Fiche Patrimoniale</h1>
+</div>
+
+<div class="form-group">
+<label>Catégorie *</label>
+
+<select id="categorie">
+<option value="">Choisir...</option>
+<option>Puits</option>
+<option>Fontaine</option>
+<option>Lavoir</option>
+<option>Four à pain</option>
+<option>Croix</option>
+<option>Calvaire</option>
+<option>Chapelle</option>
+<option>Moulin</option>
+<option>Arbre remarquable</option>
+<option>Patrimoine maritime</option>
+<option>Sentier</option>
+<option>Autre</option>
+</select>
+
+</div>
+
+<div class="form-group">
+<label>Nom de l'élément *</label>
+<input id="nomPatrimoine">
+</div>
+
+<div class="form-group">
+<label>Adresse / Lieu-dit</label>
+<input id="adressePatrimoine">
+</div>
+
+<div class="form-group">
+<label>Description *</label>
+<textarea id="descriptionPatrimoine"></textarea>
+</div>
+
+<div class="form-group">
+<label>Latitude</label>
+<input id="latitude">
+</div>
+
+<div class="form-group">
+<label>Longitude</label>
+<input id="longitude">
+</div>
+
+<div class="form-group">
+<label>Photos</label>
+<input type="file"
+id="photos"
+multiple
+accept="image/*">
+</div>
+
+<div class="boutons">
+
+<button class="btn btn-secondaire"
+onclick="gps()">
+📍 Ma position
+</button>
+
+<button class="btn btn-secondaire"
+onclick="retour1()">
+← Retour
+</button>
+
+<button class="btn btn-principal"
+onclick="apercu()">
+Vérifier →
+</button>
+
+</div>
+
+</div>
+
+<!-- ETAPE 3 -->
+
+<div id="etape3"
+class="carte"
+style="display:none;">
+
+<div class="entete">
+<h1>✅ Vérification</h1>
+</div>
+
+<div id="blocApercu"
+class="apercu"></div>
+
+<div class="boutons">
+
+<button class="btn btn-secondaire"
+onclick="retour2()">
+Modifier
+</button>
+
+<button class="btn btn-principal"
+onclick="envoyerContribution()">
+Envoyer
+</button>
+
+</div>
+
+<div id="messageFinal"
+class="message"></div>
+
+</div>
+
+<!-- ETAPE 4 -->
+
+<div id="etape4"
+class="carte"
+style="display:none;">
+
+<div class="entete">
+<h1>🎉 Merci !</h1>
+<p>
+Votre contribution a bien été enregistrée.
+</p>
+</div>
+
+<div class="boutons">
+
+<button
+class="btn btn-principal"
+onclick="location.reload()">
+
+Nouvelle contribution
+
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const URL_APPS_SCRIPT =
+"VOTRE_URL_APPS_SCRIPT";
+
+/* -------- coordonnées ------- */
+
+function chargerCoordonnees(){
+
+nom.value =
+localStorage.getItem("patpen_nom") || "";
+
+prenom.value =
+localStorage.getItem("patpen_prenom") || "";
+
+email.value =
+localStorage.getItem("patpen_email") || "";
+
+telephone.value =
+localStorage.getItem("patpen_telephone") || "";
+
+association.value =
+localStorage.getItem("patpen_association") || "";
+
+}
+
+function sauvegarderCoordonnees(){
+
+localStorage.setItem(
+"patpen_nom",
+nom.value
+);
+
+localStorage.setItem(
+"patpen_prenom",
+prenom.value
+);
+
+localStorage.setItem(
+"patpen_email",
+email.value
+);
+
+localStorage.setItem(
+"patpen_telephone",
+telephone.value
+);
+
+localStorage.setItem(
+"patpen_association",
+association.value
+);
+
+}
+
+function oublierCoordonnees(){
+
+if(confirm("Supprimer les coordonnées ?")){
+
+localStorage.clear();
+location.reload();
+
+}
+
+}
+
+/* -------- navigation ------- */
+
+function continuer(){
+
+if(!nom.value || !prenom.value || !email.value){
+
+alert("Complétez les champs obligatoires");
+return;
+
+}
+
+if(!consentementRGPD.checked){
+
+alert("Consentement RGPD obligatoire");
+return;
+
+}
+
+sauvegarderCoordonnees();
+
+etape1.style.display="none";
+etape2.style.display="block";
+
+}
+
+function retour1(){
+
+etape2.style.display="none";
+etape1.style.display="block";
+
+}
+
+function retour2(){
+
+etape3.style.display="none";
+etape2.style.display="block";
+
+}
+
+/* -------- gps ------- */
+
+function gps(){
+
+navigator.geolocation.getCurrentPosition(
+
+function(position){
+
+latitude.value =
+position.coords.latitude;
+
+longitude.value =
+position.coords.longitude;
+
+}
+
+);
+
+}
+
+/* -------- aperçu ------- */
+
+function apercu(){
+
+if(!categorie.value){
+
+alert("Choisissez une catégorie");
+return;
+
+}
+
+if(!nomPatrimoine.value){
+
+alert("Nom obligatoire");
+return;
+
+}
+
+if(!descriptionPatrimoine.value){
+
+alert("Description obligatoire");
+return;
+
+}
+
+blocApercu.innerHTML = `
+
+<p><b>Contributeur :</b>
+${prenom.value} ${nom.value}</p>
+
+<p><b>Email :</b>
+${email.value}</p>
+
+<hr><br>
+
+<p><b>Catégorie :</b>
+${categorie.value}</p>
+
+<p><b>Nom :</b>
+${nomPatrimoine.value}</p>
+
+<p><b>Adresse :</b>
+${adressePatrimoine.value}</p>
+
+<p><b>Latitude :</b>
+${latitude.value}</p>
+
+<p><b>Longitude :</b>
+${longitude.value}</p>
+
+<br>
+
+<p><b>Description :</b></p>
+
+<p>${descriptionPatrimoine.value}</p>
+
+`;
+
+etape2.style.display="none";
+etape3.style.display="block";
+
+}
+
+/* -------- envoi ------- */
+
+async function envoyerContribution(){
+
+const contribution = {
+
+nom: nom.value,
+prenom: prenom.value,
+email: email.value,
+telephone: telephone.value,
+association: association.value,
+
+categorie: categorie.value,
+nomPatrimoine: nomPatrimoine.value,
+adressePatrimoine: adressePatrimoine.value,
+descriptionPatrimoine: descriptionPatrimoine.value,
+
+latitude: latitude.value,
+longitude: longitude.value
+
+};
+
+if(URL_APPS_SCRIPT==="VOTRE_URL_APPS_SCRIPT"){
+
+messageFinal.innerHTML =
+"✅ Mode test : configurez l'URL Apps Script.";
+return;
+
+}
+
+try{
+
+const response =
+await fetch(URL_APPS_SCRIPT,{
+
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify(contribution)
+
+});
+
+const resultat =
+await response.json();
+
+if(resultat.success){
+
+etape3.style.display="none";
+etape4.style.display="block";
+
+}else{
+
+throw new Error();
+
+}
+
+}
+catch(e){
+
+messageFinal.innerHTML =
+"❌ Erreur d'envoi.";
+
+console.error(e);
+
+}
+
+}
+
+window.onload = chargerCoordonnees;
+
+</script>
+
+</body>
+</html>
