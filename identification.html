@@ -1,102 +1,244 @@
-<div class="form-step" id="step-contributeur">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <h2>👤 Vos coordonnées</h2>
+<title>PATPEN - Identification du contributeur</title>
 
-  <p>
-    Avant de contribuer à l'inventaire participatif du patrimoine de Pénestin,
-    merci de renseigner vos coordonnées.
-  </p>
+<style>
 
-  <div class="form-group">
-    <label for="nom">Nom *</label>
-    <input type="text" id="nom" name="nom" required>
-  </div>
+:root{
+    --vert:#2c7a3f;
+    --vert-clair:#eaf6ec;
+    --gris:#f5f7f9;
+    --texte:#333;
+    --ombre:0 4px 18px rgba(0,0,0,0.12);
+}
 
-  <div class="form-group">
-    <label for="prenom">Prénom *</label>
-    <input type="text" id="prenom" name="prenom" required>
-  </div>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
 
-  <div class="form-group">
-    <label for="email">Adresse e-mail *</label>
-    <input type="email" id="email" name="email" required>
-  </div>
+body{
+    font-family: "Segoe UI", Arial, sans-serif;
+    background:#eef2f4;
+    color:var(--texte);
+    line-height:1.5;
+    padding:30px 15px;
+}
 
-  <div class="form-group">
-    <label for="telephone">Téléphone (facultatif)</label>
-    <input type="tel" id="telephone" name="telephone">
-  </div>
+.conteneur{
+    max-width:900px;
+    margin:auto;
+}
 
-  <div class="form-group">
-    <label for="association">Association ou organisme (facultatif)</label>
-    <input type="text" id="association" name="association">
-  </div>
+.carte{
+    background:white;
+    border-radius:14px;
+    box-shadow:var(--ombre);
+    padding:30px;
+}
 
-  <div class="rgpd-box">
+.entete{
+    text-align:center;
+    margin-bottom:25px;
+}
 
-    <h3>Protection des données personnelles</h3>
+.entete h1{
+    color:var(--vert);
+    font-size:2rem;
+    margin-bottom:10px;
+}
 
-    <p>
-      Les informations recueillies sont enregistrées par la commune de
-      Pénestin dans le cadre du projet PATPEN, inventaire participatif du
-      patrimoine local.
-    </p>
+.entete p{
+    color:#666;
+}
 
-    <p>
-      Ces données sont utilisées uniquement pour identifier l'auteur de la
-      contribution, permettre les échanges nécessaires à sa validation et
-      assurer le suivi du projet.
-    </p>
+.section{
+    margin-bottom:25px;
+}
 
-    <p>
-      Elles ne sont ni vendues ni communiquées à des tiers non autorisés.
-    </p>
+.section h2{
+    color:var(--vert);
+    margin-bottom:15px;
+}
 
-    <p>
-      Conformément au Règlement Général sur la Protection des Données (RGPD)
-      et à la loi Informatique et Libertés, vous disposez d'un droit d'accès,
-      de rectification, d'effacement et de limitation du traitement de vos
-      données.
-    </p>
+.form-group{
+    margin-bottom:18px;
+}
 
-    <p>
-      Pour toute question concernant vos données personnelles, vous pouvez
-      contacter la mairie de Pénestin.
-    </p>
+.form-group label{
+    display:block;
+    font-weight:600;
+    margin-bottom:6px;
+}
 
-  </div>
+.form-group input{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:1rem;
+}
 
-  <div class="consentements">
+.form-group input:focus{
+    outline:none;
+    border-color:var(--vert);
+}
 
-    <label class="checkbox">
-      <input type="checkbox"
-             id="consentementRGPD"
-             name="consentementRGPD"
-             required>
-      J'accepte que mes données personnelles soient enregistrées et utilisées
-      dans le cadre du projet PATPEN. *
-    </label>
+.rgpd{
+    background:var(--vert-clair);
+    border-left:5px solid var(--vert);
+    padding:20px;
+    border-radius:8px;
+    margin-top:20px;
+}
 
-    <label class="checkbox">
-      <input type="checkbox"
-             id="autorisationContact"
-             name="autorisationContact">
-      J'accepte d'être recontacté pour obtenir des précisions sur ma contribution.
-    </label>
+.rgpd h3{
+    color:var(--vert);
+    margin-bottom:10px;
+}
 
-    <label class="checkbox">
-      <input type="checkbox"
-             id="autorisationPublication"
-             name="autorisationPublication">
-      J'autorise la publication de mon nom comme contributeur sur le site PATPEN.
-    </label>
+.rgpd p{
+    margin-bottom:10px;
+    font-size:0.95rem;
+}
 
-  </div>
+.checkbox{
+    display:block;
+    margin-top:15px;
+}
 
-  <div class="button-group">
-    <button type="button" onclick="passerEtapeSuivante()">
-      Continuer vers la fiche patrimoniale →
-    </button>
-  </div>
+.checkbox input{
+    margin-right:8px;
+}
 
+.boutons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:25px;
+}
+
+.btn{
+    border:none;
+    border-radius:8px;
+    padding:12px 22px;
+    font-size:1rem;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.btn-principal{
+    background:var(--vert);
+    color:white;
+}
+
+.btn-principal:hover{
+    background:#246633;
+}
+
+.btn-secondaire{
+    background:#f0f0f0;
+    color:#333;
+}
+
+.btn-danger{
+    background:#d9534f;
+    color:white;
+}
+
+.btn-danger:hover{
+    background:#c43d39;
+}
+
+.message{
+    margin-top:15px;
+    color:var(--vert);
+    font-weight:600;
+}
+
+@media(max-width:768px){
+
+    .carte{
+        padding:20px;
+    }
+
+    .boutons{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+    }
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="conteneur">
+
+<div class="carte">
+
+<div class="entete">
+    <h1>🏛️ PATPEN</h1>
+    <p>Inventaire Participatif du Patrimoine de Pénestin</p>
 </div>
+
+<div class="section">
+
+<h2>👤 Vos coordonnées</h2>
+
+<div class="form-group">
+    <label>Nom *</label>
+    <input type="text" id="nom">
+</div>
+
+<div class="form-group">
+    <label>Prénom *</label>
+    <input type="text" id="prenom">
+</div>
+
+<div class="form-group">
+    <label>Adresse e-mail *</label>
+    <input type="email" id="email">
+</div>
+
+<div class="form-group">
+    <label>Téléphone (facultatif)</label>
+    <input type="tel" id="telephone">
+</div>
+
+<div class="form-group">
+    <label>Association / organisme (facultatif)</label>
+    <input type="text" id="association">
+</div>
+
+<div class="rgpd">
+
+<h3>Protection des données personnelles</h3>
+
+<p>
+Les informations recueillies sont enregistrées par la commune de
+Pénestin dans le cadre du projet PATPEN.
+</p>
+
+<p>
+Elles sont utilisées uniquement pour identifier les auteurs des
+contributions, faciliter les échanges et permettre la validation
+des informations patrimoniales transmises.
+</p>
+
+<p>
+Conformément au RGPD, vous disposez d'un droit d'accès,
+de rectification et de suppression de vos données.
+</p>
+
+<label class="checkbox">
+<input type="checkbox" id="consentementRGPD">
+J'accepte le traitement de mes donn
