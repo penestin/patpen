@@ -1,1 +1,439 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>PATPEN - Identification du contributeur</title>
+
+<style>
+
+:root{
+    --vert:#2c7a3f;
+    --vert-clair:#eaf6ec;
+    --gris:#f5f7f9;
+    --texte:#333;
+    --ombre:0 4px 18px rgba(0,0,0,0.12);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:"Segoe UI",Arial,sans-serif;
+    background:#eef2f4;
+    color:var(--texte);
+    line-height:1.5;
+    padding:30px 15px;
+}
+
+.conteneur{
+    max-width:900px;
+    margin:auto;
+}
+
+.carte{
+    background:white;
+    border-radius:14px;
+    box-shadow:var(--ombre);
+    padding:30px;
+}
+
+.entete{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.entete h1{
+    color:var(--vert);
+    font-size:2rem;
+    margin-bottom:10px;
+}
+
+.entete p{
+    color:#666;
+}
+
+.section{
+    margin-bottom:25px;
+}
+
+.section h2{
+    color:var(--vert);
+    margin-bottom:15px;
+}
+
+.form-group{
+    margin-bottom:18px;
+}
+
+.form-group label{
+    display:block;
+    font-weight:600;
+    margin-bottom:6px;
+}
+
+.form-group input{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:1rem;
+}
+
+.form-group input:focus{
+    outline:none;
+    border-color:var(--vert);
+}
+
+.rgpd{
+    background:var(--vert-clair);
+    border-left:5px solid var(--vert);
+    padding:20px;
+    border-radius:8px;
+    margin-top:20px;
+}
+
+.rgpd h3{
+    color:var(--vert);
+    margin-bottom:10px;
+}
+
+.rgpd p{
+    margin-bottom:10px;
+}
+
+.checkbox{
+    display:block;
+    margin-top:12px;
+}
+
+.checkbox input{
+    margin-right:8px;
+}
+
+.info{
+    background:#f7f9fb;
+    border-left:5px solid #3b82f6;
+    padding:20px;
+    border-radius:8px;
+    margin-top:20px;
+}
+
+.info h3{
+    margin-bottom:10px;
+    color:#2563eb;
+}
+
+.boutons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:25px;
+}
+
+.btn{
+    border:none;
+    border-radius:8px;
+    padding:12px 22px;
+    font-size:1rem;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.btn-principal{
+    background:var(--vert);
+    color:white;
+}
+
+.btn-principal:hover{
+    background:#246633;
+}
+
+.btn-secondaire{
+    background:#ececec;
+    color:#333;
+}
+
+.btn-secondaire:hover{
+    background:#dcdcdc;
+}
+
+.btn-danger{
+    background:#d9534f;
+    color:white;
+}
+
+.btn-danger:hover{
+    background:#c43d39;
+}
+
+.message{
+    margin-top:20px;
+    font-weight:600;
+    color:var(--vert);
+}
+
+@media(max-width:768px){
+
+    .carte{
+        padding:20px;
+    }
+
+    .boutons{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+    }
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="conteneur">
+
+<div class="carte">
+
+<div class="entete">
+    <h1>🏛️ PATPEN</h1>
+    <p>Patrimoine & Mémoire de Pénestin</p>
+</div>
+
+<div class="section">
+
+<h2>👤 Identification du contributeur</h2>
+
+<div class="form-group">
+    <label>Nom *</label>
+    <input type="text" id="nom">
+</div>
+
+<div class="form-group">
+    <label>Prénom *</label>
+    <input type="text" id="prenom">
+</div>
+
+<div class="form-group">
+    <label>Adresse e-mail *</label>
+    <input type="email" id="email">
+</div>
+
+<div class="form-group">
+    <label>Téléphone (facultatif)</label>
+    <input type="tel" id="telephone">
+</div>
+
+<div class="form-group">
+    <label>Association / organisme (facultatif)</label>
+    <input type="text" id="association">
+</div>
+
+</div>
+
+<div class="rgpd">
+
+<h3>Protection des données personnelles</h3>
+
+<p>
+Les informations recueillies sont enregistrées par la commune de Pénestin
+dans le cadre du projet PATPEN.
+</p>
+
+<p>
+Elles sont utilisées uniquement pour identifier les auteurs des
+contributions et permettre d'éventuels échanges concernant les informations
+transmises.
+</p>
+
+<p>
+Conformément au RGPD, vous disposez d'un droit d'accès, de rectification
+et de suppression de vos données.
+</p>
+
+<label class="checkbox">
+    <input type="checkbox" id="consentementRGPD">
+    J'accepte le traitement de mes données personnelles dans le cadre du projet PATPEN. *
+</label>
+
+<label class="checkbox">
+    <input type="checkbox" id="autorisationContact">
+    J'accepte d'être recontacté pour compléter ma contribution.
+</label>
+
+<label class="checkbox">
+    <input type="checkbox" id="autorisationPublication">
+    J'autorise la publication de mon nom comme contributeur.
+</label>
+
+</div>
+
+<div class="info">
+
+<h3>📋 Étape suivante</h3>
+
+<p>
+Après validation de votre identité, vous serez dirigé vers le formulaire
+de contribution afin de décrire l'élément patrimonial à inventorier
+(localisation, photographie, description, historique, etc.).
+</p>
+
+</div>
+
+<div class="boutons">
+
+<button class="btn btn-principal"
+        onclick="continuer()">
+
+Continuer vers la contribution →
+
+</button>
+
+<button class="btn btn-secondaire"
+        onclick="chargerCoordonnees()">
+
+Recharger mes coordonnées
+
+</button>
+
+<button class="btn btn-danger"
+        onclick="oublierCoordonnees()">
+
+Oublier mes coordonnées
+
+</button>
+
+</div>
+
+<div id="message" class="message"></div>
+
+</div>
+
+</div>
+
+<script>
+
+function chargerCoordonnees(){
+
+    document.getElementById("nom").value =
+    localStorage.getItem("patpen_nom") || "";
+
+    document.getElementById("prenom").value =
+    localStorage.getItem("patpen_prenom") || "";
+
+    document.getElementById("email").value =
+    localStorage.getItem("patpen_email") || "";
+
+    document.getElementById("telephone").value =
+    localStorage.getItem("patpen_telephone") || "";
+
+    document.getElementById("association").value =
+    localStorage.getItem("patpen_association") || "";
+
+}
+
+function sauvegarderCoordonnees(){
+
+    localStorage.setItem(
+        "patpen_nom",
+        document.getElementById("nom").value
+    );
+
+    localStorage.setItem(
+        "patpen_prenom",
+        document.getElementById("prenom").value
+    );
+
+    localStorage.setItem(
+        "patpen_email",
+        document.getElementById("email").value
+    );
+
+    localStorage.setItem(
+        "patpen_telephone",
+        document.getElementById("telephone").value
+    );
+
+    localStorage.setItem(
+        "patpen_association",
+        document.getElementById("association").value
+    );
+
+}
+
+function oublierCoordonnees(){
+
+    if(confirm(
+        "Supprimer les coordonnées enregistrées ?"
+    )){
+
+        localStorage.removeItem("patpen_nom");
+        localStorage.removeItem("patpen_prenom");
+        localStorage.removeItem("patpen_email");
+        localStorage.removeItem("patpen_telephone");
+        localStorage.removeItem("patpen_association");
+
+        location.reload();
+    }
+
+}
+
+function continuer(){
+
+    const nom =
+    document.getElementById("nom").value.trim();
+
+    const prenom =
+    document.getElementById("prenom").value.trim();
+
+    const email =
+    document.getElementById("email").value.trim();
+
+    if(!nom || !prenom || !email){
+
+        alert(
+            "Veuillez compléter les champs obligatoires."
+        );
+
+        return;
+    }
+
+    if(
+        !document.getElementById(
+            "consentementRGPD"
+        ).checked
+    ){
+
+        alert(
+            "Le consentement RGPD est obligatoire."
+        );
+
+        return;
+    }
+
+    sauvegarderCoordonnees();
+
+    document.getElementById("message").innerHTML =
+    "✅ Identification enregistrée. Redirection vers le formulaire...";
+
+    setTimeout(function(){
+
+        window.location.href =
+        "formulaire.html";
+
+    },1000);
+
+}
+
+window.onload = chargerCoordonnees;
+
+</script>
+
+</body>
+</html>
