@@ -123,13 +123,13 @@ const CSV_URL =
 
 const map = L.map("map").setView(
     [47.482,-2.475],
-    15
+    12
 );
 
 L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
-        maxZoom:22,
+        maxZoom:20,
         attribution:"© OpenStreetMap"
     }
 ).addTo(map);
