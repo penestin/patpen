@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>PATPEN - Inventaire patrimonial</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#aad3df;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:30px;
+    box-sizing:border-box;
+}
+
+.app{
+    width:90%;
+    min-width:380px;
+    max-width:900px;
+    min-height:800px;
+    background:#ffffff;
+    border-radius:15px;
+    overflow:hidden;
+    display:flex;
+    box-shadow:0 12px 40px rgba(0,0,0,0.15);
+}
+
+.sidebar{
+    width:15%;
+    min-width:70px;
+    max-width:200px;
+    background:#f7f7f7;
+    padding:10px;
+    overflow:auto;
+    border-right:1px solid #ddd;
+}
+
+.content{
+    flex:1;
+    padding:10px;
+}
+
+.card{
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+}
+
+.step{
+    padding:6px 2px;
+    font-size:11px;
+    word-break:break-word;
+}
+
+.sidebar h2{
+    font-size:16px;
+    text-align:center;
+    margin-top:0;
+}
+
+.active{
+    font-weight:bold;
+    color:#9b4b82;
+}
+
+#map{
+    height:380px;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:10px;
+    margin:6px 0;
+    box-sizing:border-box;
+}
+
+button{
+    padding:10px 10px;
+    background:#9b4b82;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#7e3c69;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+#json{
+    background:#f3f3f3;
+    padding:10px;
+    border-radius:8px;
+    overflow:auto;
+    font-size:13px;
+}
+
+.success{
+    display:none;
+    background:#dff0d8;
+    color:#3c763d;
+    padding:10px;
+    border-radius:6px;
+    margin-bottom:10px;
+}
+
+.error{
+    display:none;
+    background:#f2dede;
+    color:#a94442;
+    padding:10px;
+    border-radius:6px;
+    margin-bottom:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="sidebar">
+
+<h2>PATPEN</h2>
+
+<div id="steps"></div>
+
+</div>
+
+<div class="content">
+
+<div class="card">
+
+<div id="success" class="success">
+✅ Contribution enregistrée dans PATPEN.
+</div>
+
+<div id="error" class="error">
+❌ Impossible d'envoyer la contribution.
+</div>
+
+<form id="f">
+<!-- PAGE 1 -->
+
+<div class="page active">
+
+<h2>1. Localisation</h2>
+
+<div id="map"></div>
+
+<input
+id="lat"
+name="latitude"
+placeholder="Latitude"
+readonly>
+
+<input
+id="lng"
+name="longitude"
+placeholder="Longitude"
+readonly>
+
+<input
+name="commune"
+value="Pénestin"
+placeholder="Commune">
+
+<input
+name="lieudit"
+placeholder="Lieu-dit">
+
+<input
+name="adresse"
+placeholder="Adresse">
+
+</div>
+
+<!-- PAGE 2 -->
+
+<div class="page">
+
+<h2>2. Illustration</h2>
+
+<input
+type="file"
+name="photos"
+multiple>
+
+<textarea
+name="legende"
+placeholder="Légende"></textarea>
+
+<input
+name="credit_photo"
+placeholder="Crédit photo">
+
+</div>
+
+<!-- PAGE 3 -->
+
+<div class="page">
+
+<h2>3. Désignation</h2>
+
+<select name="categorie">
+
+<option>Puits</option>
+<option>Fontaine</option>
+<option>Lavoir</option>
+<option>Four</option>
+<option>Moulin</option>
+<option>Arbre remarquable</option>
+<option>Croix</option>
+<option>Moulin</option>
+<option>Maison</option>
+<option>Autre</option>
+
+
+</select>
+
+<input
+name="nom"
+placeholder="Nom du patrimoine">
+
+<input
+name="nom_local"
+placeholder="Nom local">
+
+<input
+name="epoque"
+placeholder="Époque">
+
+</div>
+
+<!-- PAGE 4 -->
+
+<div class="page">
+
+<h2>4. Propriété</h2>
+
+<input
+name="proprietaire"
+placeholder="Propriétaire">
+
+<select name="acces">
+
+<option>Libre</option>
+<option>Restreint</option>
+
+</select>
+
+</div>
+<!-- PAGE 5 -->
+
+<div class="page">
+
+<h2>5. Description</h2>
+
+<textarea
+name="description"
+placeholder="Description"></textarea>
+
+<input
+name="materiaux"
+placeholder="Matériaux">
+
+</div>
+
+<!-- PAGE 6 -->
+
+<div class="page">
+
+<h2>6. Historique</h2>
+
+<input
+name="periode"
+placeholder="Période">
+
+<textarea
+name="historique"
+placeholder="Historique"></textarea>
+
+</div>
+
+<!-- PAGE 7 -->
+
+<div class="page">
+
+<h2>7. Observations</h2>
+
+<textarea
+name="commentaires"
+placeholder="Commentaires"></textarea>
+
+<button
+type="button"
+id="sendBtn">
+
+Envoyer la contribution
+
+</button>
+
+<pre id="json"></pre>
+
+</div>
+
+</form>
+
+<div style="margin-top:15px">
+
+<button
+type="button"
+onclick="prev()">
+
+Précédent
+
+</button>
+
+<button
+type="button"
+onclick="next()">
+
+Suivant
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+const WEBAPP_URL =
+"https://script.google.com/macros/s/AKfycbyS5upmnHbfLttMDhkq2Ejf2MrT5G_dDlSxUD5Zv6cKUHBGKCc2Ga_pr71Ar5KHJixZHQ/exec";
+
+const names = [
+"Localisation",
+"Illustration",
+"Désignation",
+"Propriété",
+"Description",
+"Historique",
+"Observations"
+];
+
+let cur = 0;
+
+const pages =
+document.querySelectorAll(".page");
+
+const steps =
+document.getElementById("steps");
+
+function renderSteps(){
+
+    steps.innerHTML = "";
+
+    names.forEach((n,i)=>{
+
+        const d =
+        document.createElement("div");
+
+        d.className =
+        "step " +
+        (i===cur ? "active" : "");
+
+        d.textContent =
+        (i+1)+". "+n;
+
+        steps.appendChild(d);
+
+    });
+
+}
+
+function show(){
+
+    pages.forEach((p,i)=>
+        p.classList.toggle(
+            "active",
+            i===cur
+        )
+    );
+
+    renderSteps();
+
+    if(cur===6){
+
+        const data =
+        Object.fromEntries(
+            new FormData(
+                document.getElementById("f")
+            )
+        );
+
+        document
+        .getElementById("json")
+        .textContent =
+        JSON.stringify(
+            data,
+            null,
+            2
+        );
+
+    }
+
+}
+
+function next(){
+
+    if(cur < pages.length-1){
+
+        cur++;
+        show();
+
+    }
+
+}
+
+function prev(){
+
+    if(cur > 0){
+
+        cur--;
+        show();
+
+    }
+
+}
+
+renderSteps();
+const map =
+L.map("map")
+.setView(
+    [47.483,-2.48],
+    14
+);
+
+L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+        attribution:"© OpenStreetMap"
+    }
+).addTo(map);
+
+let marker =
+L.marker(
+    [47.483,-2.48]
+).addTo(map);
+
+document.getElementById("lat").value =
+"47.483000";
+
+document.getElementById("lng").value =
+"-2.480000";
+
+map.on("click", e => {
+
+    document.getElementById("lat").value =
+    e.latlng.lat.toFixed(6);
+
+    document.getElementById("lng").value =
+    e.latlng.lng.toFixed(6);
+
+    marker.setLatLng(
+        e.latlng
+    );
+
+});
+
+document
+.getElementById("sendBtn")
+.addEventListener(
+"click",
+async () => {
+
+    const form =
+    document.getElementById("f");
+
+    const data =
+    Object.fromEntries(
+        new FormData(form)
+    );
+
+    try {
+
+        await fetch(
+            WEBAPP_URL,
+            {
+                method:"POST",
+                mode:"no-cors",
+                body:JSON.stringify(data)
+            }
+        );
+
+        document.getElementById("success")
+        .innerHTML =
+        "✅ Contribution enregistrée dans PATPEN.";
+
+        document.getElementById("success")
+        .style.display =
+        "block";
+
+        document.getElementById("error")
+        .style.display =
+        "none";
+
+        console.log(
+            "Contribution envoyée"
+        );
+
+        form.reset();
+
+        document.getElementById("lat").value =
+        "47.483000";
+
+        document.getElementById("lng").value =
+        "-2.480000";
+
+        marker.setLatLng(
+            [47.483,-2.48]
+        );
+
+        cur = 0;
+        show();
+
+        document.getElementById("json")
+        .textContent = "";
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        document.getElementById("success")
+        .style.display =
+        "none";
+
+        document.getElementById("error")
+        .style.display =
+        "block";
+
+    }
+
+});
+
+show();
+
+</script>
+
+</body>
+</html>
