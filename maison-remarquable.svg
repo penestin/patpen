@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title>Maison remarquable</title>
+  <defs><clipPath id="circleClip"><circle cx="64" cy="64" r="60"/></clipPath></defs>
+  <circle cx="64" cy="64" r="60" fill="#1976B8"/>
+  <g clip-path="url(#circleClip)"><path d="M20 45 64 19l44 26v67H20z" fill="#E7D4AC"/><path d="M15 45 64 12l49 33-5 7-44-29-44 29z" fill="#47545D"/><path d="M30 57h14v17H30zM57 52h14v22H57zM84 57h14v17H84z" fill="#3A9FC5"/><path d="M29 82h14v17H29zM57 82h14v17H57zM85 82h14v17H85z" fill="#3A9FC5"/><path d="M56 112V97a8 8 0 0 1 16 0v15z" fill="#76502F"/><path d="M27 56h20M54 51h20M81 56h20M26 81h20M54 81h20M82 81h20" stroke="#F8F2E4" stroke-width="3"/><path d="M13 114h102" stroke="#D0BC92" stroke-width="5"/></g>
+</svg>

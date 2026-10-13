@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title>Four à pain</title>
+  <defs><clipPath id="circleClip"><circle cx="64" cy="64" r="60"/></clipPath></defs>
+  <circle cx="64" cy="64" r="60" fill="#EF6A32"/>
+  <g clip-path="url(#circleClip)"><path d="M22 47 64 18l42 29v57H22z" fill="#E7D4AC"/><path d="M16 48 64 12l48 36-5 7-43-32-43 32z" fill="#C45B35"/><path d="M82 25V12h16v25" fill="#E7D4AC"/><path d="M79 13h22v8H79z" fill="#C45B35"/><path d="M39 104V77a25 25 0 0 1 50 0v27z" fill="#B9A88A"/><path d="M47 104V78a17 17 0 0 1 34 0v26z" fill="#3D4548"/><path d="M52 84q12-18 24 0v7H52z" fill="#F4A51C"/><path d="M20 105h88" stroke="#D5C29B" stroke-width="5"/></g>
+</svg>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title>Puits</title>
+  <defs><clipPath id="circleClip"><circle cx="64" cy="64" r="60"/></clipPath></defs>
+  <circle cx="64" cy="64" r="60" fill="#FFC247"/>
+  <g clip-path="url(#circleClip)"><path d="M25 48h78v52H25z" fill="#C9C4B8"/><path d="M25 48h78v12H25z" fill="#A9A397"/><path d="M18 46 31 22h66l13 24z" fill="#C45B35"/><path d="M28 46V95M100 46V95" stroke="#76502F" stroke-width="7"/><path d="M23 96h82" stroke="#8E897F" stroke-width="8" stroke-linecap="round"/><path d="M48 52h32" stroke="#76502F" stroke-width="5"/><path d="M64 53v20" stroke="#76502F" stroke-width="3"/><path d="M53 72h22l-3 16H56z" fill="#48545B"/><path d="M12 106q8-15 16 0q8-17 16 0M84 106q8-16 16 0q8-13 16 0" fill="#57964B"/></g>
+</svg>

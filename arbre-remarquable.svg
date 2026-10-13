@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title>Arbre remarquable</title>
+  <defs><clipPath id="circleClip"><circle cx="64" cy="64" r="60"/></clipPath></defs>
+  <circle cx="64" cy="64" r="60" fill="#8CB52E"/>
+  <g clip-path="url(#circleClip)"><path d="M64 65v47" stroke="#76502F" stroke-width="12" stroke-linecap="round"/><path d="m63 91-18-18m20 9 20-24m-19 40 22-10" stroke="#76502F" stroke-width="7" stroke-linecap="round"/><circle cx="43" cy="45" r="24" fill="#4F9148"/><circle cx="68" cy="34" r="27" fill="#579F4D"/><circle cx="87" cy="52" r="22" fill="#438541"/><circle cx="63" cy="57" r="28" fill="#5BA34F"/><circle cx="34" cy="64" r="16" fill="#57964B"/><path d="M25 115q39-12 78 0" stroke="#57964B" stroke-width="5" stroke-linecap="round"/></g>
+</svg>
