@@ -105,8 +105,8 @@ body{
 
     <button
         id="btnFormulaire"
-        onclick="window.location.href='identification+formulaire.html';">
-        ➕ Ajouter un Élément patrimonial
+        onclick="window.location.href='formulaire.html';">
+        ➕ Ajouter une fiche
     </button>
 
 </div>
@@ -129,7 +129,7 @@ const map = L.map("map").setView(
 L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
-        maxZoom:20,
+        maxZoom:19,
         attribution:"© OpenStreetMap"
     }
 ).addTo(map);
@@ -198,17 +198,43 @@ Papa.parse(CSV_URL,{
                 fiche["Photos"]
             );
 
-            const marker =
-            L.circleMarker(
-                [lat,lng],
-                {
-                    radius:8,
-                    color:"brown",
-                    fillColor:"brown",
-                    fillOpacity:1
-                }
-            ).addTo(map);
 
+const icons = {
+    "Puits": "images/categories/puits.svg",
+    "Fontaine": "images/categories/fontaine.svg",
+    "Lavoir": "images/categories/savoir.svg",
+    "Four à pain": "images/categories/quatre.svg",
+    "Arbre remarquable": "images/categories/arbre.svg",
+    "Croix-Calvaire": "images/categories/croix.svg",
+    "Moulin": "images/categories/moulin.svg",
+    "Maison remarquable": "images/categories/maison.svg",
+    "Chemin rural": "images/categories/chemin.svg",
+    "Chapelle": "images/categories/chapelle.svg"
+    "Autre": "images/categories/autre.svg"
+};
+
+const markerIcon = L.icon({
+    iconUrl: icons[categorie] || "images/categories/default.png",
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40]
+});
+
+const marker = L.marker(
+    [lat, lng],
+    {
+        icon: markerIcon
+    }
+).addTo(map);
+
+
+
+
+
+
+
+
+            
             marker.bindPopup(
             `
             <div style="width:280px">
