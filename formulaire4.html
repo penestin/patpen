@@ -1,141 +1,97 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>PATPEN - Inventaire patrimonial</title>
+<title>PATPEN</title>
 
 <link rel="stylesheet"
-href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
 
-body{
+html,body{
     margin:0;
-    font-family:Arial,sans-serif;
-    background:#aad3df;
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-    padding:30px;
-    box-sizing:border-box;
-}
-/* Boîte principale */
-.app{
-   width:90%;
-    min-width:380px;
-    max-width:900px;
-
-    min-height:800px;
-    max-height:900px;
-
-    background:#ffffff;
-    border-radius:15px;
-    overflow:hidden;
-
-    display:flex;
-
-    box-shadow:0 12px 40px rgba(0,0,0,0.15);
+    padding:0;
+    height:100%;
 }
 
-.sidebar{
-    width:15%;
-    min-width:70px;
-    max-width:200px;
-    background:#f7f7f7;
-    padding:10px;
-    overflow:auto;
+body{
+    display:flex;
+    flex-direction:row;
+}
+
+/* PANNEAU GAUCHE */
+
+#sidebar{
+    width:220px;
+    min-width:220px;
+    background:#205ba4;
     border-right:1px solid #ddd;
-}
-
-.content{
-    flex:1;
-    padding:10px;
-}
-
-.card{
-     background:#fff;
-    padding:20px;
-    border-radius:12px;
-}
-
-.step{
-    padding:6px 2px;
-    font-size:11px;
-    word-break:break-word;
-}
-.sidebar h2{
-    font-size:16px;
-    text-align:center;
-    margin-top:0;
-}
-
-.active{
-    font-weight:bold;
-    color:#9b4b82;
-}
-
-#map{
-    height:380px;
-    border-radius:10px;
-    overflow:hidden;
-}
-
-input,
-textarea,
-select{
-    width:100%;
-    padding:10px;
-    margin:6px 0;
+    padding:15px;
+    overflow:auto;
     box-sizing:border-box;
+    font-family:Arial,sans-serif;
+    color:white;
 }
 
-button{
-    padding:10px 10px;
-    background:#9b4b82;
-    color:#fff;
+#sidebar h1{
+    margin-top:0;
+    color:white;
+}
+
+#btnFormulaire{
+    width:100%;
+    padding:12px;
+    margin-top:20px;
+    background:white;
+    color:#205ba4;
     border:none;
     border-radius:6px;
+    font-weight:bold;
+    font-size:15px;
     cursor:pointer;
 }
 
-button:hover{
-    background:#7e3c69;
+#btnFormulaire:hover{
+    background:#e6eef9;
 }
 
-.page{
-    display:none;
+/* CARTE */
+
+#map{
+    flex:1;
+    height:100vh;
 }
 
-.page.active{
-    display:block;
+.photo-popup{
+    width:100%;
+    max-height:220px;
+    object-fit:cover;
 }
 
-#json{
-    background:#f3f3f3;
-    padding:10px;
-    border-radius:8px;
-    overflow:auto;
-}
+/* RESPONSIVE */
 
-.success{
-    display:none;
-    background:#dff0d8;
-    color:#3c763d;
-    padding:10px;
-    border-radius:6px;
-    margin-bottom:10px;
-}
+@media screen and (max-width:768px){
 
-.error{
-    display:none;
-    background:#f2dede;
-    color:#a94442;
-    padding:10px;
-    border-radius:6px;
-    margin-bottom:10px;
+    body{
+        flex-direction:column;
+    }
+
+    #sidebar{
+        width:100%;
+        min-width:100%;
+        height:auto;
+        border-right:none;
+        border-bottom:1px solid #ddd;
+    }
+
+    #map{
+        width:100%;
+        height:calc(100vh - 140px);
+    }
+
 }
 
 </style>
@@ -143,396 +99,179 @@ button:hover{
 
 <body>
 
-<div class="app">
+<div id="sidebar">
 
-<div class="sidebar">
+    <h1>PATPEN</h1>
 
-<h2>PATPEN</h2>
-
-<div id="steps"></div>
+    <button
+        id="btnFormulaire"
+        onclick="window.location.href='formulaire.html';">
+        ➕ Ajouter une fiche
+    </button>
 
 </div>
-
-<div class="content">
-
-<div class="card">
-
-<div id="success" class="success">
-Contribution enregistrée avec succès.
-</div>
-
-<div id="error" class="error">
-Erreur lors de l'envoi.
-</div>
-
-<form id="f">
-
-<!-- 1 -->
-
-<div class="page active">
-
-<h2>1. Localisation</h2>
 
 <div id="map"></div>
 
-<input id="lat"
-       name="latitude"
-       placeholder="Latitude"
-       readonly>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<input id="lng"
-       name="longitude"
-       placeholder="Longitude"
-       readonly>
 
-<input name="commune"
-       value="Pénestin"
-       placeholder="Commune">
 
-<input name="lieudit"
-       placeholder="Lieu-dit">
-
-<input name="adresse"
-       placeholder="Adresse">
-
-</div>
-
-<!-- 2 -->
-
-<div class="page">
-
-<h2>2. Illustration</h2>
-
-<input type="file"
-       name="photos"
-       multiple>
-
-<textarea name="legende"
-          placeholder="Légende"></textarea>
-
-<input name="credit_photo"
-       placeholder="Crédit photo">
-
-</div>
-
-<!-- 3 -->
-
-<div class="page">
-
-<h2>3. Désignation</h2>
-
-<select name="categorie">
-
-<option>Puits</option>
-<option>Fontaine</option>
-<option>Lavoir</option>
-<option>Four</option>
-<option>Moulin</option>
-<option>Arbre</option>
-
-</select>
-
-<input name="nom"
-       placeholder="Nom">
-
-<input name="nom_local"
-       placeholder="Nom local">
-
-<input name="epoque"
-       placeholder="Époque">
-
-</div>
-
-<!-- 4 -->
-
-<div class="page">
-
-<h2>4. Propriété</h2>
-
-<input name="proprietaire"
-       placeholder="Propriétaire">
-
-<select name="acces">
-
-<option>Libre</option>
-<option>Restreint</option>
-
-</select>
-
-</div>
-
-<!-- 5 -->
-
-<div class="page">
-
-<h2>5. Description</h2>
-
-<textarea name="description"
-          placeholder="Description"></textarea>
-
-<input name="materiaux"
-       placeholder="Matériaux">
-
-</div>
-
-<!-- 6 -->
-
-<div class="page">
-
-<h2>6. Historique</h2>
-
-<input name="periode"
-       placeholder="Période">
-
-<textarea name="historique"
-          placeholder="Historique"></textarea>
-
-</div>
-
-<!-- 7 -->
-
-<div class="page">
-
-<h2>7. Observations</h2>
-
-<textarea name="commentaires"
-          placeholder="Commentaires"></textarea>
-
-<button
-type="button"
-id="sendBtn">
-
-Envoyer la contribution
-
-</button>
-
-<pre id="json"></pre>
-
-</div>
-
-</form>
-
-<div style="margin-top:15px">
-
-<button onclick="prev()">
-Précédent
-</button>
-
-<button onclick="next()">
-Suivant
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
 <script>
 
-const WEBAPP_URL =
-"https://script.google.com/macros/s/AKfycbyS5upmnHbfLttMDhkq2Ejf2MrT5G_dDlSxUD5Zv6cKUHBGKCc2Ga_pr71Ar5KHJixZHQ/exec";
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQxz-pZWXUmcWB99nJPRKGJ2wxbYbBB4Y4Lq16nOEBtKm5peTr1ThCHfuHWvPJ5v1ScgZ7w0N9uqP-J/pub?gid=1723096786&single=true&output=csv";
 
-const names = [
-'Localisation',
-'Illustration',
-'Désignation',
-'Propriété',
-'Description',
-'Historique',
-'Observations'
-];
-
-let cur = 0;
-
-const pages =
-document.querySelectorAll('.page');
-
-const steps =
-document.getElementById('steps');
-
-function renderSteps(){
-
-    steps.innerHTML='';
-
-    names.forEach((n,i)=>{
-
-        const d =
-        document.createElement('div');
-
-        d.className =
-        'step ' +
-        (i===cur ? 'active' : '');
-
-        d.textContent =
-        (i+1)+'. '+n;
-
-        steps.appendChild(d);
-
-    });
-
-}
-
-function show(){
-
-    pages.forEach((p,i)=>
-        p.classList.toggle(
-            'active',
-            i===cur
-        )
-    );
-
-    renderSteps();
-
-    if(cur===6){
-
-        const data =
-        Object.fromEntries(
-            new FormData(
-                document.getElementById('f')
-            )
-        );
-
-        document
-        .getElementById('json')
-        .textContent =
-        JSON.stringify(
-            data,
-            null,
-            2
-        );
-
-    }
-
-}
-
-function next(){
-
-    if(cur < pages.length-1){
-
-        cur++;
-        show();
-
-    }
-
-}
-
-function prev(){
-
-    if(cur > 0){
-
-        cur--;
-        show();
-
-    }
-
-}
-
-renderSteps();
-
-const map =
-L.map('map')
-.setView(
-    [47.483,-2.48],
-    14
+const map = L.map("map").setView(
+    [47.482,-2.475],
+    12
 );
 
 L.tileLayer(
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-{
-attribution:'© OpenStreetMap'
-}
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+        maxZoom:19,
+        attribution:"© OpenStreetMap"
+    }
 ).addTo(map);
 
-let marker =
-L.marker(
-    [47.483,-2.48]
-)
-.addTo(map);
+function photoDrive(url){
 
-document.getElementById("lat").value =
-47.483000;
+    if(!url) return "";
 
-document.getElementById("lng").value =
--2.480000;
+    const match = url.match(/id=([^&]+)/);
 
-map.on('click',e=>{
+    if(!match) return "";
 
-document.getElementById("lat").value =
-e.latlng.lat.toFixed(6);
+    return "https://drive.google.com/thumbnail?id="
+        + match[1]
+        + "&sz=w800";
+}
 
-document.getElementById("lng").value =
-e.latlng.lng.toFixed(6);
+function photoDrive(url){
+    if(!url) return "";
+    const match = url.match(/id=([^&]+)/);
+    if(!match) return "";
+    return "https://drive.google.com/thumbnail?id="
+        + match[1]
+        + "&sz=w800";
+}
 
-marker.setLatLng(
-e.latlng
-);
+/* ===== ICÔNES PATPEN ===== */
+const icons = {
+    "Puits": "images/categories/puits.svg",
+    "Fontaine": "images/categories/fontaine.svg",
+    "Lavoir": "images/categories/lavoir.svg",
+    "Four à pain": "images/categories/four.svg",
+    "Arbre remarquable": "images/categories/arbre.svg",
+    "Croix-Calvaire": "images/categories/croix.svg",
+    "Moulin": "images/categories/moulin.svg",
+    "Maison remarquable": "images/categories/maison.svg",
+    "Chemin rural": "images/categories/chemin.svg",
+    "Chapelle": "images/categories/chapelle.svg"
+};
 
+Papa.parse(CSV_URL,{
+
+
+    download:true,
+    header:true,
+    skipEmptyLines:true,
+
+    complete:function(results){
+
+        let nb = 0;
+
+        results.data.forEach(function(fiche){
+
+            const statut =
+            (fiche["Statut"] || "")
+            .trim()
+            .toLowerCase();
+
+            const afficher =
+            (fiche["Afficher carte"] || "")
+            .trim()
+            .toLowerCase();
+
+            if(statut !== "validé") return;
+            if(afficher !== "oui") return;
+
+            const lat =
+            parseFloat(fiche["Latitude"]);
+
+            const lng =
+            parseFloat(fiche["Longitude"]);
+
+            if(isNaN(lat) || isNaN(lng))
+                return;
+
+            const nom =
+            fiche["Nom du lieu"] || "Sans nom";
+
+            const description =
+            fiche["Description"] || "";
+
+            const categorie =
+            fiche["Catégorie"] || "";
+
+            const secteur =
+            fiche["Secteur"] || "";
+
+            const photo =
+            photoDrive(
+                fiche["Photos"]
+            );
+
+const markerIcon = L.icon({
+    iconUrl: icons[categorie] || "images/categories/puits.svg",
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40]
 });
 
-document
-.getElementById("sendBtn")
-.addEventListener(
-"click",
-async ()=>{
+const marker = L.marker(
+    [lat, lng],
+    {
+        icon: markerIcon
 
-const data =
-Object.fromEntries(
-new FormData(
-document.getElementById("f")
-)
-);
+    }
+).addTo(map);
 
-try{
+            marker.bindPopup(
+            `
+            <div style="width:280px">
 
-const response =
-await fetch(
-WEBAPP_URL,
-{
-method:"POST",
-mode:"no-cors",
-body:JSON.stringify(data)
-}
-);
+                <h3>${nom}</h3>
 
-document
-.getElementById("success")
-.style.display = "block";
+                ${
+                    photo
+                    ? `<img src="${photo}" class="photo-popup">`
+                    : ""
+                }
 
-document
-.getElementById("error")
-.style.display = "none";
+                <b>Catégorie :</b> ${categorie}
+                <br>
 
-document
-.getElementById("success")
-.style.display =
-"block";
+                <b>Secteur :</b> ${secteur}
 
-document
-.getElementById("error")
-.style.display =
-"none";
+                <br><br>
 
-}
-catch(error){
+                ${description}
 
-console.error(error);
+            </div>
+            `
+            );
 
-document
-.getElementById("error")
-.style.display =
-"block";
+            nb++;
 
-document
-.getElementById("success")
-.style.display =
-"none";
+        });
 
-}
+        console.log(nb + " fiche(s) affichée(s)");
+
+    }
 
 });
 
