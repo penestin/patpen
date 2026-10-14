@@ -198,8 +198,24 @@ Papa.parse(CSV_URL,{
                 fiche["Photos"]
             );
 
-const wellIcon = L.icon({
-    iconUrl: 'puits.png',
+
+
+            
+const icons = {
+    "Puits": "images/categories/puits.png",
+    "Four à pain": "images/categories/four.png",
+    "Arbre remarquable": "images/categories/arbre.png",
+    "Fontaine": "images/categories/fontaine.png",
+    "Lavoir": "images/categories/lavoir.png",
+    "Croix-Calvaire": "images/categories/croix.png",
+    "Maison remarquable": "images/categories/maison.png",
+    "Moulin": "images/categories/moulin.png",
+    "Chemin rural": "images/categories/chemin.png"
+    "Autre": "images/categories/autre.png"   
+};
+
+const markerIcon = L.icon({
+    iconUrl: icons[categorie] || "images/categories/default.png",
     iconSize: [40, 40],
     iconAnchor: [20, 40],
     popupAnchor: [0, -40]
@@ -208,10 +224,18 @@ const wellIcon = L.icon({
 const marker = L.marker(
     [lat, lng],
     {
-        icon: wellIcon
+        icon: markerIcon
     }
 ).addTo(map);
 
+
+
+
+
+
+
+
+            
             marker.bindPopup(
             `
             <div style="width:280px">
