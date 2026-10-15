@@ -190,6 +190,14 @@ Papa.parse(CSV_URL,{
 
             const categorie =
             fiche["Catégorie"] || "";
+// =================================================================================================================================
+
+            console.log(
+    "Colonnes CSV :",
+    Object.keys(results.data[0])
+);
+// =================================================================================================================================
+            complete:function(results){
 
             const secteur =
             fiche["Secteur"] || "";
@@ -256,8 +264,6 @@ if (!categorieNettoyee) {
     console.warn("Catégorie vide");
 
 }
-
-// ===========================================================================================================
 const markerIcon = L.icon({
     iconUrl: getIconUrl(categorieNettoyee),
     iconSize: [40, 40],
@@ -272,12 +278,7 @@ const marker = L.marker(
     }
 ).addTo(map);
 
-
-
-
-
-
-
+// ===========================================================================================================
             
             marker.bindPopup(
             `
