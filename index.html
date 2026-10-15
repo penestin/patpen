@@ -213,8 +213,10 @@ const icons = {
      "Chapelle": "images/categories/autre.svg"
 };
 console.log("Catégorie :", categorie);
+const categorieNettoyee = (categorie || "").trim();
+
 const markerIcon = L.icon({
-    iconUrl: icons[categorie] || "images/categories/default.png",
+    iconUrl: icons[categorieNettoyee] || "images/categories/puits.svg",
     iconSize: [40, 40],
     iconAnchor: [20, 40],
     popupAnchor: [0, -40]
