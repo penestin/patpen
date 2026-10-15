@@ -245,14 +245,16 @@ function getIconUrl(categorie) {
 // Création du marqueur
 // =====================================================
 
+
 const categorieNettoyee = (categorie || "").trim();
-// ===========================================================================================================
+
+console.log(
+    `Catégorie lue : "${categorieNettoyee}"`
+);
+
 if (!categorieNettoyee) {
-    console.log("FICHE PROBLEME :", row);
-}
-// ===========================================================================================================
-if (!categorieNettoyee) {
-    console.log("LIGNE PROBLÈME :", row);
+    console.warn("Catégorie vide");
+
 }
 
 // ===========================================================================================================
