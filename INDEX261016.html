@@ -1,1 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    
+<title>PATPEN</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<style>
+
+html,body{
+    margin:0;
+    padding:0;
+    height:100%;
+}
+
+body{
+    display:flex;
+    flex-direction:row;
+}
+
+/* PANNEAU GAUCHE */
+
+#sidebar{
+    width:220px;
+    min-width:220px;
+    background:#205ba4;
+    border-right:1px solid #ddd;
+    padding:15px;
+    overflow:auto;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+    color:white;
+}
+
+#sidebar h1{
+    margin-top:0;
+    color:white;
+}
+
+#btnFormulaire{
+    width:100%;
+    padding:12px;
+    margin-top:20px;
+    background:white;
+    color:#205ba4;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    font-size:15px;
+    cursor:pointer;
+}
+
+#btnFormulaire:hover{
+    background:#e6eef9;
+}
+
+/* CARTE */
+
+#map{
+    flex:1;
+    height:100vh;
+}
+
+.photo-popup{
+    width:100%;
+    max-height:220px;
+    object-fit:cover;
+}
+
+/* RESPONSIVE */
+
+@media screen and (max-width:768px){
+
+    body{
+        flex-direction:column;
+    }
+
+    #sidebar{
+        width:100%;
+        min-width:100%;
+        height:auto;
+        border-right:none;
+        border-bottom:1px solid #ddd;
+    }
+
+    #map{
+        width:100%;
+        height:calc(100vh - 140px);
+    }
+
+}
+
+</style>
+</head>
+
+<div id="sidebar">
+
+    <a
+        id="btnFormulaire"
+        href="identification.html">
+        ➕ Ajouter une fiche
+    </a>
+
+</div>
+
+</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<script>
+
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQxz-pZWXUmcWB99nJPRKGJ2wxbYbBB4Y4Lq16nOEBtKm5peTr1ThCHfuHWvPJ5v1ScgZ7w0N9uqP-J/pub?gid=1723096786&single=true&output=csv";
+
+const map = L.map("map").setView(
+    [47.482,-2.475],
+    12
+);
+
+L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+        maxZoom:19,
+        attribution:"© OpenStreetMap"
+    }
+).addTo(map);
+
+function photoDrive(url){
+
+    if(!url) return "";
+
+    const match = url.match(/id=([^&]+)/);
+
+    if(!match) return "";
+
+    return "https://drive.google.com/thumbnail?id="
+        + match[1]
+        + "&sz=w800";
+}
+
+Papa.parse(CSV_URL,{
+
+    download:true,
+    header:true,
+    skipEmptyLines:true,
+
+    complete:function(results){
+
+        let nb = 0;
+
+        results.data.forEach(function(fiche){
+
+            const statut =
+            (fiche["Statut"] || "")
+            .trim()
+            .toLowerCase();
+
+            const afficher =
+            (fiche["Afficher carte"] || "")
+            .trim()
+            .toLowerCase();
+
+            if(statut !== "validé") return;
+            if(afficher !== "oui") return;
+
+            const lat =
+            parseFloat(fiche["Latitude"]);
+
+            const lng =
+            parseFloat(fiche["Longitude"]);
+
+            if(isNaN(lat) || isNaN(lng))
+                return;
+
+            const nom =
+            fiche["Nom du lieu"] || "Sans nom";
+
+            const description =
+            fiche["Description"] || "";
+
+            const categorie =
+            fiche["Catégorie"] || "";
+
+            const secteur =
+            fiche["Secteur"] || "";
+
+            const photo =
+            photoDrive(
+                fiche["Photos"]
+            );
+
+
+// =====================================================
+// Icônes des catégories
+// =====================================================
+
+const icons = {
+    "Puits": "images/categories/puits.svg",
+    "Fontaine": "images/categories/fontaine.svg",
+    "Lavoir": "images/categories/lavoir.svg",
+    "Four à pain": "images/categories/four.svg",
+    "Arbre remarquable": "images/categories/arbre.svg",
+    "Croix-Calvaire": "images/categories/croix.svg",
+    "Moulin": "images/categories/moulin.svg",
+    "Maison remarquable": "images/categories/maison.svg",
+    "Chemin rural": "images/categories/chemin.svg",
+    "Chapelle": "images/categories/chapelle.svg"
+};
+
+// =====================================================
+// Fonction de récupération sécurisée de l'icône
+// =====================================================
+
+function getIconUrl(categorie) {
+
+    const categorieNettoyee = (categorie || "").trim();
+
+    if (!categorieNettoyee) {
+        console.warn("Catégorie vide");
+        return "images/categories/puits.svg";
+    }
+
+    if (!icons[categorieNettoyee]) {
+        console.warn(
+            "Catégorie inconnue :",
+            categorieNettoyee
+        );
+        return "images/categories/puits.svg";
+    }
+
+    return icons[categorieNettoyee];
+}
+
+// =====================================================
+// Création du marqueur
+// =====================================================
+
+const categorieNettoyee = (categorie || "").trim();
+// ===========================================================================================================
+console.log(
+  `Catégorie lue : "${categorieNettoyee}"`
+);
+
+if (!categorieNettoyee) {
+  console.warn("Catégorie vide");
+}
+
+// ===========================================================================================================
+const markerIcon = L.icon({
+    iconUrl: getIconUrl(categorieNettoyee),
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40]
+});
+
+const marker = L.marker(
+    [lat, lng],
+    {
+        icon: markerIcon
+    }
+).addTo(map);
+
+
+
+
+
+
+
+            
+            marker.bindPopup(
+            `
+            <div style="width:280px">
+
+                <h3>${nom}</h3>
+
+                ${
+                    photo
+                    ? `<img src="${photo}" class="photo-popup">`
+                    : ""
+                }
+
+                <b>Catégorie :</b> ${categorie}
+                <br>
+
+                <b>Secteur :</b> ${secteur}
+
+                <br><br>
+
+                ${description}
+
+            </div>
+            `
+            );
+
+            nb++;
+
+        });
+
+        console.log(nb + " fiche(s) affichée(s)");
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
 
