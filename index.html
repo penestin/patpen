@@ -247,13 +247,11 @@ function getIconUrl(categorie) {
 const categorieNettoyee = (categorie || "").trim();
 // ===========================================================================================================
 console.log(
-  `Titre : "${titre}" | Catégorie : "${categorieNettoyee}"`
+  `Catégorie lue : "${categorieNettoyee}"`
 );
 
 if (!categorieNettoyee) {
-  console.warn(
-    `FICHE SANS CATEGORIE : ${titre}`
-  );
+  console.warn("Catégorie vide");
 }
 
 // ===========================================================================================================
