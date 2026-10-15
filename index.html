@@ -190,15 +190,6 @@ Papa.parse(CSV_URL,{
 
             const categorie =
             fiche["Catégorie"] || "";
-            
- // ==========================================           
-            complete:function(results){
-            console.log(
-    "Colonnes CSV :",
-    Object.keys(results.data[0])
-);
-// ====================================================
-            complete:function(results){
 
             const secteur =
             fiche["Secteur"] || "";
@@ -254,17 +245,17 @@ function getIconUrl(categorie) {
 // Création du marqueur
 // =====================================================
 
-
 const categorieNettoyee = (categorie || "").trim();
-
-console.log(
-    `Catégorie lue : "${categorieNettoyee}"`
-);
-
+// ===========================================================================================================
 if (!categorieNettoyee) {
-    console.warn("Catégorie vide");
-
+    console.log("FICHE PROBLEME :", row);
 }
+// ===========================================================================================================
+if (!categorieNettoyee) {
+  console.warn("Catégorie vide");
+}
+
+// ===========================================================================================================
 const markerIcon = L.icon({
     iconUrl: getIconUrl(categorieNettoyee),
     iconSize: [40, 40],
@@ -279,7 +270,12 @@ const marker = L.marker(
     }
 ).addTo(map);
 
-// ===========================================================================================================
+
+
+
+
+
+
             
             marker.bindPopup(
             `
