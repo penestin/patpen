@@ -199,48 +199,70 @@ Papa.parse(CSV_URL,{
             );
 
 
+// =====================================================
+// Icônes des catégories
+// =====================================================
+
 const icons = {
     "Puits": "images/categories/puits.svg",
     "Fontaine": "images/categories/fontaine.svg",
-    "Lavoir": "images/categories/Alavoir.svg",
-    "Four à pain": "images/categories/Afour.svg",
+    "Lavoir": "images/categories/lavoir.svg",
+    "Four à pain": "images/categories/four.svg",
     "Arbre remarquable": "images/categories/arbre.svg",
     "Croix-Calvaire": "images/categories/croix.svg",
     "Moulin": "images/categories/moulin.svg",
     "Maison remarquable": "images/categories/maison.svg",
     "Chemin rural": "images/categories/chemin.svg",
-    "Chapelle": "images/categories/chapelle.svg",
-     "Chapelle": "images/categories/autre.svg"
+    "Chapelle": "images/categories/chapelle.svg"
 };
-console.log("Catégorie :", categorie);
+
+// =====================================================
+// Fonction de récupération sécurisée de l'icône
+// =====================================================
+
+function getIconUrl(categorie) {
+
+    const categorieNettoyee = (categorie || "").trim();
+
+    if (!categorieNettoyee) {
+        console.warn("Catégorie vide");
+        return "images/categories/puits.svg";
+    }
+
+    if (!icons[categorieNettoyee]) {
+        console.warn(
+            "Catégorie inconnue :",
+            categorieNettoyee
+        );
+        return "images/categories/puits.svg";
+    }
+
+    return icons[categorieNettoyee];
+}
+
+// =====================================================
+// Création du marqueur
+// =====================================================
+
 const categorieNettoyee = (categorie || "").trim();
 
+console.log(
+    `Catégorie lue : "${categorieNettoyee}"`
+);
+
 const markerIcon = L.icon({
-    iconUrl: icons[categorieNettoyee] || "images/categories/puits.svg",
+    iconUrl: getIconUrl(categorieNettoyee),
     iconSize: [40, 40],
     iconAnchor: [20, 40],
     popupAnchor: [0, -40]
 });
-const categorieNettoyee = (categorie || "").trim();
 
-console.log(
-    "Catégorie lue :",
-    `"${categorieNettoyee}"`
-);
-
-if (!icons[categorieNettoyee]) {
-    console.error(
-        "❌ Catégorie inconnue :",
-        `"${categorieNettoyee}"`
-    );
-}
 const marker = L.marker(
     [lat, lng],
     {
         icon: markerIcon
     }
 ).addTo(map);
-
 
 
 
