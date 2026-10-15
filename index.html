@@ -247,10 +247,10 @@ function getIconUrl(categorie) {
 
 const categorieNettoyee = (categorie || "").trim();
 // ===========================================================================================================
-console.log(
-  `Catégorie lue : "${categorieNettoyee}"`
-);
-
+if (!categorieNettoyee) {
+    console.log("FICHE PROBLEME :", row);
+}
+// ===========================================================================================================
 if (!categorieNettoyee) {
   console.warn("Catégorie vide");
 }
