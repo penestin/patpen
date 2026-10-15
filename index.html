@@ -245,11 +245,17 @@ function getIconUrl(categorie) {
 // =====================================================
 
 const categorieNettoyee = (categorie || "").trim();
-
+// ===========================================================================================================
 console.log(
-    `Catégorie lue : "${categorieNettoyee}"`
+  `Titre : "${titre}" | Catégorie : "${categorieNettoyee}"`
 );
 
+if (!categorieNettoyee) {
+  console.warn(
+    `FICHE SANS CATEGORIE : ${titre}`
+  );
+}
+// ===========================================================================================================
 const markerIcon = L.icon({
     iconUrl: getIconUrl(categorieNettoyee),
     iconSize: [40, 40],
