@@ -219,7 +219,19 @@ const markerIcon = L.icon({
     iconAnchor: [20, 40],
     popupAnchor: [0, -40]
 });
+const categorieNettoyee = (categorie || "").trim();
 
+console.log(
+    "Catégorie lue :",
+    `"${categorieNettoyee}"`
+);
+
+if (!icons[categorieNettoyee]) {
+    console.error(
+        "❌ Catégorie inconnue :",
+        `"${categorieNettoyee}"`
+    );
+}
 const marker = L.marker(
     [lat, lng],
     {
