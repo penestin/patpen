@@ -316,11 +316,26 @@ console.log("PHOTO =", photo);
 
                     <h3>${nom}</h3>
 
+
+
+
+
                     ${
                         photo
-                        ? `<img src="${photo}" class="photo-popup">`
+                        ? `<img
+    src="${photo}"
+    class="photo-popup"
+    onload="console.log('IMAGE OK')"
+    onerror="console.log('IMAGE KO')"
+>`
                         : ""
                     }
+
+
+
+
+
+
 
                     <b>Catégorie :</b>
                     ${categorie}
