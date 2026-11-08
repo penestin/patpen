@@ -182,6 +182,13 @@ function getIconUrl(categorie){
 // CHARGEMENT CSV
 // =====================================================
 
+
+
+
+
+
+
+    
 function getDriveImage(url){
 
     if(!url) return "";
@@ -189,7 +196,7 @@ function getDriveImage(url){
     const match = url.match(/\/d\/([^\/]+)/);
 
     if(match){
-        return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+        return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`;
     }
 
     return url;
