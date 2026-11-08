@@ -65,6 +65,31 @@ body{
     height:100vh;
 }
 
+#photoPanel{
+    width:400px;
+    min-width:400px;
+    background:white;
+    border-left:1px solid #ccc;
+    padding:15px;
+    box-sizing:border-box;
+    overflow:auto;
+}
+
+#photoAffichee{
+    width:100%;
+    border-radius:8px;
+    display:none;
+}
+
+#messagePhoto{
+    color:#666;
+}
+
+
+
+
+    
+
 .photo-popup{
     width:100%;
     max-height:220px;
@@ -112,6 +137,20 @@ body{
 </div>
 
 <div id="map"></div>
+
+<div id="photoPanel">
+
+    <h2 id="titrePhoto">Photo</h2>
+
+    <img id="photoAffichee">
+
+    <div id="messagePhoto">
+        Cliquez sur un élément de la carte.
+    </div>
+
+</div>
+
+    
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
@@ -202,11 +241,20 @@ function getDriveImage(url){
     return url;
 }
 
+function afficherPhoto(nom, photo){
 
+    document.getElementById("titrePhoto")
+        .textContent = nom;
 
+    document.getElementById("photoAffichee")
+        .src = photo;
 
+    document.getElementById("photoAffichee")
+        .style.display = "block";
 
-
+    document.getElementById("messagePhoto")
+        .style.display = "none";
+}
 
 
 
@@ -317,6 +365,22 @@ console.log("PHOTO =", photo);
                     icon:markerIcon
                 }
             ).addTo(map);
+
+marker.on("click", function(){
+
+    if(photo){
+
+        afficherPhoto(
+            nom,
+            photo
+        );
+
+    }
+
+});
+
+
+            
 
             marker.bindPopup(`
                 <div style="width:280px">
