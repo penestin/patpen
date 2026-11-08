@@ -8,7 +8,7 @@
 <title>PATPEN - Inventaire patrimonial</title>
 
 <link rel="stylesheet"
-href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+href="https://unpkg.com/leaflet/dist/leaflet.css">
 
 <style>
 
@@ -18,87 +18,45 @@ body{
     background:#aad3df;
     display:flex;
     justify-content:center;
-    align-items:flex-start;
     padding:30px;
     box-sizing:border-box;
 }
 
 .app{
-    width:90%;
-    min-width:380px;
-    max-width:900px;
-    min-height:800px;
-    background:#ffffff;
+    width:95%;
+    max-width:1000px;
+    background:#fff;
     border-radius:15px;
     overflow:hidden;
-    display:flex;
     box-shadow:0 12px 40px rgba(0,0,0,0.15);
+    display:flex;
 }
 
 .sidebar{
-    width:15%;
-    min-width:70px;
-    max-width:200px;
+    width:180px;
     background:#f7f7f7;
-    padding:10px;
-    overflow:auto;
     border-right:1px solid #ddd;
-}
-
-.content{
-    flex:1;
-    padding:10px;
-}
-
-.card{
-    background:#fff;
-    padding:20px;
-    border-radius:12px;
-}
-
-.step{
-    padding:6px 2px;
-    font-size:11px;
-    word-break:break-word;
+    padding:15px;
 }
 
 .sidebar h2{
-    font-size:16px;
-    text-align:center;
     margin-top:0;
+    text-align:center;
 }
 
-.active{
+.step{
+    padding:6px;
+    font-size:12px;
+}
+
+.active-step{
     font-weight:bold;
     color:#9b4b82;
 }
 
-#map{
-    height:380px;
-    border-radius:10px;
-    overflow:hidden;
-}
-
-input,
-textarea,
-select{
-    width:100%;
-    padding:10px;
-    margin:6px 0;
-    box-sizing:border-box;
-}
-
-button{
-    padding:10px 10px;
-    background:#9b4b82;
-    color:white;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#7e3c69;
+.content{
+    flex:1;
+    padding:20px;
 }
 
 .page{
@@ -109,12 +67,39 @@ button:hover{
     display:block;
 }
 
+#map{
+    height:350px;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    box-sizing:border-box;
+}
+
+button{
+    padding:10px 16px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    background:#9b4b82;
+    color:white;
+}
+
+button:hover{
+    background:#7e3c69;
+}
+
 #json{
     background:#f3f3f3;
     padding:10px;
     border-radius:8px;
-    overflow:auto;
-    font-size:13px;
+    white-space:pre-wrap;
 }
 
 .success{
@@ -135,6 +120,12 @@ button:hover{
     margin-bottom:10px;
 }
 
+.nav{
+    margin-top:15px;
+    display:flex;
+    justify-content:space-between;
+}
+
 </style>
 </head>
 
@@ -152,17 +143,16 @@ button:hover{
 
 <div class="content">
 
-<div class="card">
-
 <div id="success" class="success">
 ✅ Contribution enregistrée dans PATPEN.
 </div>
 
 <div id="error" class="error">
-❌ Impossible d'envoyer la contribution.
+❌ Erreur pendant l'envoi.
 </div>
 
 <form id="f">
+
 <!-- PAGE 1 -->
 
 <div class="page active">
@@ -171,26 +161,13 @@ button:hover{
 
 <div id="map"></div>
 
-<input
-id="lat"
-name="latitude"
-placeholder="Latitude"
-readonly>
+<input id="lat" name="latitude" readonly>
 
-<input
-id="lng"
-name="longitude"
-placeholder="Longitude"
-readonly>
+<input id="lng" name="longitude" readonly>
 
 <input
 name="commune"
-value="Pénestin"
-placeholder="Commune">
-
-<input
-name="lieudit"
-placeholder="Lieu-dit">
+value="Pénestin">
 
 <input
 name="adresse"
@@ -244,14 +221,6 @@ placeholder="Crédit photo">
 name="nom"
 placeholder="Nom du patrimoine">
 
-<input
-name="nom_local"
-placeholder="Nom local">
-
-<input
-name="epoque"
-placeholder="Époque">
-
 </div>
 
 <!-- PAGE 4 -->
@@ -265,13 +234,12 @@ name="proprietaire"
 placeholder="Propriétaire">
 
 <select name="acces">
-
 <option>Libre</option>
 <option>Restreint</option>
-
 </select>
 
 </div>
+
 <!-- PAGE 5 -->
 
 <div class="page">
@@ -322,31 +290,23 @@ Envoyer la contribution
 
 </button>
 
+<h3>Aperçu JSON</h3>
+
 <pre id="json"></pre>
 
 </div>
 
 </form>
 
-<div style="margin-top:15px">
+<div class="nav">
 
-<button
-type="button"
-onclick="prev()">
-
+<button type="button" onclick="prev()">
 Précédent
-
 </button>
 
-<button
-type="button"
-onclick="next()">
-
+<button type="button" onclick="next()">
 Suivant
-
 </button>
-
-</div>
 
 </div>
 
@@ -359,9 +319,9 @@ Suivant
 <script>
 
 const WEBAPP_URL =
-"https://script.google.com/macros/s/AKfycbyS5upmnHbfLttMDhkq2Ejf2MrT5G_dDlSxUD5Zv6cKUHBGKCc2Ga_pr71Ar5KHJixZHQ/exec";
+"https://script.google.com/macros/s/AKfycbxFp5fApK9IkboUcKjsBm-RFYKhmclOmRFwmnsMY9YtvS2iJJJFS5V1d4ocOkcoNK8X5w/exec";
 
-const names = [
+const names=[
 "Localisation",
 "Illustration",
 "Désignation",
@@ -371,28 +331,29 @@ const names = [
 "Observations"
 ];
 
-let cur = 0;
+let cur=0;
 
-const pages =
+const pages=
 document.querySelectorAll(".page");
 
-const steps =
+const steps=
 document.getElementById("steps");
 
 function renderSteps(){
 
-    steps.innerHTML = "";
+    steps.innerHTML="";
 
     names.forEach((n,i)=>{
 
-        const d =
+        const d=
         document.createElement("div");
 
-        d.className =
-        "step " +
-        (i===cur ? "active" : "");
+        d.className=
+        i===cur
+        ? "step active-step"
+        : "step";
 
-        d.textContent =
+        d.textContent=
         (i+1)+". "+n;
 
         steps.appendChild(d);
@@ -403,12 +364,14 @@ function renderSteps(){
 
 function show(){
 
-    pages.forEach((p,i)=>
+    pages.forEach((p,i)=>{
+
         p.classList.toggle(
             "active",
             i===cur
-        )
-    );
+        );
+
+    });
 
     renderSteps();
 
@@ -436,7 +399,7 @@ function show(){
 
 function next(){
 
-    if(cur < pages.length-1){
+    if(cur<pages.length-1){
 
         cur++;
         show();
@@ -447,7 +410,7 @@ function next(){
 
 function prev(){
 
-    if(cur > 0){
+    if(cur>0){
 
         cur--;
         show();
@@ -457,7 +420,8 @@ function prev(){
 }
 
 renderSteps();
-const map =
+
+const map=
 L.map("map")
 .setView(
     [47.483,-2.48],
@@ -465,34 +429,29 @@ L.map("map")
 );
 
 L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
-        attribution:"© OpenStreetMap"
-    }
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{
+ attribution:'© OpenStreetMap'
+}
 ).addTo(map);
 
-let marker =
+let marker=
 L.marker(
-    [47.483,-2.48]
+[47.483,-2.48]
 ).addTo(map);
 
-document.getElementById("lat").value =
-"47.483000";
+document.getElementById("lat").value="47.483000";
+document.getElementById("lng").value="-2.480000";
 
-document.getElementById("lng").value =
-"-2.480000";
+map.on("click",e=>{
 
-map.on("click", e => {
-
-    document.getElementById("lat").value =
+    document.getElementById("lat").value=
     e.latlng.lat.toFixed(6);
 
-    document.getElementById("lng").value =
+    document.getElementById("lng").value=
     e.latlng.lng.toFixed(6);
 
-    marker.setLatLng(
-        e.latlng
-    );
+    marker.setLatLng(e.latlng);
 
 });
 
@@ -500,7 +459,7 @@ document
 .getElementById("sendBtn")
 .addEventListener(
 "click",
-async () => {
+async()=>{
 
     const form =
     document.getElementById("f");
@@ -510,7 +469,9 @@ async () => {
         new FormData(form)
     );
 
-    try {
+    console.log(data);
+
+    try{
 
         await fetch(
             WEBAPP_URL,
@@ -522,38 +483,10 @@ async () => {
         );
 
         document.getElementById("success")
-        .innerHTML =
-        "✅ Contribution enregistrée dans PATPEN.";
-
-        document.getElementById("success")
-        .style.display =
-        "block";
+        .style.display="block";
 
         document.getElementById("error")
-        .style.display =
-        "none";
-
-        console.log(
-            "Contribution envoyée"
-        );
-
-        form.reset();
-
-        document.getElementById("lat").value =
-        "47.483000";
-
-        document.getElementById("lng").value =
-        "-2.480000";
-
-        marker.setLatLng(
-            [47.483,-2.48]
-        );
-
-        cur = 0;
-        show();
-
-        document.getElementById("json")
-        .textContent = "";
+        .style.display="none";
 
     }
     catch(error){
@@ -561,12 +494,10 @@ async () => {
         console.error(error);
 
         document.getElementById("success")
-        .style.display =
-        "none";
+        .style.display="none";
 
         document.getElementById("error")
-        .style.display =
-        "block";
+        .style.display="block";
 
     }
 
