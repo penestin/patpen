@@ -125,7 +125,27 @@ button:hover{
     display:flex;
     justify-content:space-between;
 }
+.send-btn{
+    margin-top:20px;
+    background:#28a745;
+    color:white;
+    font-weight:bold;
+    font-size:16px;
+    padding:12px 24px;
+}
 
+.send-btn:hover{
+    background:#218838;
+}
+
+.restart-btn{
+    background:#009688 !important;
+    color:white;
+}
+
+.restart-btn:hover{
+    background:#00796b !important;
+}
 </style>
 </head>
 
@@ -282,17 +302,23 @@ placeholder="Historique"></textarea>
 name="commentaires"
 placeholder="Commentaires"></textarea>
 
+
+
+<h3>Résumé :</h3>
+
+<pre id="json"></pre>
+
 <button
 type="button"
-id="sendBtn">
+id="sendBtn"
+class="send-btn">
 
 Envoyer la contribution
 
 </button>
 
-<h3>Aperçu JSON</h3>
 
-<pre id="json"></pre>
+
 
 </div>
 
@@ -300,9 +326,12 @@ Envoyer la contribution
 
 <div class="nav">
 
+
+
 <button type="button" onclick="prev()">
 Précédent
 </button>
+
 
 <button type="button" onclick="next()">
 Suivant
@@ -319,7 +348,7 @@ Suivant
 <script>
 
 const WEBAPP_URL =
-"https://script.google.com/macros/s/AKfycbxFp5fApK9IkboUcKjsBm-RFYKhmclOmRFwmnsMY9YtvS2iJJJFS5V1d4ocOkcoNK8X5w/exec";
+"https://script.google.com/macros/s/AKfycbwQjb4mNhtIuKX6ma5k1aPBlXbDjjmH1yJRvP1Tu6aEZ1i-PpXca2fS0WdzDEJZCtR4cQ/exec";
 
 const names=[
 "Localisation",
@@ -362,6 +391,11 @@ function renderSteps(){
 
 }
 
+
+
+
+
+
 function show(){
 
     pages.forEach((p,i)=>{
@@ -375,14 +409,38 @@ function show(){
 
     renderSteps();
 
-    if(cur===6){
+    const nextBtn =
+        document.querySelector(".nav button:last-child");
 
-        const data =
-        Object.fromEntries(
-            new FormData(
-                document.getElementById("f")
-            )
-        );
+
+
+
+
+
+
+
+
+if(cur===6){
+
+    nextBtn.textContent =
+        "Ajouter une autre contribution";
+
+    nextBtn.style.background =
+        "#205ba4";
+
+    const data =
+    Object.fromEntries(
+        new FormData(
+            document.getElementById("f")
+        )
+    );
+
+
+
+
+
+
+
 
         document
         .getElementById("json")
@@ -393,18 +451,58 @@ function show(){
             2
         );
 
-    }
+}else{
+
+    nextBtn.textContent =
+        "Suivant";
+
+    nextBtn.style.background =
+        "#009588";
+
+    
 
 }
+}
+
+
+
+
+
+
 
 function next(){
 
-    if(cur<pages.length-1){
+    if(cur < pages.length - 1){
 
         cur++;
         show();
 
+    }else{
+
+        document.getElementById("f").reset();
+
+        document.getElementById("lat").value =
+            "47.483000";
+
+        document.getElementById("lng").value =
+            "-2.480000";
+
+        marker.setLatLng(
+            [47.483,-2.48]
+        );
+
+        map.setView(
+            [47.483,-2.48],
+            14
+        );
+
+        cur = 0;
+
+        show();
+
     }
+
+
 
 }
 
@@ -455,51 +553,107 @@ map.on("click",e=>{
 
 });
 
+function fileToBase64(file){
+
+    return new Promise((resolve,reject)=>{
+
+        const reader =
+            new FileReader();
+
+        reader.onload = ()=>
+            resolve(reader.result);
+
+        reader.onerror = reject;
+
+        reader.readAsDataURL(file);
+
+    });
+
+}
+
+
+
+
+
 document
 .getElementById("sendBtn")
 .addEventListener(
 "click",
 async()=>{
 
-    const form =
-    document.getElementById("f");
 
-    const data =
-    Object.fromEntries(
-        new FormData(form)
-    );
 
-    console.log(data);
+const form =
+document.getElementById("f");
 
-    try{
 
-        await fetch(
-            WEBAPP_URL,
-            {
-                method:"POST",
-                mode:"no-cors",
-                body:JSON.stringify(data)
-            }
+
+
+
+
+
+
+
+const data =
+Object.fromEntries(
+    new FormData(form)
+);
+
+const fichier =
+document.querySelector(
+    'input[name="photos"]'
+).files[0];
+
+if(fichier){
+
+    data.photo =
+        await fileToBase64(
+            fichier
         );
 
-        document.getElementById("success")
-        .style.display="block";
+    delete data.photos;
 
-        document.getElementById("error")
-        .style.display="none";
+}
 
-    }
-    catch(error){
+console.log("PHOTO =", data.photo);
+console.log("PHOTOS =", data.photos);
 
-        console.error(error);
+try{
 
-        document.getElementById("success")
-        .style.display="none";
+    await fetch(
+        WEBAPP_URL,
+        {
+            method:"POST",
+            mode:"no-cors",
+            body:JSON.stringify(data)
+        }
+    );
 
-        document.getElementById("error")
-        .style.display="block";
+    document.getElementById("success")
+    .style.display="block";
 
-    }
+    document.getElementById("error")
+    .style.display="none";
+
+}
+catch(error){
+
+    console.error(error);
+
+    document.getElementById("success")
+    .style.display="none";
+
+    document.getElementById("error")
+    .style.display="block";
+
+}
+
+
+
+
+
+
+
 
 });
 
