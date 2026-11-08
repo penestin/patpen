@@ -320,10 +320,11 @@ console.log("PHOTO =", photo);
 
 
 
-                    ${ photo
-? `<a href="${photo}" target="_blank">Voir la photo</a>`: "">`
-                        : ""
-                    }
+${
+photo
+? `<a href="${photo}" target="_blank">Voir la photo</a>`
+: ""
+}
 
 
 
