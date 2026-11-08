@@ -4,8 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    
-    
 <title>PATPEN</title>
 
 <link rel="stylesheet"
@@ -42,6 +40,7 @@ body{
     margin-top:0;
     color:white;
 }
+
 #btnFormulaire{
     width:100%;
     padding:12px;
@@ -119,9 +118,16 @@ body{
 
 <script>
 
+// =====================================================
+// GOOGLE SHEET
+// =====================================================
+
 const CSV_URL =
 "https://docs.google.com/spreadsheets/d/12Zo6EKHmgA-NlKnUbjerfRS78BH34dO-dhYuq5RcNls/gviz/tq?tqx=out:csv&gid=545961012";
-    
+
+// =====================================================
+// CARTE
+// =====================================================
 
 const map = L.map("map").setView(
     [47.482,-2.475],
@@ -136,179 +142,174 @@ L.tileLayer(
     }
 ).addTo(map);
 
-function photoDrive(url){
+// =====================================================
+// ICÔNES
+// =====================================================
 
-    if(!url) return "";
+const icons = {
 
-    const match = url.match(/id=([^&]+)/);
+    "Puits":"images/categories/puits.svg",
+    "Fontaine":"images/categories/fontaine.svg",
+    "Lavoir":"images/categories/lavoir.svg",
+    "Four à pain":"images/categories/four.svg",
+    "Arbre remarquable":"images/categories/arbre.svg",
+    "Croix-Calvaire":"images/categories/croix.svg",
+    "Moulin":"images/categories/moulin.svg",
+    "Maison remarquable":"images/categories/maison.svg",
+    "Chemin rural":"images/categories/chemin.svg",
+    "Chapelle":"images/categories/chapelle.svg"
 
-    if(!match) return "";
+};
 
-    return "https://drive.google.com/thumbnail?id="
-        + match[1]
-        + "&sz=w800";
+function getIconUrl(categorie){
+
+    const c = (categorie || "").trim();
+
+    if(!c){
+        console.warn("Catégorie vide");
+        return "images/categories/puits.svg";
+    }
+
+    if(!icons[c]){
+        console.warn("Catégorie inconnue :", c);
+        return "images/categories/puits.svg";
+    }
+
+    return icons[c];
 }
-console.log("CSV =", CSV_URL);
-    
+
+// =====================================================
+// CHARGEMENT CSV
+// =====================================================
+
 Papa.parse(CSV_URL,{
 
     download:true,
+
     header:true,
+
     skipEmptyLines:true,
 
     complete:function(results){
+
+        console.log("Nombre de lignes :",results.data.length);
+
+        if(results.data.length > 0){
+            console.log("Première fiche :",results.data[0]);
+        }
 
         let nb = 0;
 
         results.data.forEach(function(fiche){
 
             const statut =
-            (fiche["Statut"] || "")
-            .trim()
-            .toLowerCase();
+                (fiche["statut"] || "")
+                .trim()
+                .toLowerCase();
 
-            const afficher =
-            (fiche["Afficher carte"] || "")
-            .trim()
-            .toLowerCase();
+            // uniquement les fiches validées
 
-            if(statut !== "validé") return;
-            if(afficher !== "oui") return;
+            if(
+                statut !== "validé" &&
+                statut !== "valide"
+            ){
+                return;
+            }
 
             const lat =
-            parseFloat(fiche["Latitude"]);
+                parseFloat(fiche["latitude"]);
 
             const lng =
-            parseFloat(fiche["Longitude"]);
+                parseFloat(fiche["longitude"]);
 
-            if(isNaN(lat) || isNaN(lng))
+            if(
+                isNaN(lat) ||
+                isNaN(lng)
+            ){
                 return;
+            }
 
             const nom =
-            fiche["Nom du lieu"] || "Sans nom";
+                fiche["nom"] ||
+                "Sans nom";
 
             const description =
-            fiche["Description"] || "";
+                fiche["description"] || "";
 
             const categorie =
-            fiche["Catégorie"] || "";
+                fiche["categorie"] || "";
 
-            const secteur =
-            fiche["Secteur"] || "";
+            const commune =
+                fiche["commune"] || "";
+
+            const adresse =
+                fiche["adresse"] || "";
 
             const photo =
-            photoDrive(
-                fiche["Photos"]
-            );
+                fiche["PHOTO_URL"] ||
+                "";
 
+            const markerIcon = L.icon({
 
-// =====================================================
-// Icônes des catégories
-// =====================================================
+                iconUrl:getIconUrl(categorie),
 
-const icons = {
-    "Puits": "images/categories/puits.svg",
-    "Fontaine": "images/categories/fontaine.svg",
-    "Lavoir": "images/categories/lavoir.svg",
-    "Four à pain": "images/categories/four.svg",
-    "Arbre remarquable": "images/categories/arbre.svg",
-    "Croix-Calvaire": "images/categories/croix.svg",
-    "Moulin": "images/categories/moulin.svg",
-    "Maison remarquable": "images/categories/maison.svg",
-    "Chemin rural": "images/categories/chemin.svg",
-    "Chapelle": "images/categories/chapelle.svg"
-};
+                iconSize:[40,40],
 
-// =====================================================
-// Fonction de récupération sécurisée de l'icône
-// =====================================================
+                iconAnchor:[20,40],
 
-function getIconUrl(categorie) {
+                popupAnchor:[0,-40]
 
-    const categorieNettoyee = (categorie || "").trim();
+            });
 
-    if (!categorieNettoyee) {
-        console.warn("Catégorie vide");
-        return "images/categories/puits.svg";
-    }
-
-    if (!icons[categorieNettoyee]) {
-        console.warn(
-            "Catégorie inconnue :",
-            categorieNettoyee
-        );
-        return "images/categories/puits.svg";
-    }
-
-    return icons[categorieNettoyee];
-}
-
-// =====================================================
-// Création du marqueur
-// =====================================================
-
-const categorieNettoyee = (categorie || "").trim();
-// ===========================================================================================================
-console.log(
-  `Catégorie lue : "${categorieNettoyee}"`
-);
-
-if (!categorieNettoyee) {
-  console.warn("Catégorie vide");
-}
-
-// ===========================================================================================================
-const markerIcon = L.icon({
-    iconUrl: getIconUrl(categorieNettoyee),
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-    popupAnchor: [0, -40]
-});
-
-const marker = L.marker(
-    [lat, lng],
-    {
-        icon: markerIcon
-    }
-).addTo(map);
-
-
-
-
-
-
-
-            
-            marker.bindPopup(
-            `
-            <div style="width:280px">
-
-                <h3>${nom}</h3>
-
-                ${
-                    photo
-                    ? `<img src="${photo}" class="photo-popup">`
-                    : ""
+            const marker = L.marker(
+                [lat,lng],
+                {
+                    icon:markerIcon
                 }
+            ).addTo(map);
 
-                <b>Catégorie :</b> ${categorie}
-                <br>
+            marker.bindPopup(`
+                <div style="width:280px">
 
-                <b>Secteur :</b> ${secteur}
+                    <h3>${nom}</h3>
 
-                <br><br>
+                    ${
+                        photo
+                        ? `<img src="${photo}" class="photo-popup">`
+                        : ""
+                    }
 
-                ${description}
+                    <b>Catégorie :</b>
+                    ${categorie}
+                    <br>
 
-            </div>
-            `
-            );
+                    <b>Commune :</b>
+                    ${commune}
+                    <br>
+
+                    <b>Adresse :</b>
+                    ${adresse}
+                    <br><br>
+
+                    ${description}
+
+                </div>
+            `);
 
             nb++;
 
         });
 
         console.log(nb + " fiche(s) affichée(s)");
+
+    },
+
+    error:function(error){
+
+        console.error(
+            "Erreur de lecture CSV :",
+            error
+        );
 
     }
 
