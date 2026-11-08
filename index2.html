@@ -273,11 +273,31 @@ Papa.parse(CSV_URL,{
 
                     <h3>${nom}</h3>
 
-                    ${
-                        photo
-                        ? `<img src="${photo}" class="photo-popup">`
-                        : ""
-                    }
+
+
+
+
+
+${
+photo ? `
+<button onclick="document.getElementById('photo_${nb}').style.display='block'">
+📷 Voir la photo
+</button>
+
+<div id="photo_${nb}" style="display:none;margin-top:10px;">
+    <img src="${photo}" class="photo-popup">
+</div>
+`
+: ""
+}
+
+
+
+
+
+
+
+
 
                     <b>Catégorie :</b>
                     ${categorie}
