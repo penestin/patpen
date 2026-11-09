@@ -93,7 +93,58 @@ body{
     }
 
 }
+.fiche-panel{
+    position:fixed;
+    bottom:-100%;
+    left:0;
+    width:100%;
+    height:75vh;
+    background:white;
+    z-index:9999;
+    transition:0.4s;
+    border-radius:20px 20px 0 0;
+    box-shadow:0 -5px 20px rgba(0,0,0,0.25);
+    overflow-y:auto;
+}
 
+.fiche-panel.open{
+    bottom:0;
+}
+
+.panel-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px;
+    border-bottom:1px solid #ddd;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.panel-header button{
+    border:none;
+    background:none;
+    font-size:24px;
+    cursor:pointer;
+}
+
+.tuile-photo{
+    padding:15px;
+}
+
+.tuile-photo img{
+    width:100%;
+    border-radius:12px;
+}
+
+.tuile-info{
+    padding:15px;
+}
+
+.tuile-info h2{
+    color:#1f5f3a;
+    margin-top:0;
+}
 </style>
 </head>
 
@@ -206,7 +257,34 @@ function getDriveImage(url){
     return url;
 }
 
+function ouvrirPanel(fiche){
 
+    document.getElementById("ficheTitre").textContent =
+        fiche.nom;
+
+    document.getElementById("ficheDescription").textContent =
+        fiche.description;
+
+    document.getElementById("ficheAuteur").textContent =
+        fiche.auteur;
+
+    document.getElementById("ficheDate").textContent =
+        fiche.date;
+
+    document.getElementById("ficheSecteur").textContent =
+        fiche.secteur;
+
+    document.getElementById("fichePhoto").src =
+        fiche.photo;
+
+    document.getElementById("fichePanel")
+        .classList.add("open");
+}
+
+function fermerPanel(){
+    document.getElementById("fichePanel")
+        .classList.remove("open");
+}
 
 
 
@@ -327,7 +405,18 @@ console.log("PHOTO =", photo);
 
                     <h3>${nom}</h3>
 
+marker.on("click", function(){
 
+    ouvrirPanel({
+        nom: fiche.NOM,
+        description: fiche.DESCRIPTION,
+        auteur: fiche.AUTEUR,
+        date: fiche.DATE,
+        secteur: fiche.SECTEUR,
+        photo: fiche.PHOTO_URL
+    });
+
+});
 
 
 
