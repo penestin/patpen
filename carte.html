@@ -641,18 +641,7 @@ Papa.parse(CSV_URL,{
 
         });
 
-        if(markers.length){
-
-            const group =
-                L.featureGroup(markers);
-
-            map.fitBounds(
-                group.getBounds(),
-                {
-                    padding:[30,30]
-                }
-            );
-        }
+map.setView([47.482,-2.475],14);
 
     },
 
