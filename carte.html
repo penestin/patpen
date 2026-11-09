@@ -433,16 +433,20 @@ const CSV_URL =
 "https://docs.google.com/spreadsheets/d/12Zo6EKHmgA-NlKnUbjerfRS78BH34dO-dhYuq5RcNls/gviz/tq?tqx=out:csv&gid=545961012";
 
 /* ==========================
-   CARTE-molette
+   CARTE
 ========================== */
 
-const map = L.map('map', {
-    dragging: false,
-    touchZoom: false,
-    doubleClickZoom: false,
-    scrollWheelZoom: false,
-    zoomControl: true
-});
+const map = L.map("map",{
+    scrollWheelZoom:false,  // désactive molette
+    touchZoom:false,        // désactive pincement
+    doubleClickZoom:false,
+    boxZoom:false,
+    keyboard:false,
+    dragging:false          // optionnel
+}).setView(
+    [47.482,-2.475],
+    14
+);
 
 L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -637,7 +641,18 @@ Papa.parse(CSV_URL,{
 
         });
 
-map.setView([47.482,-2.475],14);
+        if(markers.length){
+
+            const group =
+                L.featureGroup(markers);
+
+            map.fitBounds(
+                group.getBounds(),
+                {
+                    padding:[30,30]
+                }
+            );
+        }
 
     },
 
