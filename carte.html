@@ -437,22 +437,6 @@ const CSV_URL =
 ========================== */
 
 const map = L.map('map', {
-    dragging: false,
-    touchZoom: false,
-    doubleClickZoom: false,
-    scrollWheelZoom: false,
-    zoomControl: true
-});
-
-L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
-        maxZoom:19,
-        attribution:"© OpenStreetMap"
-    }
-).addTo(map);
-
-const map = L.map('map', {
     center: [47.48, -2.48],
     zoom: 13,
     dragging: false,
@@ -498,10 +482,6 @@ mapContainer.addEventListener('touchend', () => {
 // =====================
 
 L.tileLayer(...).addTo(map);
-
-
-      
-      
 
 /* ==========================
    ICÔNES PATPEN
