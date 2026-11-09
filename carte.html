@@ -432,8 +432,14 @@ body{
 const CSV_URL =
 "https://docs.google.com/spreadsheets/d/12Zo6EKHmgA-NlKnUbjerfRS78BH34dO-dhYuq5RcNls/gviz/tq?tqx=out:csv&gid=545961012";
 
+
+
+
+
+
+
 /* ==========================
-   CARTE-molette
+   CARTE
 ========================== */
 
 const map = L.map('map', {
@@ -479,10 +485,20 @@ mapContainer.addEventListener('touchend', () => {
     }
 
 });
+
 // =====================
 
-L.tileLayer(...).addTo(map);
+L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        attribution: '&copy; OpenStreetMap contributors'
+    }
+).addTo(map);
 
+
+
+
+      
 /* ==========================
    ICÔNES PATPEN
 ========================== */
