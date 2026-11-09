@@ -169,52 +169,6 @@ header{
     background:#1a4b88;
 }
 /* ==========================
-   ICÔNES PATPEN
-========================== */
-
-/* ==========================
-   BOUTON AJOUTER UNE FICHE
-========================== */
-
-const AddFicheControl = L.Contr*l.extend({
-
-    options:{
-        *osition:'topright'
-    },
-
-    onA*d:function(){
-
-        const div =*L.DomUtil.create(
-            'div*,
-            'leaflet-bar leaflet*control leaflet-control-addfiche'
-*       );
-
-        div.innerHTML =*            '<a href="#" title="Aj*uter une fiche">+</a>';
-
-        d*v.onclick = function(e){
-
-        *   L.DomEvent.stop(e);
-
-          * window.location.href =
-          *     'ajouter.html';   // URL de v*tre formulaire
-
-        };
-
-      * return div;
-    }
-});
-
-map.addCon*rol(
-    new AddFicheControl()
-);
-*
-
-
-
-
-    
-    
-/* ==========================
    BOUTON AJOUT FICHE
 ========================== */
 
@@ -249,8 +203,6 @@ map.addCon*rol(
 
     margin-top:10px;
 }
-
-).addTo(map);    
 /* ======================
    FOOTER
 ====================== */
