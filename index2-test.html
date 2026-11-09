@@ -73,20 +73,55 @@ body{
 
 .fiche-panel{
     position:fixed;
-    left:0;
-    right:0;
-    bottom:-100%;
-    height:75vh;
     background:white;
     z-index:9999;
-    border-radius:20px 20px 0 0;
-    transition:.35s;
-    box-shadow:0 -4px 20px rgba(0,0,0,.25);
+    box-shadow:0 0 20px rgba(0,0,0,.25);
     overflow-y:auto;
 }
 
-.fiche-panel.open{
-    bottom:0;
+/* PC */
+
+@media (min-width: 769px){
+
+    .fiche-panel{
+
+        top:0;
+        right:-450px;
+
+        width:420px;
+        height:100vh;
+
+        transition:right 0.3s;
+
+        border-radius:0;
+    }
+
+    .fiche-panel.open{
+        right:0;
+    }
+}
+
+/* Mobile */
+
+@media (max-width:768px){
+
+    .fiche-panel{
+
+        left:0;
+        right:0;
+
+        bottom:-55vh;
+
+        height:50vh;
+
+        transition:bottom .3s;
+
+        border-radius:20px 20px 0 0;
+    }
+
+    .fiche-panel.open{
+        bottom:0;
+    }
 }
 
 .panel-header{
