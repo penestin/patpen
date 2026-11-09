@@ -249,13 +249,12 @@ body{
 
     width:100%;
 
-    max-height:250px;
+    height:160px;
 
     object-fit:cover;
 
     display:block;
 }
-
       
 
 </style>
@@ -495,16 +494,6 @@ Papa.parse(CSV_URL,{
                     fiche.photos || ""
                 );
 
-console.log("PHOTO :", fiche.photos);
-console.log("PHOTO URL :", photo);
-
-
-
-
-
-
-
-              
             const marker = L.marker(
                 [lat,lng],
                 {
