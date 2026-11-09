@@ -257,6 +257,61 @@ body{
 
     display:block;
 }
+.fiche-title{
+
+    color:#205ba4;
+
+    font-size:30px;
+
+    margin:10px 0;
+
+    font-weight:700;
+}
+
+.separator{
+
+    height:1px;
+
+    background:#dddddd;
+
+    margin:15px 0;
+}
+
+.description-card{
+
+    background:#eef4fb;
+
+    border-left:5px solid #205ba4;
+
+    border-radius:12px;
+
+    padding:15px;
+
+    margin-bottom:20px;
+
+    line-height:1.6;
+}
+
+.info-bloc{
+
+    padding:12px 0;
+
+    border-bottom:1px solid #e5e5e5;
+}
+
+.info-bloc label{
+
+    display:block;
+
+    color:#666;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+    margin-bottom:6px;
+}
+
       
 
 </style>
@@ -305,29 +360,52 @@ body{
 
 </div>
 
-    <div class="tuile-info">
+<div class="tuile-info">
 
-        <h2 id="ficheTitre"></h2>
+    <h2 id="ficheTitre" class="fiche-title"></h2>
 
-        <p id="ficheDescription"></p>
+    <div class="separator"></div>
 
-        <p>
-            <strong>Catégorie :</strong>
-            <span id="ficheCategorie"></span>
-        </p>
+    <div class="description-card">
 
-        <p>
-            <strong>Commune :</strong>
-            <span id="ficheCommune"></span>
-        </p>
-
-        <p>
-            <strong>Adresse :</strong>
-            <span id="ficheAdresse"></span>
-        </p>
+        <div id="ficheDescription"></div>
 
     </div>
 
+    <div class="info-bloc">
+
+        <label>Catégorie</label>
+
+        <div id="ficheCategorie"></div>
+
+    </div>
+
+    <div class="info-bloc">
+
+        <label>Commune</label>
+
+        <div id="ficheCommune"></div>
+
+    </div>
+
+    <div class="info-bloc">
+
+        <label>Adresse</label>
+
+        <div id="ficheAdresse"></div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+      
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
