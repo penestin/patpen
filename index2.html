@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>PATPEN</title>
+<title>PATPEN - Carte du patrimoine</title>
 
 <link rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
 
@@ -15,65 +16,120 @@ html,body{
     margin:0;
     padding:0;
     height:100%;
+    overflow:hidden;
+    font-family:Arial,sans-serif;
 }
 
 body{
     display:flex;
-    flex-direction:row;
 }
 
-/* PANNEAU GAUCHE */
+/* ==========================
+   MENU
+========================== */
 
 #sidebar{
-    width:220px;
-    min-width:220px;
+    width:260px;
     background:#205ba4;
-    border-right:1px solid #ddd;
-    padding:15px;
-    overflow:auto;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
     color:white;
+    padding:20px;
+    box-sizing:border-box;
 }
 
 #sidebar h1{
     margin-top:0;
-    color:white;
+    font-size:48px;
 }
 
 #btnFormulaire{
     width:100%;
-    padding:12px;
-    margin-top:20px;
+    padding:15px;
     background:white;
     color:#205ba4;
     border:none;
-    border-radius:6px;
+    border-radius:10px;
+    font-size:18px;
     font-weight:bold;
-    font-size:15px;
     cursor:pointer;
 }
 
 #btnFormulaire:hover{
-    background:#e6eef9;
+    background:#f0f0f0;
 }
 
-/* CARTE */
+/* ==========================
+   CARTE
+========================== */
 
 #map{
     flex:1;
+    min-width:0;
     height:100vh;
 }
 
-.photo-popup{
-    width:100%;
-    max-height:220px;
-    object-fit:cover;
+/* ==========================
+   PANNEAU DETAIL
+========================== */
+
+.fiche-panel{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:-100%;
+    height:75vh;
+    background:white;
+    z-index:9999;
+    border-radius:20px 20px 0 0;
+    transition:.35s;
+    box-shadow:0 -4px 20px rgba(0,0,0,.25);
+    overflow-y:auto;
 }
 
-/* RESPONSIVE */
+.fiche-panel.open{
+    bottom:0;
+}
 
-@media screen and (max-width:768px){
+.panel-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px;
+    border-bottom:1px solid #ddd;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.panel-header button{
+    border:none;
+    background:none;
+    cursor:pointer;
+    font-size:28px;
+}
+
+.tuile-photo{
+    padding:15px;
+}
+
+.tuile-photo img{
+    width:100%;
+    border-radius:12px;
+    display:block;
+}
+
+.tuile-info{
+    padding:15px;
+}
+
+.tuile-info h2{
+    margin-top:0;
+    color:#205ba4;
+}
+
+/* ==========================
+   MOBILE
+========================== */
+
+@media(max-width:768px){
 
     body{
         flex-direction:column;
@@ -81,20 +137,16 @@ body{
 
     #sidebar{
         width:100%;
-        min-width:100%;
         height:auto;
-        border-right:none;
-        border-bottom:1px solid #ddd;
     }
 
     #map{
-        width:100%;
         height:calc(100vh - 140px);
     }
-
 }
 
 </style>
+
 </head>
 
 <body>
@@ -103,9 +155,8 @@ body{
 
     <h1>PATPEN</h1>
 
-    <button
-        id="btnFormulaire"
-        onclick="window.location.href='identification+formulaire.html';">
+    <button id="btnFormulaire"
+            onclick="window.location.href='identification+formulaire.html'">
         ➕ Ajouter une fiche
     </button>
 
@@ -113,27 +164,68 @@ body{
 
 <div id="map"></div>
 
+<!-- PANNEAU -->
+
+<div id="fichePanel" class="fiche-panel">
+
+    <div class="panel-header">
+
+        <span>Détail du patrimoine</span>
+
+        <button onclick="fermerPanel()">✕</button>
+
+    </div>
+
+    <div class="tuile-photo">
+
+        <img id="fichePhoto"
+             src=""
+             alt="Photo du patrimoine">
+
+    </div>
+
+    <div class="tuile-info">
+
+        <h2 id="ficheTitre"></h2>
+
+        <p id="ficheDescription"></p>
+
+        <p>
+            <strong>Catégorie :</strong>
+            <span id="ficheCategorie"></span>
+        </p>
+
+        <p>
+            <strong>Commune :</strong>
+            <span id="ficheCommune"></span>
+        </p>
+
+        <p>
+            <strong>Adresse :</strong>
+            <span id="ficheAdresse"></span>
+        </p>
+
+    </div>
+
+</div>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
 <script>
 
-// =====================================================
-// GOOGLE SHEET
-// =====================================================
+/* ==========================
+   GOOGLE SHEET
+========================== */
 
 const CSV_URL =
 "https://docs.google.com/spreadsheets/d/12Zo6EKHmgA-NlKnUbjerfRS78BH34dO-dhYuq5RcNls/gviz/tq?tqx=out:csv&gid=545961012";
 
-// =====================================================
-// CARTE
-// =====================================================
+/* ==========================
+   CARTE
+========================== */
 
-const map = L.map("map",{
-    zoomSnap: 0.25,
-    zoomDelta: 0.25,
-    wheelPxPerZoomLevel: 250
-}).setView(
+const map = L.map("map").setView(
     [47.482,-2.475],
     15
 );
@@ -141,17 +233,16 @@ const map = L.map("map",{
 L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
-        maxZoom:19,
-        attribution:"© OpenStreetMap"
+        attribution:"© OpenStreetMap",
+        maxZoom:19
     }
 ).addTo(map);
 
-// =====================================================
-// ICÔNES
-// =====================================================
+/* ==========================
+   ICÔNES
+========================== */
 
 const icons = {
-
     "Puits":"images/categories/puits.svg",
     "Fontaine":"images/categories/fontaine.svg",
     "Lavoir":"images/categories/lavoir.svg",
@@ -162,37 +253,18 @@ const icons = {
     "Maison remarquable":"images/categories/maison.svg",
     "Chemin rural":"images/categories/chemin.svg",
     "Chapelle":"images/categories/chapelle.svg"
-
 };
 
 function getIconUrl(categorie){
 
-    const c = (categorie || "").trim();
-
-    if(!c){
-        console.warn("Catégorie vide");
-        return "images/categories/puits.svg";
-    }
-
-    if(!icons[c]){
-        console.warn("Catégorie inconnue :", c);
-        return "images/categories/puits.svg";
-    }
-
-    return icons[c];
+    return icons[categorie]
+        || "images/categories/puits.svg";
 }
 
-// =====================================================
-// CHARGEMENT CSV
-// =====================================================
+/* ==========================
+   PHOTO GOOGLE DRIVE
+========================== */
 
-
-
-
-
-
-
-    
 function getDriveImage(url){
 
     if(!url) return "";
@@ -200,26 +272,65 @@ function getDriveImage(url){
     const match = url.match(/\/d\/([^\/]+)/);
 
     if(match){
-        return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`;
+
+        return "https://drive.google.com/thumbnail?id="
+             + match[1]
+             + "&sz=w1200";
     }
 
     return url;
 }
 
+/* ==========================
+   PANNEAU
+========================== */
 
+function ouvrirPanel(data){
 
+    document.getElementById("ficheTitre")
+        .textContent = data.nom || "";
 
+    document.getElementById("ficheDescription")
+        .textContent = data.description || "";
 
+    document.getElementById("ficheCategorie")
+        .textContent = data.categorie || "";
 
+    document.getElementById("ficheCommune")
+        .textContent = data.commune || "";
 
+    document.getElementById("ficheAdresse")
+        .textContent = data.adresse || "";
 
+    const photo =
+        document.getElementById("fichePhoto");
 
+    if(data.photo){
 
+        photo.src = data.photo;
+        photo.style.display = "block";
 
+    } else {
 
+        photo.style.display = "none";
+    }
 
+    document.getElementById("fichePanel")
+        .classList.add("open");
+}
 
-    
+function fermerPanel(){
+
+    document.getElementById("fichePanel")
+        .classList.remove("open");
+}
+
+/* ==========================
+   CHARGEMENT GOOGLE SHEET
+========================== */
+
+const markers = [];
+
 Papa.parse(CSV_URL,{
 
     download:true,
@@ -230,149 +341,91 @@ Papa.parse(CSV_URL,{
 
     complete:function(results){
 
-        console.log("Nombre de lignes :",results.data.length);
-
-        if(results.data.length > 0){
-            console.log("Première fiche :",results.data[0]);
-        }
-
-        let nb = 0;
-
         results.data.forEach(function(fiche){
 
-            const statut =
-                (fiche["statut"] || "")
-                .trim()
-                .toLowerCase();
-
-            // uniquement les fiches validées
-/*
-            if(
-                statut !== "validé" &&
-                statut !== "valide"
-            ){
-                return;
-            }
-*/
             const lat =
-                parseFloat(fiche["latitude"]);
+                parseFloat(fiche.latitude);
 
             const lng =
-                parseFloat(fiche["longitude"]);
+                parseFloat(fiche.longitude);
 
-            if(
-                isNaN(lat) ||
-                isNaN(lng)
-            ){
+            if(isNaN(lat) || isNaN(lng)){
                 return;
             }
 
             const nom =
-                fiche["nom"] ||
-                "Sans nom";
+                fiche.nom || "";
 
             const description =
-                fiche["description"] || "";
+                fiche.description || "";
 
             const categorie =
-                fiche["categorie"] || "";
+                fiche.categorie || "";
 
             const commune =
-                fiche["commune"] || "";
+                fiche.commune || "";
 
             const adresse =
-                fiche["adresse"] || "";
+                fiche.adresse || "";
 
-
-
-
-
-            
-const photo =
-    getDriveImage(
-        fiche["photos"] || ""
-    );
-console.log("PHOTO =", photo);
-
-
-
-
-
-
-
-
-            
-            
-            const markerIcon = L.icon({
-
-                iconUrl:getIconUrl(categorie),
-
-                iconSize:[40,40],
-
-                iconAnchor:[20,40],
-
-                popupAnchor:[0,-40]
-
-            });
+            const photo =
+                getDriveImage(
+                    fiche.photos || ""
+                );
 
             const marker = L.marker(
                 [lat,lng],
                 {
-                    icon:markerIcon
+                    icon:L.icon({
+
+                        iconUrl:getIconUrl(categorie),
+
+                        iconSize:[40,40],
+
+                        iconAnchor:[20,40]
+                    })
                 }
             ).addTo(map);
 
-            marker.bindPopup(`
-                <div style="width:280px">
+            markers.push(marker);
 
-                    <h3>${nom}</h3>
+            marker.on("click", function(){
 
+                ouvrirPanel({
 
+                    nom:nom,
+                    description:description,
+                    categorie:categorie,
+                    commune:commune,
+                    adresse:adresse,
+                    photo:photo
 
+                });
 
-
-${
-photo
-? `<a href="${photo}" target="_blank">Voir la photo</a>`
-: ""
-}
-
-
-
-
-
-
-
-                    <b>Catégorie :</b>
-                    ${categorie}
-                    <br>
-
-                    <b>Commune :</b>
-                    ${commune}
-                    <br>
-
-                    <b>Adresse :</b>
-                    ${adresse}
-                    <br><br>
-
-                    ${description}
-
-                </div>
-            `);
-
-            nb++;
+            });
 
         });
 
-        console.log(nb + " fiche(s) affichée(s)");
+        if(markers.length){
+
+            const group =
+                L.featureGroup(markers);
+
+            map.fitBounds(
+                group.getBounds(),
+                {
+                    padding:[30,30]
+                }
+            );
+        }
 
     },
 
-    error:function(error){
+    error:function(err){
 
         console.error(
-            "Erreur de lecture CSV :",
-            error
+            "Erreur CSV :",
+            err
         );
 
     }
