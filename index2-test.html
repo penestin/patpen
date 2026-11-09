@@ -2,70 +2,69 @@
 <html lang="fr">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>PATPEN</title>
+<title>PATPEN - Carte du patrimoine</title>
 
 <link rel="stylesheet"
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
 
-/* =========================
-   PAGE
-========================= */
-
 html,body{
     margin:0;
     padding:0;
     height:100%;
+    overflow:hidden;
+    font-family:Arial,sans-serif;
 }
 
 body{
     display:flex;
-    flex-direction:row;
 }
 
-/* =========================
-   SIDEBAR
-========================= */
+/* ==========================
+   MENU
+========================== */
 
 #sidebar{
-    width:220px;
+    width:260px;
     background:#205ba4;
     color:white;
-    padding:15px;
+    padding:20px;
     box-sizing:border-box;
 }
 
 #sidebar h1{
     margin-top:0;
+    font-size:48px;
 }
 
 #btnFormulaire{
     width:100%;
-    padding:12px;
-    border:none;
-    border-radius:8px;
+    padding:15px;
     background:white;
     color:#205ba4;
+    border:none;
+    border-radius:10px;
+    font-size:18px;
     font-weight:bold;
     cursor:pointer;
 }
 
-/* =========================
+/* ==========================
    CARTE
-========================= */
+========================== */
 
 #map{
     flex:1;
     height:100vh;
 }
 
-/* =========================
-   PANNEAU FICHE
-========================= */
+/* ==========================
+   FICHE PATRIMOINE
+========================== */
 
 .fiche-panel{
 
@@ -79,13 +78,13 @@ body{
 
     background:white;
 
+    z-index:9999;
+
     border-radius:20px 20px 0 0;
 
-    box-shadow:0 -5px 20px rgba(0,0,0,.25);
+    transition:.35s;
 
-    transition:.3s ease;
-
-    z-index:9999;
+    box-shadow:0 -4px 20px rgba(0,0,0,.25);
 
     overflow-y:auto;
 }
@@ -106,6 +105,8 @@ body{
 
     border-bottom:1px solid #ddd;
 
+    font-size:20px;
+
     font-weight:bold;
 }
 
@@ -115,9 +116,9 @@ body{
 
     background:none;
 
-    font-size:24px;
-
     cursor:pointer;
+
+    font-size:28px;
 }
 
 .tuile-photo{
@@ -146,6 +147,10 @@ body{
     color:#205ba4;
 }
 
+/* ==========================
+   MOBILE
+========================== */
+
 @media(max-width:768px){
 
     body{
@@ -154,35 +159,36 @@ body{
 
     #sidebar{
         width:100%;
+        height:auto;
     }
 
     #map{
-        height:calc(100vh - 120px);
+        height:calc(100vh - 140px);
     }
 }
 
 </style>
+
 </head>
 
 <body>
-
-<!-- COLONNE BLEUE -->
 
 <div id="sidebar">
 
     <h1>PATPEN</h1>
 
-    <button id="btnFormulaire">
+    <button id="btnFormulaire"
+        onclick="window.location.href='identification+formulaire.html'">
         ➕ Ajouter une fiche
     </button>
 
 </div>
 
-<!-- CARTE -->
-
 <div id="map"></div>
 
-<!-- PANNEAU DETAIL -->
+<!-- ==========================
+     PANNEAU DETAIL
+========================== -->
 
 <div id="fichePanel" class="fiche-panel">
 
@@ -207,18 +213,18 @@ body{
         <p id="ficheDescription"></p>
 
         <p>
-            <strong>Auteur :</strong>
-            <span id="ficheAuteur"></span>
+            <strong>Catégorie :</strong>
+            <span id="ficheCategorie"></span>
         </p>
 
         <p>
-            <strong>Secteur :</strong>
-            <span id="ficheSecteur"></span>
+            <strong>Commune :</strong>
+            <span id="ficheCommune"></span>
         </p>
 
         <p>
-            <strong>Date :</strong>
-            <span id="ficheDate"></span>
+            <strong>Adresse :</strong>
+            <span id="ficheAdresse"></span>
         </p>
 
     </div>
@@ -226,83 +232,203 @@ body{
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
 <script>
 
-/* =========================
-   CARTE
-========================= */
+/* ==========================
+   GOOGLE SHEET
+========================== */
 
-const map = L.map('map')
-.setView([47.482,-2.475],15);
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/12Zo6EKHmgA-NlKnUbjerfRS78BH34dO-dhYuq5RcNls/gviz/tq?tqx=out:csv&gid=545961012";
+
+/* ==========================
+   CARTE
+========================== */
+
+const map = L.map("map").setView(
+    [47.482,-2.475],
+    15
+);
 
 L.tileLayer(
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+        maxZoom:19,
+        attribution:"© OpenStreetMap"
+    }
 ).addTo(map);
 
-/* =========================
+/* ==========================
+   ICONES
+========================== */
+
+const icons = {
+
+    "Puits":"images/categories/puits.svg",
+    "Fontaine":"images/categories/fontaine.svg",
+    "Lavoir":"images/categories/lavoir.svg",
+    "Four à pain":"images/categories/four.svg",
+    "Arbre remarquable":"images/categories/arbre.svg",
+    "Croix-Calvaire":"images/categories/croix.svg",
+    "Moulin":"images/categories/moulin.svg",
+    "Maison remarquable":"images/categories/maison.svg",
+    "Chemin rural":"images/categories/chemin.svg",
+    "Chapelle":"images/categories/chapelle.svg"
+};
+
+function getIconUrl(categorie){
+
+    return icons[categorie]
+        || "images/categories/puits.svg";
+}
+
+/* ==========================
+   IMAGE DRIVE
+========================== */
+
+function getDriveImage(url){
+
+    if(!url) return "";
+
+    const match =
+        url.match(/\/d\/([^\/]+)/);
+
+    if(match){
+
+        return "https://drive.google.com/thumbnail?id="
+            + match[1]
+            + "&sz=w1200";
+    }
+
+    return url;
+}
+
+/* ==========================
    PANNEAU
-========================= */
+========================== */
 
 function ouvrirPanel(data){
 
-    document.getElementById("ficheTitre").textContent =
-        data.nom || "";
+    document.getElementById("ficheTitre")
+        .textContent = data.nom || "";
 
-    document.getElementById("ficheDescription").textContent =
-        data.description || "";
+    document.getElementById("ficheDescription")
+        .textContent = data.description || "";
 
-    document.getElementById("ficheAuteur").textContent =
-        data.auteur || "";
+    document.getElementById("ficheCategorie")
+        .textContent = data.categorie || "";
 
-    document.getElementById("ficheSecteur").textContent =
-        data.secteur || "";
+    document.getElementById("ficheCommune")
+        .textContent = data.commune || "";
 
-    document.getElementById("ficheDate").textContent =
-        data.date || "";
+    document.getElementById("ficheAdresse")
+        .textContent = data.adresse || "";
 
-    document.getElementById("fichePhoto").src =
-        data.photo || "";
+    document.getElementById("fichePhoto")
+        .src = data.photo || "";
 
-    document
-       .getElementById("fichePanel")
-       .classList.add("open");
+    document.getElementById("fichePanel")
+        .classList.add("open");
 }
 
 function fermerPanel(){
 
-    document
-        .getElementById("fichePanel")
+    document.getElementById("fichePanel")
         .classList.remove("open");
 }
 
-/* =========================
-   EXEMPLE MARQUEUR
-========================= */
+/* ==========================
+   CHARGEMENT SHEET
+========================== */
 
-const marker = L.marker(
-    [47.482,-2.475]
-).addTo(map);
+Papa.parse(CSV_URL,{
 
-marker.on("click",function(){
+    download:true,
 
-    ouvrirPanel({
+    header:true,
 
-        nom:"Lavoir des Demoiselles",
+    skipEmptyLines:true,
 
-        description:
-        "Ancien lavoir utilisé par les habitants du bourg.",
+    complete:function(results){
 
-        auteur:"Noël Joly",
+        results.data.forEach(function(fiche){
 
-        secteur:"Centre-Bourg",
+            const lat =
+                parseFloat(fiche.latitude);
 
-        date:"2026",
+            const lng =
+                parseFloat(fiche.longitude);
 
-        photo:
-        "https://via.placeholder.com/800x500"
+            if(
+                isNaN(lat) ||
+                isNaN(lng)
+            ){
+                return;
+            }
 
-    });
+            const nom =
+                fiche.nom || "";
+
+            const description =
+                fiche.description || "";
+
+            const categorie =
+                fiche.categorie || "";
+
+            const commune =
+                fiche.commune || "";
+
+            const adresse =
+                fiche.adresse || "";
+
+            const photo =
+                getDriveImage(
+                    fiche.photos || ""
+                );
+
+            const marker = L.marker(
+                [lat,lng],
+                {
+                    icon:L.icon({
+
+                        iconUrl:getIconUrl(
+                            categorie
+                        ),
+
+                        iconSize:[40,40],
+
+                        iconAnchor:[20,40]
+                    })
+                }
+            ).addTo(map);
+
+            marker.on(
+                "click",
+                function(){
+
+                    ouvrirPanel({
+
+                        nom:nom,
+
+                        description:description,
+
+                        categorie:categorie,
+
+                        commune:commune,
+
+                        adresse:adresse,
+
+                        photo:photo
+                    });
+
+                }
+            );
+
+        });
+
+    }
 
 });
 
