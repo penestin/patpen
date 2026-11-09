@@ -1,396 +1,323 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-  <title>PATPEN</title>
-  <link rel="icon" type="image/png" href="favicon-patpen.png">
-</head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>PATPEN | Patrimoine & Mémoire de Pénestin</title>
 
+<link rel="icon" type="image/png" href="favicon-patpen.png">
+
 <style>
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-background:#f5f7f8;
-color:#333;
+    background:#f5f7f8;
+    color:#333;
 }
 
+/* ======================
+   HEADER
+====================== */
+
 header{
-background:#1f5e42;
-color:white;
-padding:20px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-flex-wrap:wrap;
+    background:#1f5e42;
+    color:white;
+    padding:20px;
 }
 
 .logo{
-display:flex;
-align-items:center;
-gap:15px;
+    display:flex;
+    align-items:center;
+    gap:15px;
 }
 
 .logo img{
-width:70px;
-height:70px;
-object-fit:contain;
-}
-
-.logo-placeholder{
-width:70px;
-height:70px;
-background:white;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-color:#1f5e42;
-font-weight:bold;
+    width:70px;
+    height:70px;
+    object-fit:contain;
 }
 
 .titre h1{
-font-size:2rem;
+    font-size:2rem;
 }
 
 .titre p{
-font-size:1rem;
-opacity:0.9;
+    opacity:.9;
 }
 
-.actions{
-display:flex;
-gap:15px;
-margin-top:10px;
-}
-
-.btn{
-padding:12px 22px;
-border:none;
-border-radius:8px;
-text-decoration:none;
-font-weight:bold;
-cursor:pointer;
-transition:0.3s;
-}
-
-.btn-consulter{
-background:#ffffff;
-color:#1f5e42;
-}
-
-.btn-consulter:hover{
-background:#e6e6e6;
-}
-
-.btn-contribuer{
-background:#f7b500;
-color:#000;
-}
-
-.btn-contribuer:hover{
-background:#ffcb3d;
-}
+/* ======================
+   HERO
+====================== */
 
 .hero{
-padding:40px 20px;
-text-align:center;
-background:white;
+    background:white;
+    padding:40px 20px;
+    text-align:center;
 }
 
 .hero h2{
-font-size:2rem;
-margin-bottom:15px;
+    margin-bottom:15px;
+    color:#1f5e42;
 }
 
 .hero p{
-max-width:900px;
-margin:auto;
-line-height:1.6;
-font-size:1.1rem;
+    max-width:900px;
+    margin:auto;
+    line-height:1.6;
 }
 
+/* ======================
+   BLOCS
+====================== */
+
 .blocs{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:20px;
-padding:40px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+    padding:30px;
 }
 
 .carte{
-background:white;
-padding:25px;
-border-radius:12px;
-box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    background:white;
+    border-radius:12px;
+    padding:25px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
 }
 
 .carte h3{
-color:#1f5e42;
-margin-bottom:12px;
+    color:#1f5e42;
+    margin-bottom:15px;
 }
 
 .categorie{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-margin-top:15px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
 }
 
 .badge{
-background:#eaf6ef;
-color:#1f5e42;
-padding:8px 12px;
-border-radius:20px;
-font-size:0.9rem;
+    background:#eaf6ef;
+    color:#1f5e42;
+    padding:8px 12px;
+    border-radius:20px;
+    font-size:.9rem;
 }
 
+/* ======================
+   CARTE PATPEN
+====================== */
+
 .section-map{
-padding:20px 40px 40px 40px;
+    padding:20px 30px 30px;
 }
-.icone-carte{
-    width:20px;
-    height:20px;
-    object-fit:contain;
-    vertical-align:middle;
+
+.section-map h2{
+    margin-bottom:20px;
+    color:#1f5e42;
 }
-.titre-PATPEN,
-.titre-consulter,
-.titre-participer,
-.titre-categories{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
+
 .map-container{
     width:100%;
     height:55vh;
+    overflow:hidden;
     border-radius:12px;
-overflow:hidden;
-box-shadow:0 2px 10px rgba(0,0,0,0.15);
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
 }
 
-iframe{
-width:100%;
-height:100%;
-border:none;
+.map-container iframe{
+    width:100%;
+    height:100%;
+    border:none;
 }
 
-footer{
-background:#1f5e42;
-color:white;
-text-align:center;
-padding:20px;
-margin-top:20px;
-}
-/* ===== AFFICHAGE SMARTPHONE ===== */
+/* ======================
+   BOUTON AJOUT
+====================== */
 
 .zone-ajout{
-    margin-top:12px;
-    margin-bottom:20px;
-    display:block;
+    margin-top:15px;
 }
+
 .btn-ajout{
     width:100%;
-    padding:20px;
-    background:red !important;
-    color:white !important;
-    border:3px solid yellow !important;
-    font-size:24px !important;
-    font-weight:bold !important;
-    display:block !important;
+    padding:18px;
+    background:#205ba4;
+    color:white;
+    border:none;
+    border-radius:12px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
 }
- 
+
 .btn-ajout:hover{
     background:#184d36;
 }
 
-@media (max-width: 400px){
+/* ======================
+   FOOTER
+====================== */
+
+footer{
+    background:#1f5e42;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+/* ======================
+   MOBILE
+====================== */
+
+@media (max-width:768px){
 
     .blocs{
         grid-template-columns:1fr;
+        padding:8px;
         gap:12px;
-        padding:6px;
     }
 
     .carte{
-        width:100%;
-        padding:10px;
-        border-radius:10px;
+        padding:12px;
     }
 
     .section-map{
-        padding:10px 6px;
+        padding:10px 6px 20px;
     }
 
     .map-container{
-        width:100%;
-        height:68vh;
-        border-radius:10px;
+        height:65vh;
+    }
+
+    .titre h1{
+        font-size:1.6rem;
     }
 }
-</style> 
+
+</style>
+
 </head>
 
 <body>
 
 <header>
 
-<div class="logo">
+    <div class="logo">
 
-<div class="logo-placeholder">
+        <img src="moule.svg" alt="PATPEN">
 
-<h3 class="titre-PATPEN">
-    <img src="moule.svg"
-         alt="PATPEN"
-         class="icone-PATPEN">
- 
-</div>
+        <div class="titre">
+            <h1>PATPEN</h1>
+            <p>Patrimoine & Mémoire de Pénestin</p>
+        </div>
 
-<div class="titre">
-<h1>PATPEN</h1>
-<p>Patrimoine & Mémoire de Pénestin</p>
-</div>
-
-</div>
-
-<div class="actions">
- 
-<dentification.html
-➕ Contribuer
-</a>
-
-</div>
+    </div>
 
 </header>
 
 <section class="hero">
 
-<h2>Découvrez le patrimoine de Pénestin</h2>
+    <h2>Découvrez le patrimoine de Pénestin</h2>
 
-<p>
-PATPEN permet de localiser, documenter et partager les éléments
-du patrimoine local : puits, fontaines, lavoirs, fours à pain,
-croix, moulins, maisons remarquables et autres témoins de la mémoire
-de la commune.
-</p>
+    <p>
+        PATPEN permet de localiser, documenter et partager
+        les éléments du patrimoine local :
+        puits, fontaines, lavoirs, fours à pain,
+        croix, moulins, maisons remarquables et
+        autres témoins de la mémoire de la commune.
+    </p>
 
 </section>
 
 <section class="blocs">
 
-<div class="carte">
+    <div class="carte">
 
-<h3 class="titre-consulter">
-    <img src="consulter.svg"
-         alt="consulter"
-         class="icone-consulter">
-    Consulter
-</h3>
+        <h3>Consulter</h3>
 
-<p>
-Explorez les éléments patrimoniaux enregistrés sur la carte.
-Chaque fiche peut contenir :
-</p>
+        <p>
+            Explorez les éléments patrimoniaux enregistrés
+            sur la carte.
+        </p>
 
-<ul style="margin-top:10px;margin-left:20px;line-height:1.8;">
-<li>Photographies</li>
-<li>Localisation GPS</li>
-<li>Description</li>
-<li>Historique</li>
-<li>État de conservation</li>
-<li>Informations complémentaires</li>
-</ul>
+    </div>
 
-</div>
+    <div class="carte">
 
-<div class="carte">
+        <h3>Participer</h3>
 
-<h3 class="titre-participer">
-    <img src="participer.svg"
-         alt="participer"
-         class="icone-participer">
-    Participer
-</h3>
+        <p>
+            Vous connaissez un élément patrimonial non recensé ?
+            Ajoutez une contribution après identification.
+        </p>
 
-<p>
-Vous connaissez un élément patrimonial non recensé ?
-Ajoutez une contribution après identification.
-</p>
+    </div>
 
-<br>
+    <div class="carte">
 
-identification.html
-Contribuer au projet
-</a>
+        <h3>Catégories</h3>
 
-</div>
+        <div class="categorie">
 
-<div class="carte">
+            <span class="badge">Puits</span>
+            <span class="badge">Fontaine</span>
+            <span class="badge">Lavoir</span>
+            <span class="badge">Four à pain</span>
+            <span class="badge">Croix</span>
+            <span class="badge">Calvaire</span>
+            <span class="badge">Moulin</span>
+            <span class="badge">Maison remarquable</span>
+            <span class="badge">Arbre remarquable</span>
+            <span class="badge">Autres</span>
 
-<h3 class="titre-categories">
-    <img src="categories.svg"
-         alt="categories"
-         class="icone-categories">
-    Categories
-</h3>
+        </div>
 
-<div class="categorie">
-
-<span class="badge">Puits</span>
-<span class="badge">Fontaine</span>
-<span class="badge">Lavoir</span>
-<span class="badge">Four à pain</span>
-<span class="badge">Croix</span>
-<span class="badge">Calvaire</span>
-<span class="badge">Moulin</span>
-<span class="badge">Maison remarquable</span>
-<span class="badge">Arbre remarquable</span>
-<span class="badge">Autres</span>
-
-</div>
-
-</div>
+    </div>
 
 </section>
 
 <section id="carte" class="section-map">
 
-<h2 style="margin-bottom:20px;color:#1f5e42;">
-Carte du patrimoine
-</h2>
+    <h2>Carte du patrimoine</h2>
 
-<div class="map-container">
-    <iframe
-        src="carte.html"
-        title="Carte PATPEN">
-    </iframe>
-</div>
-<div class="zone-ajout">
-    <button
-        class="btn-ajout"
-        onclick="window.location.href='identification+formulaire.html'">
+    <div class="map-container">
 
-        ➕ Ajouter une fiche
+        <iframe
+            src="carte.html"
+            title="Carte PATPEN">
+        </iframe>
 
-    </button>
-</div>  
+    </div>
+
+    <div class="zone-ajout">
+
+        <button
+            class="btn-ajout"
+            onclick="window.location.href='identification+formulaire.html'">
+
+            ➕ Ajouter une fiche
+
+        </button>
+
+    </div>
+
 </section>
+
 <footer>
 
-<p>
-C-PATPEN-2026-
+    <p>C-PATPEN-2026-</p>
 
-<p style="margin-top:8px;font-size:0.9rem;">
-Projet participatif de valorisation du patrimoine local
-</p>
+    <p style="margin-top:8px">
+        Projet participatif de valorisation du patrimoine local
+    </p>
 
 </footer>
 
