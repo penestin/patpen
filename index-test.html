@@ -217,6 +217,37 @@ margin-top:20px;
     height:72vh;
     border-radius:10px;
 }
+.zone-ajout{
+
+    margin-top:12px;
+}
+
+.btn-ajout{
+
+    width:100%;
+
+    padding:18px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#205ba4;
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.btn-ajout:hover{
+
+    background:#184d36;
 
 }
 </style>
@@ -352,41 +383,21 @@ Carte du patrimoine
 
 <div class="map-container">
 
-<!-- Remplacer l'URL ci-dessous par votre carte PATPEN -->
-
-<iframe
-src="carte.html"
-title="Carte PATPEN">
-</iframe>
+    <iframe
+        src="carte.html"
+        title="Carte PATPEN">
+    </iframe>
 
 </div>
-#sidebar h1{
-    margin-top:0;
-    color:white;
-}
-#btnFormulaire{
-    width:100%;
-    padding:12px;
-    margin-top:20px;
-    background:white;
-    color:#205ba4;
-    border:none;
-    border-radius:6px;
-    font-weight:bold;
-    font-size:15px;
-    cursor:pointer;
-}
 
-#btnFormulaire:hover{
-    background:#e6eef9;
-}
+<div class="zone-ajout">
 
+    <button
+        class="btn-ajout"
+        onclick="window.location.href='identification+formulaire.html'">
 
-<div id="sidebar">
-
-    <button id="btnFormulaire"
-            onclick="window.location.href='identification+formulaire.html'">
         ➕ Ajouter une fiche
+
     </button>
 
 </div>
