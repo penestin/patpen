@@ -432,73 +432,26 @@ body{
 const CSV_URL =
 "https://docs.google.com/spreadsheets/d/12Zo6EKHmgA-NlKnUbjerfRS78BH34dO-dhYuq5RcNls/gviz/tq?tqx=out:csv&gid=545961012";
 
-
-
-
-
-
-
 /* ==========================
-   CARTE
+   CARTE-molette
 ========================== */
 
 const map = L.map('map', {
-    center: [47.48, -2.48],
-    zoom: 13,
     dragging: false,
-    touchZoom: false
+    touchZoom: false,
+    doubleClickZoom: false,
+    scrollWheelZoom: false,
+    zoomControl: true
 });
-
-// =====================
-// Appui long pour déplacer la carte
-// =====================
-let pressTimer;
-let mapUnlocked = false;
-
-const mapContainer = document.getElementById('map');
-
-mapContainer.addEventListener('touchstart', () => {
-
-    pressTimer = setTimeout(() => {
-
-        mapUnlocked = true;
-
-        map.dragging.enable();
-        map.touchZoom.enable();
-
-        navigator.vibrate?.(50);
-
-    }, 500);
-
-});
-
-mapContainer.addEventListener('touchend', () => {
-
-    clearTimeout(pressTimer);
-
-    if (mapUnlocked) {
-
-        map.dragging.disable();
-        map.touchZoom.disable();
-
-        mapUnlocked = false;
-    }
-
-});
-
-// =====================
 
 L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
-        attribution: '&copy; OpenStreetMap contributors'
+        maxZoom:19,
+        attribution:"© OpenStreetMap"
     }
 ).addTo(map);
 
-
-
-
-      
 /* ==========================
    ICÔNES PATPEN
 ========================== */
