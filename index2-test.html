@@ -8,7 +8,7 @@
 <title>PATPEN - Carte du patrimoine</title>
 
 <link rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
 
@@ -53,39 +53,35 @@ body{
     cursor:pointer;
 }
 
+#btnFormulaire:hover{
+    background:#f0f0f0;
+}
+
 /* ==========================
    CARTE
 ========================== */
 
 #map{
     flex:1;
+    min-width:0;
     height:100vh;
 }
 
 /* ==========================
-   FICHE PATRIMOINE
+   PANNEAU DETAIL
 ========================== */
 
 .fiche-panel{
-
     position:fixed;
-
     left:0;
     right:0;
     bottom:-100%;
-
     height:75vh;
-
     background:white;
-
     z-index:9999;
-
     border-radius:20px 20px 0 0;
-
     transition:.35s;
-
     box-shadow:0 -4px 20px rgba(0,0,0,.25);
-
     overflow-y:auto;
 }
 
@@ -94,56 +90,38 @@ body{
 }
 
 .panel-header{
-
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
     padding:15px;
-
     border-bottom:1px solid #ddd;
-
     font-size:20px;
-
     font-weight:bold;
 }
 
 .panel-header button{
-
     border:none;
-
     background:none;
-
     cursor:pointer;
-
     font-size:28px;
 }
 
 .tuile-photo{
-
     padding:15px;
 }
 
 .tuile-photo img{
-
     width:100%;
-
     border-radius:12px;
-
     display:block;
 }
 
 .tuile-info{
-
     padding:15px;
 }
 
 .tuile-info h2{
-
     margin-top:0;
-
     color:#205ba4;
 }
 
@@ -178,7 +156,7 @@ body{
     <h1>PATPEN</h1>
 
     <button id="btnFormulaire"
-        onclick="window.location.href='identification+formulaire.html'">
+            onclick="window.location.href='identification+formulaire.html'">
         ➕ Ajouter une fiche
     </button>
 
@@ -186,9 +164,7 @@ body{
 
 <div id="map"></div>
 
-<!-- ==========================
-     PANNEAU DETAIL
-========================== -->
+<!-- PANNEAU -->
 
 <div id="fichePanel" class="fiche-panel">
 
@@ -202,7 +178,9 @@ body{
 
     <div class="tuile-photo">
 
-        <img id="fichePhoto" src="">
+        <img id="fichePhoto"
+             src=""
+             alt="Photo du patrimoine">
 
     </div>
 
@@ -255,17 +233,16 @@ const map = L.map("map").setView(
 L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
-        maxZoom:19,
-        attribution:"© OpenStreetMap"
+        attribution:"© OpenStreetMap",
+        maxZoom:19
     }
 ).addTo(map);
 
 /* ==========================
-   ICONES
+   ICÔNES
 ========================== */
 
 const icons = {
-
     "Puits":"images/categories/puits.svg",
     "Fontaine":"images/categories/fontaine.svg",
     "Lavoir":"images/categories/lavoir.svg",
@@ -285,19 +262,20 @@ function getIconUrl(categorie){
 }
 
 /* ==========================
-   IMAGE DRIVE
+   PHOTO GOOGLE DRIVE
 ========================== */
 
 function getDriveImage(url){
 
     if(!url) return "";
 
-    const match =
-        url.match(/\/d\/([^\/]+)/);
+    const match = url.match(/\/d\/([^\/]+)/);
 
     if(match){
 
-        return "https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`;
+        return "https://drive.google.com/thumbnail?id="
+             + match[1]
+             + "&sz=w1200";
     }
 
     return url;
@@ -324,8 +302,18 @@ function ouvrirPanel(data){
     document.getElementById("ficheAdresse")
         .textContent = data.adresse || "";
 
-    document.getElementById("fichePhoto")
-        .src = data.photo || "";
+    const photo =
+        document.getElementById("fichePhoto");
+
+    if(data.photo){
+
+        photo.src = data.photo;
+        photo.style.display = "block";
+
+    } else {
+
+        photo.style.display = "none";
+    }
 
     document.getElementById("fichePanel")
         .classList.add("open");
@@ -338,8 +326,10 @@ function fermerPanel(){
 }
 
 /* ==========================
-   CHARGEMENT SHEET
+   CHARGEMENT GOOGLE SHEET
 ========================== */
+
+const markers = [];
 
 Papa.parse(CSV_URL,{
 
@@ -359,10 +349,7 @@ Papa.parse(CSV_URL,{
             const lng =
                 parseFloat(fiche.longitude);
 
-            if(
-                isNaN(lat) ||
-                isNaN(lng)
-            ){
+            if(isNaN(lat) || isNaN(lng)){
                 return;
             }
 
@@ -391,9 +378,7 @@ Papa.parse(CSV_URL,{
                 {
                     icon:L.icon({
 
-                        iconUrl:getIconUrl(
-                            categorie
-                        ),
+                        iconUrl:getIconUrl(categorie),
 
                         iconSize:[40,40],
 
@@ -402,29 +387,46 @@ Papa.parse(CSV_URL,{
                 }
             ).addTo(map);
 
-            marker.on(
-                "click",
-                function(){
+            markers.push(marker);
 
-                    ouvrirPanel({
+            marker.on("click", function(){
 
-                        nom:nom,
+                ouvrirPanel({
 
-                        description:description,
+                    nom:nom,
+                    description:description,
+                    categorie:categorie,
+                    commune:commune,
+                    adresse:adresse,
+                    photo:photo
 
-                        categorie:categorie,
+                });
 
-                        commune:commune,
-
-                        adresse:adresse,
-
-                        photo:photo
-                    });
-
-                }
-            );
+            });
 
         });
+
+        if(markers.length){
+
+            const group =
+                L.featureGroup(markers);
+
+            map.fitBounds(
+                group.getBounds(),
+                {
+                    padding:[30,30]
+                }
+            );
+        }
+
+    },
+
+    error:function(err){
+
+        console.error(
+            "Erreur CSV :",
+            err
+        );
 
     }
 
