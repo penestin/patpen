@@ -312,8 +312,53 @@ body{
     margin-bottom:6px;
 }
 
-      
+.panel-toolbar{
 
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:10px 15px;
+
+    border-bottom:1px solid #e5e5e5;
+}
+
+.close-btn{
+
+    border:none;
+
+    background:none;
+
+    color:#777;
+
+    font-size:26px;
+
+    cursor:pointer;
+}
+
+.fiche-btn{
+
+    border:none;
+
+    background:#205ba4;
+
+    color:white;
+
+    padding:8px 14px;
+
+    border-radius:8px;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}      
+
+
+      
 </style>
 
 </head>
@@ -341,7 +386,9 @@ body{
 
     <div class="drag-bar"></div>
 
-<div class="panel-header">
+
+      
+<div class="panel-toolbar">
 
     <button
         class="close-btn"
@@ -349,8 +396,16 @@ body{
         ✕
     </button>
 
+    <button
+        class="fiche-btn"
+        onclick="ouvrirFicheComplete()">
+        FICHE
+    </button>
+
 </div>
 
+
+      
 
 <div class="card-photo">
 
@@ -521,6 +576,16 @@ function ouvrirPanel(data){
 }
 
 function fermerPanel(){
+
+function ouvrirFicheComplete(){
+
+    alert(
+        "La fiche détaillée sera ajoutée prochainement."
+    );
+
+}
+
+      
 
     document.getElementById("fichePanel")
         .classList.remove("open");
