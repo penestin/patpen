@@ -211,14 +211,12 @@ margin-top:20px;
     background:#184d36;
 }
 
-@media (max-width: 400px){
-} 
-</style>
-    /* Tuiles presque sur toute la largeur */
+@media (max-width:400px){
+
     .blocs{
         grid-template-columns:1fr;
         gap:12px;
-        padding:6px 6px;
+        padding:6px;
     }
 
     .carte{
@@ -227,16 +225,19 @@ margin-top:20px;
         border-radius:10px;
     }
 
-    /* Carte PATPEN avec les mêmes marges fines */
     .section-map{
-        padding:10px 6px 10px 6px;
+        padding:10px 6px;
     }
 
-.map-container{
-    width:100%;
-    height:68vh;
-    border-radius:10px;
+    .map-container{
+        width:100%;
+        height:68vh;
+        border-radius:10px;
+    }
+
 }
+
+</style>
 
  
 </style>
@@ -371,16 +372,12 @@ Carte du patrimoine
 </h2>
 
 <div class="map-container">
-
     <iframe
         src="carte.html"
         title="Carte PATPEN">
     </iframe>
-
 </div>
-
 <div class="zone-ajout">
-
     <button
         class="btn-ajout"
         onclick="window.location.href='identification+formulaire.html'">
@@ -388,12 +385,8 @@ Carte du patrimoine
         ➕ Ajouter une fiche
 
     </button>
-
-</div>
-
-  
+</div>  
 </section>
-
 <footer>
 
 <p>
