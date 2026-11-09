@@ -399,27 +399,25 @@ console.log("PHOTO =", photo);
                     icon:markerIcon
                 }
             ).addTo(map);
-
-            marker.bindPopup(`
-                <div style="width:280px">
-
-                    <h3>${nom}</h3>
-
 marker.on("click", function(){
 
     ouvrirPanel({
-        nom: fiche.NOM,
-        description: fiche.DESCRIPTION,
-        auteur: fiche.AUTEUR,
-        date: fiche.DATE,
-        secteur: fiche.SECTEUR,
-        photo: fiche.PHOTO_URL
+
+        nom: nom,
+
+        description: description,
+
+        auteur: fiche["auteur"] || "",
+
+        date: fiche["date"] || "",
+
+        secteur: fiche["secteur"] || "",
+
+        photo: photo
+
     });
 
 });
-
-
-
 ${
 photo
 ? `<a href="${photo}" target="_blank">Voir la photo</a>`
