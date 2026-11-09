@@ -433,20 +433,16 @@ const CSV_URL =
 "https://docs.google.com/spreadsheets/d/12Zo6EKHmgA-NlKnUbjerfRS78BH34dO-dhYuq5RcNls/gviz/tq?tqx=out:csv&gid=545961012";
 
 /* ==========================
-   CARTE
+   CARTE-molette
 ========================== */
 
-const map = L.map("map",{
-    scrollWheelZoom:false,  // désactive molette
-    touchZoom:false,        // désactive pincement
-    doubleClickZoom:false,
-    boxZoom:false,
-    keyboard:false,
-    dragging:false          // optionnel
-}).setView(
-    [47.482,-2.475],
-    14
-);
+const map = L.map('map', {
+    dragging: false,
+    touchZoom: false,
+    doubleClickZoom: false,
+    scrollWheelZoom: false,
+    zoomControl: true
+});
 
 L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
