@@ -54,7 +54,7 @@ body{
 }
 
 #btnFormulaire:hover{
-    background:#f0f0f0;
+    background:#f2f2f2;
 }
 
 /* ==========================
@@ -75,13 +75,15 @@ body{
     position:fixed;
     background:white;
     z-index:9999;
-    box-shadow:0 0 20px rgba(0,0,0,.25);
     overflow-y:auto;
+    box-shadow:0 0 20px rgba(0,0,0,.25);
 }
 
-/* PC */
+/* ==========================
+   VERSION PC
+========================== */
 
-@media (min-width: 769px){
+@media (min-width:769px){
 
     .fiche-panel{
 
@@ -91,19 +93,41 @@ body{
         width:420px;
         height:100vh;
 
-        transition:right 0.3s;
+        transition:right .3s ease;
 
         border-radius:0;
     }
 
     .fiche-panel.open{
+
         right:0;
     }
 }
 
-/* Mobile */
+/* ==========================
+   VERSION MOBILE
+========================== */
 
 @media (max-width:768px){
+
+    body{
+        flex-direction:column;
+    }
+
+    #sidebar{
+        width:100%;
+        height:auto;
+        padding:12px;
+    }
+
+    #sidebar h1{
+        font-size:32px;
+        margin:0 0 10px 0;
+    }
+
+    #map{
+        height:calc(100vh - 110px);
+    }
 
     .fiche-panel{
 
@@ -114,70 +138,97 @@ body{
 
         height:50vh;
 
-        transition:bottom .3s;
+        transition:bottom .3s ease;
 
         border-radius:20px 20px 0 0;
     }
 
     .fiche-panel.open{
+
         bottom:0;
     }
 }
 
+/* ==========================
+   CONTENU FICHE
+========================== */
+
+.drag-bar{
+
+    width:50px;
+    height:5px;
+
+    background:#bdbdbd;
+
+    border-radius:5px;
+
+    margin:10px auto;
+}
+
 .panel-header{
+
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
+
     padding:15px;
+
     border-bottom:1px solid #ddd;
+
     font-size:20px;
+
     font-weight:bold;
 }
 
 .panel-header button{
+
     border:none;
+
     background:none;
+
     cursor:pointer;
+
     font-size:28px;
+
+    color:#666;
 }
 
 .tuile-photo{
+
     padding:15px;
 }
 
 .tuile-photo img{
+
     width:100%;
+
+    max-height:220px;
+
+    object-fit:cover;
+
     border-radius:12px;
+
     display:block;
 }
 
 .tuile-info{
-    padding:15px;
+
+    padding:20px;
 }
 
 .tuile-info h2{
+
     margin-top:0;
     color:#205ba4;
 }
 
-/* ==========================
-   MOBILE
-========================== */
+.tuile-info p{
 
-@media(max-width:768px){
+    margin:10px 0;
 
-    body{
-        flex-direction:column;
-    }
-
-    #sidebar{
-        width:100%;
-        height:auto;
-    }
-
-    #map{
-        height:calc(100vh - 140px);
-    }
+    line-height:1.5;
 }
 
 </style>
@@ -199,10 +250,14 @@ body{
 
 <div id="map"></div>
 
-<!-- PANNEAU -->
+<!-- ==========================
+     FICHE PATRIMOINE
+========================== -->
 
 <div id="fichePanel" class="fiche-panel">
-<div class="drag-bar"></div>
+
+    <div class="drag-bar"></div>
+
     <div class="panel-header">
 
         <span>Détail du patrimoine</span>
@@ -243,17 +298,7 @@ body{
     </div>
 
 </div>
-.drag-bar{
 
-    width:50px;
-    height:5px;
-
-    background:#bbb;
-
-    border-radius:3px;
-
-    margin:10px auto;
-}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
@@ -278,16 +323,17 @@ const map = L.map("map").setView(
 L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
-        attribution:"© OpenStreetMap",
-        maxZoom:19
+        maxZoom:19,
+        attribution:"© OpenStreetMap"
     }
 ).addTo(map);
 
 /* ==========================
-   ICÔNES
+   ICÔNES PATPEN
 ========================== */
 
 const icons = {
+
     "Puits":"images/categories/puits.svg",
     "Fontaine":"images/categories/fontaine.svg",
     "Lavoir":"images/categories/lavoir.svg",
@@ -298,6 +344,7 @@ const icons = {
     "Maison remarquable":"images/categories/maison.svg",
     "Chemin rural":"images/categories/chemin.svg",
     "Chapelle":"images/categories/chapelle.svg"
+
 };
 
 function getIconUrl(categorie){
@@ -355,7 +402,7 @@ function ouvrirPanel(data){
         photo.src = data.photo;
         photo.style.display = "block";
 
-    } else {
+    }else{
 
         photo.style.display = "none";
     }
@@ -371,7 +418,7 @@ function fermerPanel(){
 }
 
 /* ==========================
-   CHARGEMENT GOOGLE SHEET
+   CHARGEMENT DES FICHES
 ========================== */
 
 const markers = [];
@@ -394,7 +441,10 @@ Papa.parse(CSV_URL,{
             const lng =
                 parseFloat(fiche.longitude);
 
-            if(isNaN(lat) || isNaN(lng)){
+            if(
+                isNaN(lat) ||
+                isNaN(lng)
+            ){
                 return;
             }
 
@@ -423,7 +473,9 @@ Papa.parse(CSV_URL,{
                 {
                     icon:L.icon({
 
-                        iconUrl:getIconUrl(categorie),
+                        iconUrl:getIconUrl(
+                            categorie
+                        ),
 
                         iconSize:[40,40],
 
@@ -466,13 +518,12 @@ Papa.parse(CSV_URL,{
 
     },
 
-    error:function(err){
+    error:function(error){
 
         console.error(
-            "Erreur CSV :",
-            err
+            "Erreur de chargement CSV :",
+            error
         );
-
     }
 
 });
