@@ -1,1 +1,709 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>PATPEN - Carte du patrimoine</title>
+
+<link rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<style>
+
+html,body{
+    margin:0;
+    padding:0;
+    height:100%;
+    overflow:hidden;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    display:flex;
+}
+
+/* ==========================
+   MENU
+========================== */
+
+#sidebar{
+    width:260px;
+    background:#205ba4;
+    color:white;
+    padding:20px;
+    box-sizing:border-box;
+}
+
+#sidebar h1{
+    margin-top:0;
+    font-size:48px;
+}
+
+#btnFormulaire{
+    width:100%;
+    padding:15px;
+    background:white;
+    color:#205ba4;
+    border:none;
+    border-radius:10px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+#btnFormulaire:hover{
+    background:#f2f2f2;
+}
+
+/* ==========================
+   CARTE
+========================== */
+
+#map{
+    flex:1;
+    min-width:0;
+    height:100vh;
+}
+
+/* ==========================
+   PANNEAU DETAIL
+========================== */
+
+.fiche-panel{
+    position:fixed;
+    background:white;
+    z-index:9999;
+    overflow-y:auto;
+    box-shadow:0 0 20px rgba(0,0,0,.25);
+}
+
+/* ==========================
+   VERSION PC
+========================== */
+
+@media (min-width:769px){
+
+    .fiche-panel{
+
+        top:0;
+        right:-450px;
+
+        width:420px;
+        height:100vh;
+
+        transition:right .3s ease;
+
+        border-radius:0;
+    }
+
+    .fiche-panel.open{
+
+        right:0;
+    }
+}
+
+/* ==========================
+   VERSION MOBILE
+========================== */
+
+@media (max-width:768px){
+
+    body{
+        flex-direction:column;
+    }
+
+    #sidebar{
+        width:100%;
+        height:auto;
+        padding:12px;
+    }
+
+    #sidebar h1{
+        font-size:32px;
+        margin:0 0 10px 0;
+    }
+
+    #map{
+        height:calc(100vh - 110px);
+    }
+
+    .fiche-panel{
+
+        left:0;
+        right:0;
+
+        bottom:-55vh;
+
+        height:50vh;
+
+        transition:bottom .3s ease;
+
+        border-radius:20px 20px 0 0;
+    }
+
+    .fiche-panel.open{
+
+        bottom:0;
+    }
+}
+
+/* ==========================
+   CONTENU FICHE
+========================== */
+
+.drag-bar{
+
+    width:50px;
+    height:5px;
+
+    background:#bdbdbd;
+
+    border-radius:5px;
+
+    margin:10px auto;
+}
+
+.panel-header{
+
+    position:relative;
+
+    height:0;
+
+    padding:0;
+
+    border:none;
+}
+
+.panel-header button{
+
+    position:absolute;
+
+    top:8px;
+
+    right:15px;
+
+    border:none;
+
+    background:none;
+
+    cursor:pointer;
+
+    font-size:28px;
+
+    color:#666;
+
+    z-index:1000;
+}
+
+.tuile-photo{
+
+    padding:15px;
+}
+
+.tuile-photo img{
+
+    width:100%;
+
+    max-height:220px;
+
+    object-fit:cover;
+
+    border-radius:12px;
+
+    display:block;
+}
+
+.tuile-info{
+
+    padding:20px;
+}
+
+.tuile-info h2{
+
+    margin-top:0;
+    color:#205ba4;
+}
+
+.tuile-info p{
+
+    margin:10px 0;
+
+    line-height:1.5;
+}
+
+.card-photo{
+
+    margin:15px;
+
+    background:white;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.10);
+}
+
+.card-photo img{
+
+    width:100%;
+
+    height:160px;
+
+    object-fit:cover;
+
+    display:block;
+}
+.fiche-title{
+
+    color:#205ba4;
+
+    font-size:30px;
+
+    margin:10px 0;
+
+    font-weight:700;
+}
+
+.separator{
+
+    height:1px;
+
+    background:#dddddd;
+
+    margin:15px 0;
+}
+
+.description-card{
+
+    background:#eef4fb;
+
+    border-left:5px solid #205ba4;
+
+    border-radius:12px;
+
+    padding:15px;
+
+    margin-bottom:20px;
+
+    line-height:1.6;
+}
+
+.info-bloc{
+
+    padding:12px 0;
+
+    border-bottom:1px solid #e5e5e5;
+}
+
+.info-bloc label{
+
+    display:block;
+
+    color:#666;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+    margin-bottom:6px;
+}
+
+.panel-toolbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:10px 15px;
+
+    border-bottom:1px solid #e5e5e5;
+}
+
+.close-btn{
+
+    border:none;
+
+    background:none;
+
+    color:#777;
+
+    font-size:26px;
+
+    cursor:pointer;
+}
+
+.fiche-btn{
+
+    border:none;
+
+    background:#205ba4;
+
+    color:white;
+
+    padding:8px 14px;
+
+    border-radius:8px;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}      
+
+
+      
+</style>
+
+</head>
+
+<body>
+
+<div id="sidebar">
+
+    <h1>PATPEN</h1>
+
+    <button id="btnFormulaire"
+            onclick="window.location.href='identification+formulaire.html'">
+        ➕ Ajouter une fiche
+    </button>
+
+</div>
+
+<div id="map"></div>
+
+<!-- ==========================
+     FICHE PATRIMOINE
+========================== -->
+
+<div id="fichePanel" class="fiche-panel">
+
+    <div class="drag-bar"></div>
+
+
+      
+<div class="panel-toolbar">
+
+    <button
+        class="close-btn"
+        onclick="fermerPanel()">
+        ✕
+    </button>
+
+    <button
+        class="fiche-btn"
+        onclick="ouvrirFicheComplete()">
+        FICHE
+    </button>
+
+</div>
+
+
+      
+
+<div class="card-photo">
+
+    <img id="fichePhoto"
+         src=""
+         alt="Photo du patrimoine">
+
+</div>
+
+<div class="tuile-info">
+
+    <h2 id="ficheTitre" class="fiche-title"></h2>
+
+    <div class="separator"></div>
+
+    <div class="description-card">
+
+        <div id="ficheDescription"></div>
+
+    </div>
+
+    <div class="info-bloc">
+
+        <label>Catégorie</label>
+
+        <div id="ficheCategorie"></div>
+
+    </div>
+
+    <div class="info-bloc">
+
+        <label>Commune</label>
+
+        <div id="ficheCommune"></div>
+
+    </div>
+
+    <div class="info-bloc">
+
+        <label>Adresse</label>
+
+        <div id="ficheAdresse"></div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+      
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<script>
+
+/* ==========================
+   GOOGLE SHEET
+========================== */
+
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/12Zo6EKHmgA-NlKnUbjerfRS78BH34dO-dhYuq5RcNls/gviz/tq?tqx=out:csv&gid=545961012";
+
+/* ==========================
+   CARTE
+========================== */
+
+const map = L.map("map").setView(
+    [47.482,-2.475],
+    15
+);
+
+L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+        maxZoom:19,
+        attribution:"© OpenStreetMap"
+    }
+).addTo(map);
+
+/* ==========================
+   ICÔNES PATPEN
+========================== */
+
+const icons = {
+
+    "Puits":"images/categories/puits.svg",
+    "Fontaine":"images/categories/fontaine.svg",
+    "Lavoir":"images/categories/lavoir.svg",
+    "Four à pain":"images/categories/four.svg",
+    "Arbre remarquable":"images/categories/arbre.svg",
+    "Croix-Calvaire":"images/categories/croix.svg",
+    "Moulin":"images/categories/moulin.svg",
+    "Maison remarquable":"images/categories/maison.svg",
+    "Chemin rural":"images/categories/chemin.svg",
+    "Chapelle":"images/categories/chapelle.svg"
+
+};
+
+function getIconUrl(categorie){
+
+    return icons[categorie]
+        || "images/categories/puits.svg";
+}
+
+/* ==========================
+   PHOTO GOOGLE DRIVE
+========================== */
+
+function getDriveImage(url){
+
+    if(!url) return "";
+
+    const match = url.match(/\/d\/([^\/]+)/);
+
+    if(match){
+
+        return "https://drive.google.com/thumbnail?id="
+             + match[1]
+             + "&sz=w1200";
+    }
+
+    return url;
+}
+
+/* ==========================
+   PANNEAU
+========================== */
+
+function ouvrirPanel(data){
+
+    document.getElementById("ficheTitre")
+        .textContent = data.nom || "";
+
+    document.getElementById("ficheDescription")
+        .textContent = data.description || "";
+
+    document.getElementById("ficheCategorie")
+        .textContent = data.categorie || "";
+
+    document.getElementById("ficheCommune")
+        .textContent = data.commune || "";
+
+    document.getElementById("ficheAdresse")
+        .textContent = data.adresse || "";
+
+    const photo =
+        document.getElementById("fichePhoto");
+
+    if(data.photo){
+
+        photo.src = data.photo;
+        photo.style.display = "block";
+
+    }else{
+
+        photo.style.display = "none";
+    }
+
+    document.getElementById("fichePanel")
+        .classList.add("open");
+}
+
+function fermerPanel(){
+
+function ouvrirFicheComplete(){
+
+    alert(
+        "La fiche détaillée sera ajoutée prochainement."
+    );
+
+}
+
+      
+
+    document.getElementById("fichePanel")
+        .classList.remove("open");
+}
+
+/* ==========================
+   CHARGEMENT DES FICHES
+========================== */
+
+const markers = [];
+
+Papa.parse(CSV_URL,{
+
+    download:true,
+
+    header:true,
+
+    skipEmptyLines:true,
+
+    complete:function(results){
+
+        results.data.forEach(function(fiche){
+
+            const lat =
+                parseFloat(fiche.latitude);
+
+            const lng =
+                parseFloat(fiche.longitude);
+
+            if(
+                isNaN(lat) ||
+                isNaN(lng)
+            ){
+                return;
+            }
+
+            const nom =
+                fiche.nom || "";
+
+            const description =
+                fiche.description || "";
+
+            const categorie =
+                fiche.categorie || "";
+
+            const commune =
+                fiche.commune || "";
+
+            const adresse =
+                fiche.adresse || "";
+
+            const photo =
+                getDriveImage(
+                    fiche.photos || ""
+                );
+
+            const marker = L.marker(
+                [lat,lng],
+                {
+                    icon:L.icon({
+
+                        iconUrl:getIconUrl(
+                            categorie
+                        ),
+
+                        iconSize:[40,40],
+
+                        iconAnchor:[20,40]
+                    })
+                }
+            ).addTo(map);
+
+            markers.push(marker);
+
+            marker.on("click", function(){
+
+                ouvrirPanel({
+
+                    nom:nom,
+                    description:description,
+                    categorie:categorie,
+                    commune:commune,
+                    adresse:adresse,
+                    photo:photo
+
+                });
+
+            });
+
+        });
+
+        if(markers.length){
+
+            const group =
+                L.featureGroup(markers);
+
+            map.fitBounds(
+                group.getBounds(),
+                {
+                    padding:[30,30]
+                }
+            );
+        }
+
+    },
+
+    error:function(error){
+
+        console.error(
+            "Erreur de chargement CSV :",
+            error
+        );
+    }
+
+});
+
+</script>
+
+</body>
+</html>
