@@ -436,14 +436,7 @@ const CSV_URL =
    CARTE
 ========================== */
 
-const map = L.map("map",{
-    scrollWheelZoom:true,  // désactive molette
-    touchZoom:true,        // désactive pincement
-    doubleClickZoom:true,
-    boxZoom:true,
-    keyboard:true,
-    dragging:false          // optionnel
-}).setView(
+const map = L.map("map").setView(
     [47.482,-2.475],
     14
 );
