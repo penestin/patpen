@@ -692,14 +692,14 @@ const hybrid = L.layerGroup([
 const ign = L.tileLayer(
     "https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png",
     {
-        attribution:"IGN"
+        attribution:"© IGN"
     }
 );
 
 const ortho = L.tileLayer(
     "https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/jpeg",
     {
-        attribution:"IGN"
+        attribution:"© IGN"
     }
 );
 osm.addTo(map);
