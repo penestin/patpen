@@ -665,14 +665,6 @@ const topo = L.tileLayer(
     }
 );
 
-const carto = L.tileLayer(
-    "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    {
-        maxZoom:20,
-        attribution:"© Carto"
-    }
-);
-
 const satellite = L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     {
@@ -757,13 +749,11 @@ function changeBaseMap(type,element){
 
     if(map.hasLayer(osm)) map.removeLayer(osm);
     if(map.hasLayer(topo)) map.removeLayer(topo);
-    if(map.hasLayer(carto)) map.removeLayer(carto);
     if(map.hasLayer(satellite)) map.removeLayer(satellite);
    
 
     if(type==="osm") osm.addTo(map);
     if(type==="topo") topo.addTo(map);
-    if(type==="carto") carto.addTo(map);
     if(type==="satellite") satellite.addTo(map);
    
 
