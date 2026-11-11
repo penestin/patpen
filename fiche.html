@@ -13,17 +13,17 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 
 :root{
-    --patpen:#eadde7;
-    --patpen-dark:#eadde7;
-    --patpen-light:#b6dec8;
-    --patpen-ultra:#e7f4ea;
+    --patpen:#205BA4;
+    --patpen-dark:#184781;
+    --patpen-light:#EAF2FB;
+    --patpen-ultra:#F5F9FE;
     --texte:#333;
-    --bordure:#e5e5e5;
+    --bordure:#D4E1F2;
 }
 
 html,body{
     margin:0;
-    background:#fafafa;
+    background:#F7FAFE;
     font-family:'Segoe UI',sans-serif;
     color:var(--texte);
 }
@@ -38,19 +38,26 @@ html,body{
 }
 
 .btn-retour{
-
     border:none;
     background:var(--patpen);
     color:white;
-    padding:10px 18px;
-    border-radius:10px;
+    padding:12px 20px;
+    border-radius:12px;
     cursor:pointer;
     font-size:15px;
+    font-weight:600;
+    transition:.2s;
+}
+
+.btn-retour:hover{
+    background:var(--patpen-dark);
 }
 
 h1{
     margin:15px 0;
     color:var(--patpen);
+    font-size:2.7rem;
+    line-height:1.1;
 }
 
 .badge{
@@ -81,15 +88,14 @@ h1{
 }
 
 .adresse{
-
     margin:0 15px 15px;
     background:var(--patpen-light);
+    border:1px solid #c9daef;
     border-radius:18px;
     padding:22px;
 }
 
 .btn-carte{
-
     margin-top:15px;
     display:inline-block;
     background:var(--patpen);
@@ -97,6 +103,11 @@ h1{
     text-decoration:none;
     padding:10px 18px;
     border-radius:10px;
+    font-weight:600;
+}
+
+.btn-carte:hover{
+    background:var(--patpen-dark);
 }
 
 .section{
@@ -120,9 +131,9 @@ h1{
 }
 
 .meta{
-
     padding:20px;
     background:var(--patpen-ultra);
+    border-top:1px solid #d9e4f3;
 }
 
 .meta-grid{
@@ -138,10 +149,10 @@ h1{
 }
 
 .footer{
-
-    background:d9ebf0;
+    background:#EAF2FB;
     padding:25px;
     line-height:1.6;
+    color:#4a4a4a;
 }
 
 @media(max-width:768px){
