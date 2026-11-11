@@ -358,12 +358,89 @@ body{
 }
 
 
+.leaflet-control-basemap a{
+
+    width:44px;
+    height:44px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:white;
+    color:#333;
+
+    border-radius:50%;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.25);
+
+    text-decoration:none;
+
+    font-size:22px;
+}
+
+.basemap-panel{
+
+    position:absolute;
+
+    top:20px;
+    left:70px;
+
+    width:320px;
+
+    background:white;
+
+    border-radius:20px;
+
+    box-shadow:
+        0 6px 30px rgba(0,0,0,.25);
+
+    z-index:9999;
+
+    display:none;
+}
+
+.basemap-panel.open{
+    display:block;
+}
 
 
+.basemap-grid{
 
+    display:grid;
 
+    grid-template-columns:
+        repeat(2,1fr);
 
+    gap:15px;
 
+    padding:20px;
+}
+
+.basemap-item{
+
+    cursor:pointer;
+
+    text-align:center;
+}
+
+.basemap-item img{
+
+    width:100%;
+    height:90px;
+
+    object-fit:cover;
+
+    border-radius:16px;
+
+    border:3px solid transparent;
+}
+
+.basemap-item.active img{
+
+    border-color:#b34ca0;
+}
 
 
 
