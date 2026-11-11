@@ -370,10 +370,13 @@ body{
     background:white;
     color:#333;
 
-    border-radius:50%;
+    border-radius:8px;
 
-    box-shadow:
-        0 2px 8px rgba(0,0,0,.25);
+
+
+
+
+      
 
     text-decoration:none;
 
@@ -721,7 +724,34 @@ const AddFicheControl = L.Control.extend({
 
 map.addControl(new AddFicheControl());
 
+const BasemapControl = L.Control.extend({
 
+    options:{
+        position:'topleft'
+    },
+
+    onAdd:function(){
+
+        const container = L.DomUtil.create(
+            'div',
+            'leaflet-bar leaflet-control leaflet-control-basemap'
+        );
+
+        container.innerHTML =
+            '<a href="#" title="Fonds de carte">🗺️</a>';
+
+        container.onclick = function(){
+
+            toggleBasemapPanel();
+
+            return false;
+        };
+
+        return container;
+    }
+});
+
+map.addControl(new BasemapControl());
 
 
 
