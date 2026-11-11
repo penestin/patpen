@@ -324,6 +324,55 @@ body{
     cursor:pointer;
 }      
 
+.leaflet-control-addfiche a{
+
+    width:44px;
+    height:44px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#205ba4;
+    color:#fff !important;
+
+    text-decoration:none;
+
+    border-radius:8px;
+
+    font-size:28px;
+    font-weight:bold;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.25);
+}
+
+.leaflet-control-addfiche a:hover{
+
+    background:#184b88;
+}
+
+.leaflet-control-addfiche{
+
+    margin-top:10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
 
       
 </style>
@@ -449,6 +498,51 @@ L.tileLayer(
     }
 ).addTo(map);
 
+const AddFicheControl = L.Control.extend({
+
+    options:{
+        position:'topleft'
+    },
+
+    onAdd:function(){
+
+        const container = L.DomUtil.create(
+            'div',
+            'leaflet-bar leaflet-control leaflet-control-addfiche'
+        );
+
+        container.innerHTML =
+            '<a href="identification+formulaire.html" title="Ajouter un élément">+</a>';
+
+        L.DomEvent.disableClickPropagation(container);
+
+        return container;
+    }
+});
+
+map.addControl(new AddFicheControl());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
 /* ==========================
    ICÔNES PATPEN
 ========================== */
