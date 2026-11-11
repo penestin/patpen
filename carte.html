@@ -830,19 +830,7 @@ function getDriveImage(url){
    PANNEAU
 ========================== */
 
-
-      let ficheActive = null;
-      
-
 function ouvrirPanel(data){
-
-      ficheActive = data;
-      results.data.forEach(function(fiche){
-            const ficheId =
-    fiche.id ||
-    fiche.ID ||
-    fiche.nom;
-
 
     document.getElementById("ficheTitre")
         .textContent = data.nom || "";
@@ -884,11 +872,9 @@ function fermerPanel(){
 
 function ouvrirFicheComplete(){
 
-    if(!ficheActive) return;
-
-    window.location.href =
-        "fiche.html?id=" +
-        encodeURIComponent(ficheActive.id);
+    alert(
+        "La fiche détaillée sera ajoutée prochainement."
+    );
 }
 
 
@@ -967,23 +953,16 @@ Papa.parse(CSV_URL,{
 
             marker.on("click", function(){
 
-ouvrirPanel({
+                ouvrirPanel({
 
-    id:ficheId,
+                    nom:nom,
+                    description:description,
+                    categorie:categorie,
+                    commune:commune,
+                    adresse:adresse,
+                    photo:photo
 
-    nom:nom,
-
-    description:description,
-
-    categorie:categorie,
-
-    commune:commune,
-
-    adresse:adresse,
-
-    photo:photo
-
-});
+                });
 
             });
 
