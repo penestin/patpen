@@ -1,0 +1,26 @@
+[
+  {
+    "id":"FOUR001",
+    "date_saisie":"2026-07-15",
+    "latitude":"47.480120",
+    "longitude":"-2.472540",
+    "commune":"Pénestin",
+    "adresse":"264 Route de Kerseguin",
+    "categorie":"Four à pain",
+    "nom":"Four à pain de Kerseguin",
+    "proprietaire":"Personne privée",
+    "acces":"Visible depuis la voie publique",
+    "description":"Ancien four à pain rural construit en pierre.",
+    "materiaux":"Pierre",
+    "periode":"Fin XVIIIe - début XIXe siècle",
+    "historique":"Utilisé autrefois par plusieurs familles du hameau.",
+    "commentaires":"Projet de restauration.",
+    "photos":[
+      "images/four1.jpg",
+      "images/four2.jpg"
+    ],
+    "legende":"Vue générale du four",
+    "credit_photo":"PATPEN",
+    "statut":"Publié"
+  }
+]
