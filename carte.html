@@ -680,12 +680,11 @@ const satellite = L.tileLayer(
 );
 osm.addTo(map);
 
-
-
-
-
-
-
+ const baseMaps = {
+    "OpenStreetMap": topo,
+    "IGN": ign,
+    "Photo aérienne": satellite,
+};
 
       
 
