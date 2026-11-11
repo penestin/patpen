@@ -650,35 +650,31 @@ const map = L.map("map").setView(
 ========================== */
 
 const osm = L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {
         maxZoom:19,
-        attribution:"© OpenStreetMap"
-    }
-);
-
-const topo = L.tileLayer(
-    "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-    {
-        maxZoom:17,
-        attribution:"© OpenTopoMap"
+        attribution:'© OpenStreetMap'
     }
 );
 
 const ign = L.tileLayer(
-    "https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png",
+    'https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png',
     {
-        attribution:"© IGN"
+        attribution:'© IGN'
     }
 );
 
-const satellite = L.tileLayer(
-    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+const ortho = L.tileLayer(
+    'https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/jpeg',
     {
-        attribution:"© Esri"
+        attribution:'© IGN'
     }
 );
+
 osm.addTo(map);
+
+
+      
 
  const baseMaps = {
     "OpenStreetMap": topo,
@@ -686,7 +682,30 @@ osm.addTo(map);
     "Photo aérienne": satellite,
 };
 
-      
+function changeBaseMap(type,element){
+
+    map.removeLayer(osm);
+    map.removeLayer(ign);
+    map.removeLayer(ortho);
+
+    if(type==="osm"){
+        osm.addTo(map);
+    }
+
+    if(type==="ign"){
+        ign.addTo(map);
+    }
+
+    if(type==="ortho"){
+        ortho.addTo(map);
+    }
+
+    document
+        .querySelectorAll(".basemap-item")
+        .forEach(el => el.classList.remove("active"));
+
+    element.classList.add("active");
+}      
 
 const AddFicheControl = L.Control.extend({
 
