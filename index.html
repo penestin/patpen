@@ -138,27 +138,46 @@ header{
     border:none;
 }
 
+
+
+
 /* ======================
    BOUTON AJOUT
 ====================== */
 
 .zone-ajout{
-    margin-top:12px;
-    margin-bottom:10px;
+    margin-top:15px;
+    margin-bottom:15px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
 .btn-ajout{
-    width:100%;
-    padding:18px;
+    width:120px;
+    height:50px;
+
     background:#205ba4;
     color:white;
+
     border:none;
     border-radius:12px;
-    font-size:18px;
-    font-weight:bold;
+
     cursor:pointer;
-    box-shadow:
-        0 4px 12px rgba(32,91,164,.25);
+
+    font-size:16px;
+    font-weight:bold;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+
+    text-align:center;
+
+    box-shadow:0 4px 12px rgba(32,91,164,.25);
     transition:.2s;
 }
 
@@ -166,8 +185,16 @@ header{
     background:#1a4b88;
     transform:translateY(-2px);
 }
-    background:#1a4b88;
+
+.icone-ajout{
+    font-size:42px;
+    line-height:1;
 }
+
+
+
+
+
 /* ==========================
    BOUTON AJOUT FICHE
 ========================== */
@@ -344,8 +371,8 @@ footer{
             class="btn-ajout"
             onclick="window.location.href='identification+formulaire.html'">
 
-            ➕ Ajouter une fiche
-
+            Ajouter 
+            un élément
         </button>
     </div>
 </section>
