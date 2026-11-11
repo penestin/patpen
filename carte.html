@@ -680,14 +680,6 @@ const satellite = L.tileLayer(
     }
 );
 
-const hybrid = L.layerGroup([
-    L.tileLayer(
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-    ),
-    L.tileLayer(
-        "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
-    )
-]);
 
 osm.addTo(map);
 
@@ -767,13 +759,13 @@ function changeBaseMap(type,element){
     if(map.hasLayer(topo)) map.removeLayer(topo);
     if(map.hasLayer(carto)) map.removeLayer(carto);
     if(map.hasLayer(satellite)) map.removeLayer(satellite);
-    if(map.hasLayer(hybrid)) map.removeLayer(hybrid);
+   
 
     if(type==="osm") osm.addTo(map);
     if(type==="topo") topo.addTo(map);
     if(type==="carto") carto.addTo(map);
     if(type==="satellite") satellite.addTo(map);
-    if(type==="hybrid") hybrid.addTo(map);
+   
 
     document
         .querySelectorAll(".basemap-item")
