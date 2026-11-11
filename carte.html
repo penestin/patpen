@@ -650,61 +650,55 @@ const map = L.map("map").setView(
 ========================== */
 
 const osm = L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap'
+        maxZoom:19,
+        attribution:"© OpenStreetMap"
     }
 );
 
-const ign = L.tileLayer(
-    'https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png',
+const topo = L.tileLayer(
+    "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
     {
-        attribution: '© IGN'
+        maxZoom:17,
+        attribution:"© OpenTopoMap"
     }
 );
 
-const ortho = L.tileLayer(
-    'https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILEMATRIXSET=PM&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/jpeg',
+const carto = L.tileLayer(
+    "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
     {
-        attribution: '© IGN'
+        maxZoom:20,
+        attribution:"© Carto"
     }
 );
+
+const satellite = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    {
+        attribution:"© Esri"
+    }
+);
+
+const hybrid = L.layerGroup([
+    L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+    ),
+    L.tileLayer(
+        "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
+    )
+]);
 
 osm.addTo(map);
 
+
+
+
+
+
+
+
       
-
- const baseMaps = {
-    "OpenStreetMap": topo,
-    "IGN": ign,
-    "Photo aérienne": satellite,
-};
-
-function changeBaseMap(type,element){
-
-    map.removeLayer(osm);
-    map.removeLayer(ign);
-    map.removeLayer(ortho);
-
-    if(type==="osm"){
-        osm.addTo(map);
-    }
-
-    if(type==="ign"){
-        ign.addTo(map);
-    }
-
-    if(type==="ortho"){
-        ortho.addTo(map);
-    }
-
-    document
-        .querySelectorAll(".basemap-item")
-        .forEach(el => el.classList.remove("active"));
-
-    element.classList.add("active");
-}      
 
 const AddFicheControl = L.Control.extend({
 
@@ -770,19 +764,24 @@ function toggleBasemapPanel(){
 function changeBaseMap(type,element){
 
     if(map.hasLayer(osm)) map.removeLayer(osm);
-    if(map.hasLayer(ign)) map.removeLayer(ign);
-    if(map.hasLayer(ortho)) map.removeLayer(ortho);
+    if(map.hasLayer(topo)) map.removeLayer(topo);
+    if(map.hasLayer(carto)) map.removeLayer(carto);
+    if(map.hasLayer(satellite)) map.removeLayer(satellite);
+    if(map.hasLayer(hybrid)) map.removeLayer(hybrid);
 
     if(type==="osm") osm.addTo(map);
-    if(type==="ign") ign.addTo(map);
-    if(type==="ortho") ortho.addTo(map);
+    if(type==="topo") topo.addTo(map);
+    if(type==="carto") carto.addTo(map);
+    if(type==="satellite") satellite.addTo(map);
+    if(type==="hybrid") hybrid.addTo(map);
 
     document
         .querySelectorAll(".basemap-item")
-        .forEach(el=>el.classList.remove("active"));
+        .forEach(el => el.classList.remove("active"));
 
     element.classList.add("active");
 }
+
 
 
 
@@ -1022,24 +1021,37 @@ Papa.parse(CSV_URL,{
 
     <div class="basemap-grid">
 
-       <div class="basemap-item active"
-     onclick="changeBaseMap('osm',this)">
-    <img src="images/fonds/osm.jpg">
-    <span>OpenStreetMap</span>
-</div>
+        <div class="basemap-item active"
+             onclick="changeBaseMap('osm',this)">
+            <img src="images/fonds/osm.jpg">
+            <span>OpenStreetMap</span>
+        </div>
 
-<div class="basemap-item"
-     onclick="changeBaseMap('ign',this)">
-    <img src="images/fonds/ign.jpg">
-    <span>Plan IGN</span>
-</div>
+        <div class="basemap-item"
+             onclick="changeBaseMap('topo',this)">
+            <img src="images/fonds/topo.jpg">
+            <span>Relief</span>
+        </div>
 
-<div class="basemap-item"
-     onclick="changeBaseMap('ortho',this)">
-    <img src="images/fonds/ortho.jpg">
-    <span>Photographies aériennes</span>
-</div>
+        <div class="basemap-item"
+             onclick="changeBaseMap('carto',this)">
+            <img src="images/fonds/carto.jpg">
+            <span>Fond clair</span>
+        </div>
 
+        <div class="basemap-item"
+             onclick="changeBaseMap('satellite',this)">
+            <img src="images/fonds/satellite.jpg">
+            <span>Photo aérienne</span>
+        </div>
+
+        <div class="basemap-item"
+             onclick="changeBaseMap('hybrid',this)">
+            <img src="images/fonds/hybrid.jpg">
+            <span>Photo + noms</span>
+        </div>
+
+    </div>
 
 </div>
 </body>
