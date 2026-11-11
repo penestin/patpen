@@ -657,11 +657,11 @@ const osm = L.tileLayer(
     }
 );
 
-const ign = L.tileLayer(
+const topo = L.tileLayer(
     "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
     {
         maxZoom:17,
-        attribution:"© IGN"
+        attribution:"© OpenTopoMap"
     }
 );
 
@@ -748,12 +748,12 @@ function toggleBasemapPanel(){
 function changeBaseMap(type,element){
 
     if(map.hasLayer(osm)) map.removeLayer(osm);
-    if(map.hasLayer(ign)) map.removeLayer(ign);
+    if(map.hasLayer(topo)) map.removeLayer(topo);
     if(map.hasLayer(satellite)) map.removeLayer(satellite);
    
 
     if(type==="osm") osm.addTo(map);
-    if(type==="topo") ign.addTo(map);
+    if(type==="topo") topo.addTo(map);
     if(type==="satellite") satellite.addTo(map);
    
 
@@ -1010,8 +1010,8 @@ Papa.parse(CSV_URL,{
         </div>
 
         <div class="basemap-item"
-             onclick="changeBaseMap('ign',this)">
-            <img src="images/fonds/ign.jpg">
+             onclick="changeBaseMap('topo',this)">
+            <img src="images/fonds/topo.jpg">
             <span>Relief</span>
         </div>
 
