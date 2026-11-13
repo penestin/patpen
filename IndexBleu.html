@@ -1,1 +1,383 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PATPEN | Patrimoine & Mémoire de Pénestin</title>
+
+<link rel="icon" type="image/png" href="favicon-PATPEN6.png">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:344e94;
+    color:#333;
+}
+
+/* ======================
+   HEADER
+====================== */
+
+header{
+    background:344e94;
+    color:white;
+    padding:20px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo img{
+    width:70px;
+    height:70px;
+    object-fit:contain;
+}
+
+.titre h1{
+    font-size:2rem;
+}
+
+.titre p{
+    opacity:.9;
+}
+
+/* ======================
+   HERO
+====================== */
+
+.hero{
+    background:white;
+    padding:40px 20px;
+    text-align:center;
+}
+
+.hero h2{
+    margin-bottom:15px;
+    color:#1f5e42;
+}
+
+.hero p{
+    max-width:900px;
+    margin:auto;
+    line-height:1.6;
+}
+
+/* ======================
+   BLOCS
+====================== */
+
+.blocs{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+    padding:30px;
+}
+
+.carte{
+    background:white;
+    border-radius:12px;
+    padding:25px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+.carte h3{
+    color:#1f5e42;
+    margin-bottom:15px;
+}
+
+.categorie{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.badge{
+    background:#eaf6ef;
+    color:#1f5e42;
+    padding:8px 12px;
+    border-radius:20px;
+    font-size:.9rem;
+}
+
+/* ======================
+   CARTE PATPEN
+====================== */
+
+.section-map{
+    padding:20px 30px 30px;
+}
+
+.section-map h2{
+    margin-bottom:20px;
+    color:#1f5e42;
+}
+
+.map-container{
+    width:100%;
+    height:75vh;
+    overflow:hidden;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+
+.map-container iframe{
+    width:100%;
+    height:100%;
+    border:none;
+}
+
+
+
+
+/* ======================
+   BOUTON AJOUT
+====================== */
+
+.zone-ajout{
+    margin-top:15px;
+    margin-bottom:15px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.btn-ajout{
+    width:120px;
+    height:50px;
+
+    background:#205ba4;
+    color:white;
+
+    border:none;
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:16px;
+    font-weight:bold;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+
+    text-align:center;
+
+    box-shadow:0 4px 12px rgba(32,91,164,.25);
+    transition:.2s;
+}
+
+.btn-ajout:hover{
+    background:#1a4b88;
+    transform:translateY(-2px);
+}
+
+.icone-ajout{
+    font-size:42px;
+    line-height:1;
+}
+
+
+
+
+
+/* ==========================
+   BOUTON AJOUT FICHE
+========================== */
+
+.leaflet-control-addfiche a{
+
+    width:44px;
+    height:44px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#205ba4;
+    color:#fff;
+
+    text-decoration:none;
+
+    border-radius:8px;
+
+    font-size:24px;
+    font-weight:bold;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+
+.leaflet-control-addfiche a:hover{
+
+    background:#184b88;
+}
+
+.leaflet-control-addfiche{
+
+    margin-top:10px;
+}
+/* ======================
+   FOOTER
+====================== */
+
+footer{
+    background:#1f5e42;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+/* ======================
+   MOBILE
+====================== */
+
+@media (max-width:768px){
+
+    .blocs{
+        grid-template-columns:1fr;
+        padding:8px;
+        gap:12px;
+    }
+
+    .carte{
+        padding:12px;
+    }
+
+    .section-map{
+        padding:10px 6px 20px;
+    }
+
+    .map-container{
+        height:65vh;
+    }
+
+    .titre h1{
+        font-size:1.6rem;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+
+        <img src="logo-PATPEN7.svg" alt="PATPEN">
+
+        <div class="titre">
+            <h1>PATPEN</h1>
+            <p>Patrimoine & Mémoire de Pénestin</p>
+        </div>
+
+    </div>
+
+</header>
+
+<section class="hero">
+
+    <h2>Découvrez le patrimoine de Pénestin</h2>
+
+    <p>
+        PATPEN permet de localiser, documenter et partager
+        les éléments du patrimoine local :
+        puits, fontaines, lavoirs, fours à pain,
+        croix, moulins, maisons remarquables et
+        autres témoins de la mémoire de la commune.
+    </p>
+
+</section>
+
+<section class="blocs">
+
+    <div class="carte">
+
+        <h3>Consulter</h3>
+
+        <p>
+            Explorez les éléments patrimoniaux enregistrés
+            sur la carte.
+        </p>
+
+    </div>
+
+    <div class="carte">
+
+        <h3>Participer</h3>
+
+        <p>
+            Vous connaissez un élément patrimonial non recensé ?
+            Ajoutez une contribution après identification.
+        </p>
+
+    </div>
+
+    <div class="carte">
+
+        <h3>Catégories</h3>
+
+        <div class="categorie">
+
+            <span class="badge">Puits</span>
+            <span class="badge">Fontaine</span>
+            <span class="badge">Lavoir</span>
+            <span class="badge">Four à pain</span>
+            <span class="badge">Croix</span>
+            <span class="badge">Calvaire</span>
+            <span class="badge">Moulin</span>
+            <span class="badge">Maison remarquable</span>
+            <span class="badge">Arbre remarquable</span>
+            <span class="badge">Autres</span>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section id="carte" class="section-map">
+
+    <h2>Carte du patrimoine</h2>
+
+    <div class="map-container">
+
+        <iframe
+            src="carte.html"
+            title="Carte PATPEN">
+        </iframe>
+
+    </div>
+
+    <div class="zone-ajout">
+
+        <button
+            class="btn-ajout"
+            onclick="window.location.href='identification+formulaire.html'">
+
+            Ajouter 
+            un élément
+        </button>
+    </div>
+</section>
+
+</body>
+</html>
+
 
