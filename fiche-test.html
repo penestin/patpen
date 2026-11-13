@@ -257,7 +257,10 @@ Contribution libre, n'ayant pas fait l'objet d'une validation
 par le service de l'Inventaire du patrimoine de Bretagne ou ses partenaires.
 
 </div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js">
+    
+</script>
+    
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
@@ -265,18 +268,38 @@ par le service de l'Inventaire du patrimoine de Bretagne ou ses partenaires.
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
-fetch("patrimoine.json")
-.then(r=>r.json())
-.then(data=>{
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/12Zo6EKHmgA-NlKnUbjerfRS78BH34dO-dhYuq5RcNls/gviz/tq?tqx=out:csv&gid=545961012";
 
-const fiche = data.find(f=>f.id===id);
+Papa.parse(CSV_URL,{
+    download:true,
+    header:true,
 
-if(!fiche){
+    complete:function(results){
 
-document.body.innerHTML="<h2>Fiche introuvable</h2>";
-return;
+        const data = results.data;
 
-}
+        const fiche = data.find(
+            f => f.id === id
+        );
+
+console.log(data);
+
+
+        
+        if(!fiche){
+
+            document.body.innerHTML =
+            "<h2>Fiche introuvable</h2>";
+
+            return;
+        }
+
+
+
+
+
+
 
 nom.textContent=fiche.nom;
 
