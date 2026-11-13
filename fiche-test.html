@@ -1,1 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Fiche patrimoine</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<style>
+
+:root{
+    --patpen:#205BA4;
+    --patpen-dark:#184781;
+    --patpen-light:#EAF2FB;
+    --patpen-ultra:#F5F9FE;
+    --texte:#333;
+    --bordure:#D4E1F2;
+}
+
+html,body{
+    margin:0;
+    background:#F7FAFE;
+    font-family:'Segoe UI',sans-serif;
+    color:var(--texte);
+}
+
+.header{
+    background:white;
+    position:sticky;
+    top:0;
+    z-index:999;
+    padding:15px;
+    border-bottom:1px solid var(--bordure);
+}
+
+.btn-retour{
+    border:none;
+    background:var(--patpen);
+    color:white;
+    padding:12px 20px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+    transition:.2s;
+}
+
+.btn-retour:hover{
+    background:var(--patpen-dark);
+}
+
+h1{
+    margin:15px 0;
+    color:var(--patpen);
+    font-size:2.7rem;
+    line-height:1.1;
+}
+
+.badge{
+
+    display:inline-block;
+    background:#e7f4ea;
+    color:#217346;
+    font-weight:bold;
+    border-radius:20px;
+    padding:8px 15px;
+}
+
+.galerie{
+
+    padding:15px;
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:10px;
+}
+
+.galerie img{
+
+    width:100%;
+    height:420px;
+    object-fit:cover;
+    border-radius:25px;
+    background:#ddd;
+}
+
+.adresse{
+    margin:0 15px 15px;
+    background:var(--patpen-light);
+    border:1px solid #c9daef;
+    border-radius:18px;
+    padding:22px;
+}
+
+.btn-carte{
+    margin-top:15px;
+    display:inline-block;
+    background:var(--patpen);
+    color:white;
+    text-decoration:none;
+    padding:10px 18px;
+    border-radius:10px;
+    font-weight:600;
+}
+
+.btn-carte:hover{
+    background:var(--patpen-dark);
+}
+
+.section{
+
+    padding:25px 20px;
+    border-top:1px solid var(--bordure);
+    background:white;
+}
+
+.label{
+
+    color:#666;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.valeur{
+
+    line-height:1.6;
+    font-size:1.2rem;
+}
+
+.meta{
+    padding:20px;
+    background:var(--patpen-ultra);
+    border-top:1px solid #d9e4f3;
+}
+
+.meta-grid{
+
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+#carte{
+
+    height:350px;
+}
+
+.footer{
+    background:#EAF2FB;
+    padding:25px;
+    line-height:1.6;
+    color:#4a4a4a;
+}
+
+@media(max-width:768px){
+
+.galerie{
+    display:block;
+}
+
+.galerie img{
+    height:260px;
+    margin-bottom:10px;
+}
+
+.meta-grid{
+    grid-template-columns:1fr;
+}
+
+.section{
+    padding:20px;
+}
+
+.valeur{
+    font-size:1.05rem;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+
+<button class="btn-retour"
+onclick="window.location.href='index.html'">
+
+⬅ Retour à la carte
+
+</button>
+
+<h1 id="nom"></h1>
+
+<div id="badgeStatut" class="badge"></div>
+
+</div>
+
+<div class="galerie">
+
+<img id="photo1">
+<img id="photo2">
+
+</div>
+
+<div class="adresse">
+
+<div id="adresse"></div>
+<div id="commune"></div>
+
+<br>
+
+<a id="voirCarte"
+target="_blank"
+class="btn-carte">
+
+📍 Voir dans Google Maps
+
+</a>
+
+</div>
+
+<div id="contenu"></div>
+
+<div class="meta">
+
+<div class="meta-grid">
+
+<div>
+<b>Date saisie</b><br>
+<span id="date_saisie"></span>
+</div>
+
+<div>
+<b>Latitude</b><br>
+<span id="latitude"></span>
+</div>
+
+<div>
+<b>Longitude</b><br>
+<span id="longitude"></span>
+</div>
+
+</div>
+
+</div>
+
+<div id="carte"></div>
+
+<div class="footer">
+
+Contribution libre, n'ayant pas fait l'objet d'une validation
+par le service de l'Inventaire du patrimoine de Bretagne ou ses partenaires.
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+fetch("patrimoine.json")
+.then(r=>r.json())
+.then(data=>{
+
+const fiche = data.find(f=>f.id===id);
+
+if(!fiche){
+
+document.body.innerHTML="<h2>Fiche introuvable</h2>";
+return;
+
+}
+
+nom.textContent=fiche.nom;
+
+adresse.textContent=fiche.adresse;
+commune.textContent=fiche.commune;
+
+date_saisie.textContent=fiche.date_saisie;
+
+latitude.textContent=fiche.latitude;
+longitude.textContent=fiche.longitude;
+
+badgeStatut.textContent=fiche.statut;
+
+photo1.src=fiche.photos[0];
+photo2.src=fiche.photos[1] || fiche.photos[0];
+
+voirCarte.href=
+`https://www.google.com/maps?q=${fiche.latitude},${fiche.longitude}`;
+
+const champs=[
+
+["Catégorie",fiche.categorie],
+["Propriétaire",fiche.proprietaire],
+["Accès",fiche.acces],
+["Description",fiche.description],
+["Matériaux",fiche.materiaux],
+["Période",fiche.periode],
+["Historique",fiche.historique],
+["Commentaires",fiche.commentaires],
+["Légende",fiche.legende],
+["Crédit photo",fiche.credit_photo]
+
+];
+
+let html="";
+
+champs.forEach(item=>{
+
+html+=`
+
+<div class="section">
+
+<div class="label">${item[0]}</div>
+
+<div class="valeur">
+${item[1] || "-"}
+</div>
+
+</div>
+
+`;
+
+});
+
+contenu.innerHTML=html;
+
+const map=L.map('carte').setView(
+[fiche.latitude,fiche.longitude],
+18
+);
+
+L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+).addTo(map);
+
+L.marker([
+fiche.latitude,
+fiche.longitude
+])
+.addTo(map)
+.bindPopup(fiche.nom);
+
+});
+
+</script>
+
+</body>
+</html>
 
