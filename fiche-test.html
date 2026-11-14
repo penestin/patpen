@@ -2,7 +2,6 @@
 <html lang="fr">
 <head>
 
-    
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
@@ -47,7 +46,6 @@ html,body{
     cursor:pointer;
     font-size:15px;
     font-weight:600;
-    transition:.2s;
 }
 
 .btn-retour:hover{
@@ -62,7 +60,6 @@ h1{
 }
 
 .badge{
-
     display:inline-block;
     background:#e7f4ea;
     color:#217346;
@@ -72,17 +69,12 @@ h1{
 }
 
 .galerie{
-
     padding:15px;
-    display:grid;
-    grid-template-columns:2fr 1fr;
-    gap:10px;
 }
 
 .galerie img{
-
     width:100%;
-    height:420px;
+    max-height:550px;
     object-fit:cover;
     border-radius:25px;
     background:#ddd;
@@ -112,23 +104,20 @@ h1{
 }
 
 .section{
-
     padding:25px 20px;
     border-top:1px solid var(--bordure);
     background:white;
 }
 
 .label{
-
     color:#666;
     font-weight:700;
     margin-bottom:10px;
 }
 
 .valeur{
-
-    line-height:1.6;
-    font-size:1.2rem;
+    line-height:1.7;
+    font-size:1.15rem;
 }
 
 .meta{
@@ -138,14 +127,12 @@ h1{
 }
 
 .meta-grid{
-
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:20px;
 }
 
 #carte{
-
     height:350px;
 }
 
@@ -158,31 +145,29 @@ h1{
 
 @media(max-width:768px){
 
-.galerie{
-    display:block;
-}
+    .galerie img{
+        max-height:300px;
+    }
 
-    
-.galerie img{
-    height:260px;
-    margin-bottom:10px;
-}
+    .meta-grid{
+        grid-template-columns:1fr;
+    }
 
-.meta-grid{
-    grid-template-columns:1fr;
-}
+    .section{
+        padding:20px;
+    }
 
-.section{
-    padding:20px;
-}
+    .valeur{
+        font-size:1rem;
+    }
 
-.valeur{
-    font-size:1.05rem;
-}
-
+    h1{
+        font-size:2rem;
+    }
 }
 
 </style>
+
 </head>
 
 <body>
@@ -202,19 +187,8 @@ onclick="window.location.href='index.html'">
 
 </div>
 
-
-
-
-    
 <div class="galerie">
-<img id="photo1">
-<img id="photo2">
-
-
-
-
-
-    
+    <img id="photo1" alt="Photo du patrimoine">
 </div>
 
 <div class="adresse">
@@ -267,10 +241,8 @@ Contribution libre, n'ayant pas fait l'objet d'une validation
 par le service de l'Inventaire du patrimoine de Bretagne ou ses partenaires.
 
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js">
-    
-</script>
-    
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
@@ -284,149 +256,135 @@ const CSV_URL =
 Papa.parse(CSV_URL,{
     download:true,
     header:true,
+    skipEmptyLines:true,
 
     complete:function(results){
 
-        const data = results.data;
+        const fiche =
+        results.data.find(f => f.id === id);
 
-        const fiche = data.find(
-            f => f.id === id
-        );
-
-        
-console.log("FICHE =", fiche);
-console.log("PHOTO =", fiche.photos);
-
-
-
-        
         if(!fiche){
 
             document.body.innerHTML =
-            "<h2>Fiche introuvable</h2>";
+            "<h2 style='padding:30px'>Fiche introuvable</h2>";
 
             return;
         }
 
+        nom.textContent =
+            fiche.nom || "";
 
+        adresse.textContent =
+            fiche.adresse || "";
 
+        commune.textContent =
+            fiche.commune || "";
 
+        date_saisie.textContent =
+            fiche.date_saisie || "";
 
+        latitude.textContent =
+            fiche.latitude || "";
 
+        longitude.textContent =
+            fiche.longitude || "";
 
-nom.textContent=fiche.nom;
+        badgeStatut.textContent =
+            fiche.statut || "";
 
-adresse.textContent=fiche.adresse;
-commune.textContent=fiche.commune;
+        // PHOTO
 
-date_saisie.textContent=fiche.date_saisie;
+        let photoUrl =
+            fiche.photos || "";
 
-latitude.textContent=fiche.latitude;
-longitude.textContent=fiche.longitude;
+        const match =
+            photoUrl.match(/\/d\/([^\/]+)/);
 
-badgeStatut.textContent=fiche.statut;
-        console.log("PHOTO :", fiche.photos);
-        alert(fiche.photos);
+        if(match){
 
-// PHOTO
-let photoUrl = fiche.photos || "";
+            const fileId =
+                match[1];
 
-const match = photoUrl.match(/\/d\/([^\/]+)/);
+            photoUrl =
+            `https://drive.google.com/uc?export=view&id=${fileId}`;
+        }
 
-if (match) {
+        photo1.src = photoUrl;
 
-    const fileId = match[1];
+        // GOOGLE MAPS
 
-    photoUrl =
-    `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
+        voirCarte.href =
+        `https://www.google.com/maps?q=${fiche.latitude},${fiche.longitude}`;
 
-}
+        // CHAMPS DETAILLES
 
-console.log("IMAGE =", photoUrl);
-photo1.onload = () => console.log("PHOTO CHARGEE");
-photo1.onerror = () => console.log("ERREUR PHOTO");
-photo1.src = photoUrl;
+        const champs = [
 
-photo2.style.display = "none";
+            ["Catégorie", fiche.categorie],
+            ["Propriétaire", fiche.proprietaire],
+            ["Accès", fiche.acces],
+            ["Description", fiche.description],
+            ["Matériaux", fiche.materiaux],
+            ["Période", fiche.periode],
+            ["Historique", fiche.historique],
+            ["Commentaires", fiche.commentaires],
+            ["Légende", fiche.legende],
+            ["Crédit photo", fiche.credit_photo]
 
-        
-console.log("IMAGE FINALE =", photoUrl);
-photo1.src = photoUrl;
+        ];
 
-photo2.style.display = "none";
+        let html = "";
 
-photo2.style.display = "none";
+        champs.forEach(item => {
 
+            html += `
+            <div class="section">
 
-        
-// masquer la 2ème photo si vous n'avez qu'une photo
+                <div class="label">
+                    ${item[0]}
+                </div>
 
-photo2.style.display = "none";
+                <div class="valeur">
+                    ${item[1] || "-"}
+                </div>
 
-        
-voirCarte.href=
-`https://www.google.com/maps?q=${fiche.latitude},${fiche.longitude}`;
+            </div>
+            `;
 
-const champs=[
+        });
 
-["Catégorie",fiche.categorie],
-["Propriétaire",fiche.proprietaire],
-["Accès",fiche.acces],
-["Description",fiche.description],
-["Matériaux",fiche.materiaux],
-["Période",fiche.periode],
-["Historique",fiche.historique],
-["Commentaires",fiche.commentaires],
-["Légende",fiche.legende],
-["Crédit photo",fiche.credit_photo]
+        contenu.innerHTML = html;
 
-];
+        // CARTE
 
-let html="";
+        const lat =
+            parseFloat(fiche.latitude);
 
-champs.forEach(item=>{
+        const lng =
+            parseFloat(fiche.longitude);
 
-html+=`
+        const map =
+        L.map("carte").setView(
+            [lat,lng],
+            18
+        );
 
-<div class="section">
+        L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                attribution:"© OpenStreetMap"
+            }
+        ).addTo(map);
 
-<div class="label">${item[0]}</div>
+        L.marker([lat,lng])
+            .addTo(map)
+            .bindPopup(fiche.nom);
 
-<div class="valeur">
-${item[1] || "-"}
-</div>
-
-</div>
-
-`;
-
-});
-
-contenu.innerHTML=html;
-
-const map=L.map('carte').setView(
-[fiche.latitude,fiche.longitude],
-18
-);
-
-L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
-        attribution:"© OpenStreetMap"
     }
-).addTo(map);
 
-L.marker([
-fiche.latitude,
-fiche.longitude
-])
-.addTo(map)
-.bindPopup(fiche.nom);
-}
 });
 
 </script>
 
 </body>
 </html>
-
