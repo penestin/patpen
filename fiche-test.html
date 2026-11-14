@@ -328,26 +328,35 @@ badgeStatut.textContent=fiche.statut;
         alert(fiche.photos);
 
 // PHOTO
-console.log(fiche.photos);
 let photoUrl = fiche.photos || "";
 
-const match = photoUrl.match(/\/d\/([^\/]+)/);
+let fileId = "";
+
+// format file/d/xxx
+let match = photoUrl.match(/\/d\/([^\/]+)/);
 
 if(match){
+    fileId = match[1];
+}
 
-    const fileId = match[1];
+// format ?id=xxx
+if(!fileId){
+    match = photoUrl.match(/[?&]id=([^&]+)/);
 
+    if(match){
+        fileId = match[1];
+    }
+}
+
+if(fileId){
     photoUrl =
     `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
-
 }
+
+console.log("FILE ID =", fileId);
 console.log("IMAGE FINALE =", photoUrl);
+
 photo1.src = photoUrl;
-
-photo2.style.display = "none";
-
-photo2.style.display = "none";
-
 
         
 // masquer la 2ème photo si vous n'avez qu'une photo
