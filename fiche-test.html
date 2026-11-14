@@ -2,7 +2,6 @@
 <html lang="fr">
 <head>
 
-    
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
@@ -264,7 +263,7 @@ class="btn-carte">
 <div class="footer">
 
 Contribution libre, n'ayant pas fait l'objet d'une validation
-par le service de l'Inventaire du patrimoine de Bretagne ou ses partenaires.
+par le service de l'Inventaire du patrimoine de Pénestin ou ses partenaires.
 
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js">
@@ -329,11 +328,12 @@ badgeStatut.textContent=fiche.statut;
         alert(fiche.photos);
 
 // PHOTO
+console.log(fiche.photos);
 let photoUrl = fiche.photos || "";
 
 const match = photoUrl.match(/\/d\/([^\/]+)/);
 
-if (match) {
+if(match){
 
     const fileId = match[1];
 
@@ -341,15 +341,6 @@ if (match) {
     `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
 
 }
-
-console.log("IMAGE =", photoUrl);
-photo1.onload = () => console.log("PHOTO CHARGEE");
-photo1.onerror = () => console.log("ERREUR PHOTO");
-photo1.src = photoUrl;
-
-photo2.style.display = "none";
-
-        
 console.log("IMAGE FINALE =", photoUrl);
 photo1.src = photoUrl;
 
