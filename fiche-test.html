@@ -294,23 +294,26 @@ Papa.parse(CSV_URL,{
 
         // PHOTO
 
-        let photoUrl =
-            fiche.photos || "";
+       // PHOTO
 
-        const match =
-            photoUrl.match(/\/d\/([^\/]+)/);
+let photoUrl = fiche.photos || "";
 
-        if(match){
+const match = photoUrl.match(/\/d\/([^\/]+)/);
 
-            const fileId =
-                match[1];
+if(match){
 
-            photoUrl =
-            `https://drive.google.com/uc?export=view&id=${fileId}`;
-        }
+    const fileId = match[1];
 
-        photo1.src = photoUrl;
+    photoUrl =
+    `https://drive.google.com/uc?export=view&id=${fileId}`;
 
+}
+
+setTimeout(() => {
+
+    document.getElementById("photo1").src = photoUrl;
+
+}, 100);
         // GOOGLE MAPS
 
         voirCarte.href =
