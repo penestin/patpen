@@ -324,32 +324,9 @@ badgeStatut.textContent=fiche.statut;
 
 // PHOTO
 
-let photoUrl = fiche.photos || "";
+photo1.src = fiche.photos || "";
 
-if (photoUrl.includes("id=")) {
-
-    const fileId = photoUrl.split("id=")[1];
-
-    photoUrl =
-    `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
-
-}
-
-
-
-
-        
-console.log("PHOTO =", photoUrl);
-
-photo1.src = photoUrl;
-        console.log(photoUrl);
-
-photo1.onload = () => console.log("image chargée");
-photo1.onerror = () => console.log("erreur image");
-
-
-
-
+photo2.style.display = "none";
 
 
         
@@ -404,7 +381,10 @@ const map=L.map('carte').setView(
 );
 
 L.tileLayer(
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+        attribution:"© OpenStreetMap"
+    }
 ).addTo(map);
 
 L.marker([
