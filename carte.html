@@ -641,7 +641,9 @@ const map = L.map("map").setView(
     14
 );
 
+const markers = [];
 
+let pointCourant = null;
 
 
       
@@ -829,8 +831,24 @@ function getDriveImage(url){
 /* ==========================
    PANNEAU
 ========================== */
-
 function ouvrirPanel(data){
+
+    pointCourant = data;
+
+    document.getElementById("ficheTitre")
+        .textContent = data.nom || "";
+
+    document.getElementById("ficheDescription")
+        .textContent = data.description || "";
+
+    ...
+}
+
+
+      
+function ouvrirPanel(data){
+
+    pointCourant = data;
 
     document.getElementById("ficheTitre")
         .textContent = data.nom || "";
@@ -874,13 +892,14 @@ function fermerPanel(){
       
 function ouvrirFicheComplete(){
 
+    if(!pointCourant) return;
+
     window.open(
-        "fiche-test.html?id=FOUR001",
+        "fiche-test.html?id=" + pointCourant.id,
         "_blank"
     );
 
 }
-
 
 
 
@@ -891,6 +910,9 @@ function ouvrirFicheComplete(){
 
 const markers = [];
 
+let pointCourant = null;
+
+      
 Papa.parse(CSV_URL,{
 
     download:true,
@@ -958,7 +980,8 @@ Papa.parse(CSV_URL,{
 
                 ouvrirPanel({
 
-                    nom:nom,
+                    id: fiche.id,
+                   nom:nom,
                     description:description,
                     categorie:categorie,
                     commune:commune,
