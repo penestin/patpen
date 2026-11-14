@@ -812,13 +812,22 @@ function getDriveImage(url){
 
     if(!url) return "";
 
-    const match = url.match(/\/d\/([^\/]+)/);
+    // format uc?export=view&id=XXXX
+    let match = url.match(/[?&]id=([^&]+)/);
 
     if(match){
-
         return "https://drive.google.com/thumbnail?id="
-             + match[1]
-             + "&sz=w1200";
+               + match[1]
+               + "&sz=w1200";
+    }
+
+    // ancien format /d/XXXX/
+    match = url.match(/\/d\/([^\/]+)/);
+
+    if(match){
+        return "https://drive.google.com/thumbnail?id="
+               + match[1]
+               + "&sz=w1200";
     }
 
     return url;
@@ -939,7 +948,9 @@ Papa.parse(CSV_URL,{
                 getDriveImage(
                     fiche.photos || ""
                 );
-
+console.log("PHOTO =", fiche.photos);
+console.log("PHOTO_URL =", photo);
+              
             const marker = L.marker(
                 [lat,lng],
                 {
