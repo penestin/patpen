@@ -301,6 +301,9 @@ Papa.parse(CSV_URL,{
 
 let photoUrl = fiche.photos || "";
 
+// lien du type
+// https://drive.google.com/file/d/ID/view?usp=drivesdk
+
 const match = photoUrl.match(/\/d\/([^\/]+)/);
 
 if(match){
@@ -308,15 +311,26 @@ if(match){
     const fileId = match[1];
 
     photoUrl =
-    `https://drive.google.com/uc?export=view&id=${fileId}`;
-
+    `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
 }
 
-setTimeout(() => {
 
-    document.getElementById("photo1").src = photoUrl;
 
-}, 100);
+photo1.onerror = function() {
+    console.log("ERREUR");
+    console.log(photoUrl);
+};
+
+photo1.onload = function() {
+    console.log("OK");
+};
+
+
+        
+photo1.src = photoUrl;
+
+photo2.style.display = "none";
+
         // GOOGLE MAPS
 
         voirCarte.href =
