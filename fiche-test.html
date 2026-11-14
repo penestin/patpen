@@ -292,9 +292,20 @@ Papa.parse(CSV_URL,{
             f => f.id === id
         );
 
-console.log(data);
 
 
+
+
+        
+console.log("FICHE =", fiche);
+console.log("PHOTO =", fiche.photos);
+const fiche = data.find(
+    f => f.id === id
+);
+
+
+
+        
         
         if(!fiche){
 
