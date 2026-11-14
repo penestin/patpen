@@ -329,7 +329,22 @@ badgeStatut.textContent=fiche.statut;
 
 // PHOTO
 console.log(fiche.photos);
-photo1.src = fiche.photos || "";
+let photoUrl = fiche.photos || "";
+
+const match = photoUrl.match(/\/d\/([^\/]+)/);
+
+if(match){
+
+    const fileId = match[1];
+
+    photoUrl =
+    `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
+
+}
+console.log("IMAGE FINALE =", photoUrl);
+photo1.src = photoUrl;
+
+photo2.style.display = "none";
 
 photo2.style.display = "none";
 
