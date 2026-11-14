@@ -313,9 +313,28 @@ longitude.textContent=fiche.longitude;
 
 badgeStatut.textContent=fiche.statut;
 
-photo1.src=fiche.photos[0];
-photo2.src=fiche.photos[1] || fiche.photos[0];
+// PHOTO
 
+let photoUrl = fiche.photos || "";
+
+if (photoUrl.includes("id=")) {
+
+    const fileId = photoUrl.split("id=")[1];
+
+    photoUrl =
+    `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
+
+}
+
+console.log("PHOTO =", photoUrl);
+
+photo1.src = photoUrl;
+
+// masquer la 2ème photo si vous n'avez qu'une photo
+
+photo2.style.display = "none";
+
+        
 voirCarte.href=
 `https://www.google.com/maps?q=${fiche.latitude},${fiche.longitude}`;
 
