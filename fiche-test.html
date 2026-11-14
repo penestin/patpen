@@ -277,6 +277,45 @@ par le service de l'Inventaire du patrimoine de Bretagne ou ses partenaires.
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
+
+
+const CSV_URL = "votre_url_csv";
+
+    function getDriveImage(url){
+
+    if(!url) return "";
+
+    const match = url.match(/id=([^&]+)/);
+
+    if(match){
+        return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1200`;
+    }
+
+    return url;
+}
+// AJOUTER ICI
+
+function getDriveImage(url){
+
+    if(!url) return "";
+
+    const match = url.match(/id=([^&]+)/);
+
+    if(match){
+        return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1200`;
+    }
+
+    return url;
+}
+
+Papa.parse(CSV_URL,{
+
+
+
+
+
+    
+
 const CSV_URL =
 "https://docs.google.com/spreadsheets/d/12Zo6EKHmgA-NlKnUbjerfRS78BH34dO-dhYuq5RcNls/gviz/tq?tqx=out:csv&gid=545961012";
 
@@ -324,17 +363,13 @@ badgeStatut.textContent=fiche.statut;
 
 // PHOTO
 
-let photoUrl = fiche.photos || "";
+const photoUrl = getDriveImage(fiche.photos);
 
-if (photoUrl.includes("id=")) {
+console.log("PHOTO =", photoUrl);
 
-    const fileId = photoUrl.split("id=")[1];
+photo1.src = photoUrl;
 
-    photoUrl =
-    `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
-
-}
-
+photo2.style.display = "none";
 
 
 
