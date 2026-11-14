@@ -642,8 +642,8 @@ const map = L.map("map").setView(
 );
 
 const markers = [];
-
 let pointCourant = null;
+
 
 
       
@@ -831,18 +831,6 @@ function getDriveImage(url){
 /* ==========================
    PANNEAU
 ========================== */
-function ouvrirPanel(data){
-
-    pointCourant = data;
-
-    document.getElementById("ficheTitre")
-        .textContent = data.nom || "";
-
-    document.getElementById("ficheDescription")
-        .textContent = data.description || "";
-
-    ...
-}
 
 
       
@@ -908,11 +896,7 @@ function ouvrirFicheComplete(){
    CHARGEMENT DES FICHES
 ========================== */
 
-const markers = [];
-
-let pointCourant = null;
-
-      
+ 
 Papa.parse(CSV_URL,{
 
     download:true,
