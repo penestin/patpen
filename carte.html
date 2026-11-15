@@ -804,6 +804,14 @@ function getIconUrl(categorie){
         || "images/categories/puits.svg";
 }
 
+
+
+
+
+
+
+
+      
 /* ==========================
    PHOTO GOOGLE DRIVE
 ========================== */
@@ -812,14 +820,41 @@ function getDriveImage(url){
 
     if(!url) return "";
 
-    const match = url.match(/\/d\/([^\/]+)/);
+    let fileId = "";
+
+    // format /file/d/xxxx
+    let match = url.match(/\/d\/([^\/]+)/);
 
     if(match){
-
-        return "https://drive.google.com/thumbnail?id="
-             + match[1]
-             + "&sz=w1200";
+        fileId = match[1];
     }
+
+    // format ?id=xxxx
+    if(!fileId){
+
+        match = url.match(/[?&]id=([^&]+)/);
+
+        if(match){
+            fileId = match[1];
+        }
+    }
+
+    if(fileId){
+
+        return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
+
+    }
+      console.log("PHOTO ORIGINE =", url);
+console.log("PHOTO CONVERTIE =", getDriveImage(url));
+
+
+
+
+
+
+
+
+      
 
     return url;
 }
