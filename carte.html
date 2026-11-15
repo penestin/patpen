@@ -818,40 +818,39 @@ function getIconUrl(categorie){
 
 function getDriveImage(url){
 
-    if(!url) return "";
+    if (!url) return "";
 
     let fileId = "";
 
-    // format /file/d/xxxx
+    // Format :
+    // https://drive.google.com/file/d/XXXX/view
     let match = url.match(/\/d\/([^\/]+)/);
 
-    if(match){
+    if (match) {
         fileId = match[1];
     }
 
-    // format ?id=xxxx
-    if(!fileId){
+    // Format :
+    // https://drive.google.com/uc?export=view&id=XXXX
+    if (!fileId) {
 
         match = url.match(/[?&]id=([^&]+)/);
 
-        if(match){
+        if (match) {
             fileId = match[1];
         }
     }
 
-    if(fileId){
-
+    // Conversion vers miniature Google Drive
+    if (fileId) {
         return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
-
     }
-      console.log("PHOTO ORIGINE =", url);
+
+    return url;
+}
+
+console.log("PHOTO ORIGINE =", url);
 console.log("PHOTO CONVERTIE =", getDriveImage(url));
-
-
-
-
-
-
 
 
       
