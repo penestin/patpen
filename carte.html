@@ -522,6 +522,34 @@ body{
 
 
 
+      .map-btn{
+    position:fixed;
+    top:135px;
+    right:10px;
+    z-index:9998;
+
+    width:44px;
+    height:44px;
+
+    border:none;
+    border-radius:8px;
+
+    background:#205ba4;
+    color:white;
+
+    font-size:24px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+
+.map-btn:hover{
+    background:#184b88;
+}
+
+
 
 
 
@@ -536,6 +564,14 @@ body{
 
 
 <div id="map"></div>
+
+<button id="btnRecenter" class="map-btn">
+    ⌖
+</button>
+
+
+
+      
 
 <!-- ==========================
      FICHE PATRIMOINE
@@ -642,6 +678,34 @@ const map = L.map("map").setView(
     [47.482,-2.475],
     14
 );
+
+
+      const PENESTIN_CENTER = [47.482,-2.475];
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    document.getElementById("btnRecenter")
+        .addEventListener("click", () => {
+
+            map.setView(
+                PENESTIN_CENTER,
+                14
+            );
+
+            fermerPanel();
+        });
+
+});
+
+      const penestinBounds = [
+    [47.42, -2.57], // sud-ouest
+    [47.55, -2.36]  // nord-est
+];
+
+map.setMaxBounds(penestinBounds);
+map.options.maxBoundsViscosity = 1.0;
+
+map.setMinZoom(13);
 
 const markers = [];
 let pointCourant = null;
