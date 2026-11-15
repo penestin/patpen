@@ -33,12 +33,26 @@ html,body{
 
     
 body{
-    width:min(900px,75vw);
+    width:50%;
+    max-width:1000px;
     margin:0 auto;
     background:#F7FAFE;
 }
 
+@media(max-width:768px){
 
+    body{
+        width:100%;
+    }
+
+}
+
+html,body{
+    margin:0;
+    background:#F7FAFE;
+    font-family:'Segoe UI',sans-serif;
+    color:var(--texte);
+}
 
 
 
