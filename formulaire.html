@@ -146,6 +146,60 @@ button:hover{
 .restart-btn:hover{
     background:#00796b !important;
 }
+/* =========================
+   VERSION MOBILE
+   ========================= */
+
+@media (max-width:768px){
+
+    body{
+        padding:10px;
+    }
+
+    .app{
+        display:block;
+        width:100%;
+    }
+
+    /* On masque le menu de gauche */
+    .sidebar{
+        display:none;
+    }
+
+    .content{
+        padding:15px;
+    }
+
+    h2{
+        font-size:24px;
+    }
+
+    /* Carte plein écran */
+    #map{
+        width:100%;
+        height:450px;
+        min-height:450px;
+        margin-bottom:15px;
+    }
+
+    input,
+    textarea,
+    select{
+        font-size:16px;
+    }
+
+    .nav{
+        gap:10px;
+    }
+
+    .nav button{
+        flex:1;
+    }
+
+}
+
+
+    
 </style>
 </head>
 
@@ -410,10 +464,12 @@ function show(){
 
     renderSteps();
 
+    setTimeout(() => {
+        map.invalidateSize();
+    }, 200);
+
     const nextBtn =
         document.querySelector(".nav button:last-child");
-
-
 
 
 
