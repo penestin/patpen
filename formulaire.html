@@ -210,7 +210,36 @@ button:hover{
 
 }
 
+.resume-card{
+  background:#fff;
+  border-radius:16px;
+  padding:20px;
+  margin:15px 0;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  border-left:5px solid #2e7d32;
+}
 
+.resume-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:15px;
+}
+
+.info-item{
+  background:#f5f7f8;
+  padding:12px;
+  border-radius:10px;
+}
+
+.info-item strong{
+  display:block;
+  color:#2e7d32;
+  margin-bottom:5px;
+}
+
+.info-item span{
+  font-weight:600;
+}
 
     
 </style>
@@ -371,10 +400,42 @@ placeholder="Commentaires"></textarea>
 
 
 
-<h3>Résumé :</h3>
+    
 
-<pre id="json"></pre>
+<h3>Résumé</h3>
 
+<div id="resume-card" class="resume-card">
+  <div class="resume-grid">
+
+    <div class="info-item">
+      <strong>📂 Catégorie</strong>
+      <span id="r-categorie">-</span>
+    </div>
+
+    <div class="info-item">
+      <strong>🏘️ Commune</strong>
+      <span id="r-commune">-</span>
+    </div>
+
+    <div class="info-item">
+      <strong>🚶 Accès</strong>
+      <span id="r-acces">-</span>
+    </div>
+
+    <div class="info-item">
+      <strong>📍 Coordonnées</strong>
+      <span id="r-coords">-</span>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+    
 <button
 type="button"
 id="sendBtn"
@@ -512,15 +573,28 @@ if(cur===6){
 
 
 
-        document
-        .getElementById("json")
-        .textContent =
-        JSON.stringify(
-            data,
-            null,
-            2
-        );
+document.getElementById("r-categorie").textContent =
+objet.categorie || "-";
 
+document.getElementById("r-commune").textContent =
+objet.commune || "-";
+
+document.getElementById("r-acces").textContent =
+objet.acces || "-";
+
+document.getElementById("r-coords").textContent =
+`${objet.latitude || ""}, ${objet.longitude || ""}`;
+
+
+
+
+
+
+
+
+
+
+    
 }else{
 
     nextBtn.textContent =
