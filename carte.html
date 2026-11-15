@@ -638,12 +638,15 @@ const CSV_URL =
    CARTE
 ========================== */
 
-const map = L.map("map", {
-    scrollWheelZoom: false
-}).setView(
+const map = L.map("map").setView(
     [47.482,-2.475],
     14
 );
+
+const markers = [];
+let pointCourant = null;
+
+
 
       
 /* ==========================
