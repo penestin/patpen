@@ -406,7 +406,7 @@ placeholder="Commentaires"></textarea>
 <div id="resume-card" class="resume-card">
   <div class="resume-grid">
 
-    <!-- Localisation -->
+    <!-- 1. Localisation -->
 
     <div class="info-item">
       <strong>📍 Coordonnées</strong>
@@ -423,7 +423,28 @@ placeholder="Commentaires"></textarea>
       <span id="r-adresse">-</span>
     </div>
 
-    <!-- Illustration -->
+    <!-- 2. Illustration -->
+
+<div class="info-item">
+  <strong>📷 Photo</strong>
+  <span id="r-photo">Aucune photo</span>
+</div>
+
+<div class="info-item">
+  <strong>📝 Légende photo</strong>
+  <span id="r-legende">-</span>
+</div>
+
+<div class="info-item">
+  <strong>📸 Crédit photo</strong>
+  <span id="r-credit">-</span>
+</div>
+
+
+
+      
+
+      
 
     <div class="info-item">
       <strong>📷 Photo</strong>
@@ -440,7 +461,7 @@ placeholder="Commentaires"></textarea>
       <span id="r-credit">-</span>
     </div>
 
-    <!-- Désignation -->
+    <!-- 3. Désignation -->
 
     <div class="info-item">
       <strong>📂 Catégorie</strong>
@@ -452,7 +473,7 @@ placeholder="Commentaires"></textarea>
       <span id="r-nom">-</span>
     </div>
 
-    <!-- Propriété -->
+    <!-- 4. Propriété -->
 
     <div class="info-item">
       <strong>🏠 Propriétaire</strong>
@@ -464,7 +485,7 @@ placeholder="Commentaires"></textarea>
       <span id="r-acces">-</span>
     </div>
 
-    <!-- Description -->
+    <!-- 5. Description -->
 
     <div class="info-item">
       <strong>📄 Description</strong>
@@ -476,7 +497,7 @@ placeholder="Commentaires"></textarea>
       <span id="r-materiaux">-</span>
     </div>
 
-    <!-- Historique -->
+    <!-- 6. Historique -->
 
     <div class="info-item">
       <strong>📅 Période</strong>
@@ -488,7 +509,7 @@ placeholder="Commentaires"></textarea>
       <span id="r-historique">-</span>
     </div>
 
-    <!-- Observations -->
+    <!-- 7. Observations -->
 
     <div class="info-item">
       <strong>💬 Commentaires</strong>
@@ -497,6 +518,7 @@ placeholder="Commentaires"></textarea>
 
   </div>
 </div>
+
 
 
     
@@ -704,52 +726,51 @@ document.getElementById("r-commentaires").textContent =
 
 
 
+
+
+
+
+
+
+
     
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-}else{
-
-    nextBtn.textContent =
-        "Suivant";
-
-    nextBtn.style.background =
-        "#009588";
-
-}
-}
-
-
     
-    
+<button
+type="button"
+id="sendBtn"
+class="send-btn">
+
+Envoyer la contribution
+
+</button>
+
+
+
+
+</div>
+
 </form>
 
 <div class="nav">
 
-    <button type="button" onclick="prev()">
-        Précédent
-    </button>
 
-    <button type="button" onclick="next()">
-        Suivant
-    </button>
+
+<button type="button" onclick="prev()">
+Précédent
+</button>
+
+
+<button type="button" onclick="next()">
+Suivant
+</button>
 
 </div>
 
 </div>
+
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -758,6 +779,166 @@ document.getElementById("r-commentaires").textContent =
 
 const WEBAPP_URL =
 "https://script.google.com/macros/s/AKfycbyOI5bSMYMewaUTTt0Dr3_r0JNpn3gleILBfzJdC0uJjtyYEJ5bt8SApDgstdqONpgRDg/exec";
+
+    
+const names=[
+"Localisation",
+"Illustration",
+"Désignation",
+"Propriété",
+"Description",
+"Historique",
+"Observations"
+];
+
+let cur=0;
+
+const pages=
+document.querySelectorAll(".page");
+
+const steps=
+document.getElementById("steps");
+
+function renderSteps(){
+
+    steps.innerHTML="";
+
+    names.forEach((n,i)=>{
+
+        const d=
+        document.createElement("div");
+
+        d.className=
+        i===cur
+        ? "step active-step"
+        : "step";
+
+        d.textContent=
+        (i+1)+". "+n;
+
+        steps.appendChild(d);
+
+    });
+
+}
+
+
+
+
+
+
+function show(){
+
+    pages.forEach((p,i)=>{
+
+        p.classList.toggle(
+            "active",
+            i===cur
+        );
+
+    });
+
+    renderSteps();
+
+    setTimeout(() => {
+        map.invalidateSize();
+    }, 200);
+
+    const nextBtn =
+        document.querySelector(".nav button:last-child");
+
+
+
+
+
+
+
+if(cur===6){
+
+    nextBtn.textContent =
+        "Ajouter une autre contribution";
+
+    nextBtn.style.background =
+        "#205ba4";
+
+const data =
+    Object.fromEntries(
+        new FormData(
+            document.getElementById("f")
+        )
+    );
+
+
+
+  
+document.getElementById("r-coords").textContent =
+    `${data.latitude || ""}, ${data.longitude || ""}`;
+
+document.getElementById("r-commune").textContent =
+    data.commune || "-";
+
+document.getElementById("r-adresse").textContent =
+    data.adresse || "-";
+
+document.getElementById("r-photo").textContent =
+    photoInput.files.length
+    ? photoInput.files[0].name
+    : "Aucune photo";
+
+document.getElementById("r-legende").textContent =
+    data.legende || "-";
+
+document.getElementById("r-credit").textContent =
+    data.credit_photo || "-";
+
+document.getElementById("r-categorie").textContent =
+    data.categorie || "-";
+
+document.getElementById("r-nom").textContent =
+    data.nom || "-";
+
+document.getElementById("r-proprietaire").textContent =
+    data.proprietaire || "-";
+
+document.getElementById("r-acces").textContent =
+    data.acces || "-";
+
+document.getElementById("r-description").textContent =
+    data.description || "-";
+
+document.getElementById("r-materiaux").textContent =
+    data.materiaux || "-";
+
+document.getElementById("r-periode").textContent =
+    data.periode || "-";
+
+document.getElementById("r-historique").textContent =
+    data.historique || "-";
+
+document.getElementById("r-commentaires").textContent =
+    data.commentaires || "-";
+
+
+    
+    
+}else{
+
+    nextBtn.textContent =
+        "Suivant";
+
+    nextBtn.style.background =
+        "#009588";
+
+    
+
+}
+}
+
+
+
+
+
+
 
 function next(){
 
@@ -776,9 +957,14 @@ function next(){
         document.getElementById("lng").value =
             "-2.480000";
 
-        marker.setLatLng([47.483,-2.48]);
+        marker.setLatLng(
+            [47.483,-2.48]
+        );
 
-        map.setView([47.483,-2.48],14);
+        map.setView(
+            [47.483,-2.48],
+            14
+        );
 
         cur = 0;
 
@@ -786,14 +972,15 @@ function next(){
 
     }
 
+
+
 }
 
 function prev(){
 
-    if(cur > 0){
+    if(cur>0){
 
         cur--;
-
         show();
 
     }
@@ -802,35 +989,34 @@ function prev(){
 
 renderSteps();
 
-const map =
-L.map("map").setView(
+const map=
+L.map("map")
+.setView(
     [47.483,-2.48],
     14
 );
 
 L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-        attribution:'© OpenStreetMap'
-    }
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{
+ attribution:'© OpenStreetMap'
+}
 ).addTo(map);
 
-let marker =
-L.marker([47.483,-2.48])
-.addTo(map);
+let marker=
+L.marker(
+[47.483,-2.48]
+).addTo(map);
 
-document.getElementById("lat").value =
-"47.483000";
-
-document.getElementById("lng").value =
-"-2.480000";
+document.getElementById("lat").value="47.483000";
+document.getElementById("lng").value="-2.480000";
 
 map.on("click",e=>{
 
-    document.getElementById("lat").value =
+    document.getElementById("lat").value=
     e.latlng.lat.toFixed(6);
 
-    document.getElementById("lng").value =
+    document.getElementById("lng").value=
     e.latlng.lng.toFixed(6);
 
     marker.setLatLng(e.latlng);
@@ -842,13 +1028,12 @@ function fileToBase64(file){
     return new Promise((resolve,reject)=>{
 
         const reader =
-        new FileReader();
+            new FileReader();
 
-        reader.onload =
-        ()=>resolve(reader.result);
+        reader.onload = ()=>
+            resolve(reader.result);
 
-        reader.onerror =
-        reject;
+        reader.onerror = reject;
 
         reader.readAsDataURL(file);
 
@@ -856,62 +1041,89 @@ function fileToBase64(file){
 
 }
 
-document.getElementById("sendBtn")
+
+
+
+
+document
+.getElementById("sendBtn")
 .addEventListener(
 "click",
 async()=>{
 
-    const form =
-    document.getElementById("f");
 
-    const data =
-    Object.fromEntries(
-        new FormData(form)
-    );
 
-    const fichier =
-    document.querySelector(
-        'input[name="photos"]'
-    ).files[0];
+const form =
+document.getElementById("f");
 
-    if(fichier){
 
-        data.photo =
-        await fileToBase64(fichier);
 
-        delete data.photos;
 
-    }
 
-    try{
 
-        await fetch(
-            WEBAPP_URL,
-            {
-                method:"POST",
-                mode:"no-cors",
-                body:JSON.stringify(data)
-            }
+
+
+
+const data =
+Object.fromEntries(
+    new FormData(form)
+);
+
+const fichier =
+document.querySelector(
+    'input[name="photos"]'
+).files[0];
+
+if(fichier){
+
+    data.photo =
+        await fileToBase64(
+            fichier
         );
 
-        document.getElementById("success")
-        .style.display="block";
+    delete data.photos;
 
-        document.getElementById("error")
-        .style.display="none";
+}
 
-    }
-    catch(error){
+console.log("PHOTO =", data.photo);
+console.log("PHOTOS =", data.photos);
 
-        console.error(error);
+try{
 
-        document.getElementById("success")
-        .style.display="none";
+    await fetch(
+        WEBAPP_URL,
+        {
+            method:"POST",
+            mode:"no-cors",
+            body:JSON.stringify(data)
+        }
+    );
 
-        document.getElementById("error")
-        .style.display="block";
+    document.getElementById("success")
+    .style.display="block";
 
-    }
+    document.getElementById("error")
+    .style.display="none";
+
+}
+catch(error){
+
+    console.error(error);
+
+    document.getElementById("success")
+    .style.display="none";
+
+    document.getElementById("error")
+    .style.display="block";
+
+}
+
+
+
+
+
+
+
 
 });
 
