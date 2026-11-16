@@ -835,16 +835,36 @@ document.getElementById("f");
 
 
 
+const data = {
+    latitude: document.getElementById("lat").value,
+    longitude: document.getElementById("lng").value,
+
+    commune: document.querySelector('[name="commune"]').value,
+    adresse: document.querySelector('[name="adresse"]').value,
+
+    legende: document.querySelector('[name="legende"]').value,
+    credit_photo: document.querySelector('[name="credit_photo"]').value,
+
+    categorie: document.querySelector('[name="categorie"]').value,
+    nom: document.querySelector('[name="nom"]').value,
+
+    proprietaire: document.querySelector('[name="proprietaire"]').value,
+    acces: document.querySelector('[name="acces"]').value,
+
+    description: document.querySelector('[name="description"]').value,
+    materiaux: document.querySelector('[name="materiaux"]').value,
+
+    periode: document.querySelector('[name="periode"]').value,
+    historique: document.querySelector('[name="historique"]').value,
+
+    commentaires: document.querySelector('[name="commentaires"]').value
+};
 
 
 
 
 
 
-const data =
-Object.fromEntries(
-    new FormData(form)
-);
 
 const fichier =
 document.querySelector(
