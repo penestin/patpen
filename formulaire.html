@@ -582,7 +582,14 @@ document.getElementById("r-acces").textContent =
 document.getElementById("r-coords").textContent =
     `${data.latitude || ""}, ${data.longitude || ""}`;
 
+document.getElementById("r-nom").textContent =
+    data.nom || "-";
 
+document.getElementById("r-adresse").textContent =
+    data.adresse || "-";
+
+document.getElementById("r-proprietaire").textContent =
+    data.proprietaire || "-";
 
 
 
