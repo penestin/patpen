@@ -400,16 +400,17 @@ placeholder="Commentaires"></textarea>
 
 
 
-    
 
 <h3>Résumé</h3>
 
 <div id="resume-card" class="resume-card">
   <div class="resume-grid">
 
+    <!-- 1. Localisation -->
+
     <div class="info-item">
-      <strong>📂 Catégorie</strong>
-      <span id="r-categorie">-</span>
+      <strong>📍 Coordonnées</strong>
+      <span id="r-coords">-</span>
     </div>
 
     <div class="info-item">
@@ -418,19 +419,102 @@ placeholder="Commentaires"></textarea>
     </div>
 
     <div class="info-item">
+      <strong>📮 Adresse</strong>
+      <span id="r-adresse">-</span>
+    </div>
+
+    <!-- 2. Illustration -->
+
+    <div class="info-item">
+      <strong>📷 Photo</strong>
+      <span id="r-photo">Aucune photo</span>
+    </div>
+
+    <div class="info-item">
+      <strong>📝 Légende photo</strong>
+      <span id="r-legende">-</span>
+    </div>
+
+    <div class="info-item">
+      <strong>📸 Crédit photo</strong>
+      <span id="r-credit">-</span>
+    </div>
+
+    <!-- 3. Désignation -->
+
+    <div class="info-item">
+      <strong>📂 Catégorie</strong>
+      <span id="r-categorie">-</span>
+    </div>
+
+    <div class="info-item">
+      <strong>🏷️ Nom</strong>
+      <span id="r-nom">-</span>
+    </div>
+
+    <!-- 4. Propriété -->
+
+    <div class="info-item">
+      <strong>🏠 Propriétaire</strong>
+      <span id="r-proprietaire">-</span>
+    </div>
+
+    <div class="info-item">
       <strong>🚶 Accès</strong>
       <span id="r-acces">-</span>
     </div>
 
+    <!-- 5. Description -->
+
     <div class="info-item">
-      <strong>📍 Coordonnées</strong>
-      <span id="r-coords">-</span>
+      <strong>📄 Description</strong>
+      <span id="r-description">-</span>
+    </div>
+
+    <div class="info-item">
+      <strong>🧱 Matériaux</strong>
+      <span id="r-materiaux">-</span>
+    </div>
+
+    <!-- 6. Historique -->
+
+    <div class="info-item">
+      <strong>📅 Période</strong>
+      <span id="r-periode">-</span>
+    </div>
+
+    <div class="info-item">
+      <strong>📜 Historique</strong>
+      <span id="r-historique">-</span>
+    </div>
+
+    <!-- 7. Observations -->
+
+    <div class="info-item">
+      <strong>💬 Commentaires</strong>
+      <span id="r-commentaires">-</span>
     </div>
 
   </div>
 </div>
 
 
+
+    
+
+
+
+
+
+
+
+
+    
+
+    
+
+
+    
 
 
 
@@ -569,30 +653,252 @@ const data =
 
 
   
-
-document.getElementById("r-categorie").textContent =
-    data.categorie || "-";
+document.getElementById("r-coords").textContent =
+    `${data.latitude || ""}, ${data.longitude || ""}`;
 
 document.getElementById("r-commune").textContent =
     data.commune || "-";
 
-document.getElementById("r-acces").textContent =
-    data.acces || "-";
+document.getElementById("r-adresse").textContent =
+    data.adresse || "-";
 
-document.getElementById("r-coords").textContent =
-    `${data.latitude || ""}, ${data.longitude || ""}`;
+const photoInput =
+    document.querySelector('input[name="photos"]');
+
+document.getElementById("r-photo").textContent =
+    photoInput.files.length
+    ? photoInput.files[0].name
+    : "Aucune photo";
+
+document.getElementById("r-legende").textContent =
+    data.legende || "-";
+
+document.getElementById("r-credit").textContent =
+    data.credit_photo || "-";
+
+document.getElementById("r-categorie").textContent =
+    data.categorie || "-";
 
 document.getElementById("r-nom").textContent =
     data.nom || "-";
 
+document.getElementById("r-proprietaire").textContent =
+    data.proprietaire || "-";
+
+document.getElementById("r-acces").textContent =
+    data.acces || "-";
+
+document.getElementById("r-description").textContent =
+    data.description || "-";
+
+document.getElementById("r-materiaux").textContent =
+    data.materiaux || "-";
+
+document.getElementById("r-periode").textContent =
+    data.periode || "-";
+
+document.getElementById("r-historique").textContent =
+    data.historique || "-";
+
+document.getElementById("r-commentaires").textContent =
+    data.commentaires || "-";
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+    
+<button
+type="button"
+id="sendBtn"
+class="send-btn">
+
+Envoyer la contribution
+
+</button>
+
+
+
+
+</div>
+
+</form>
+
+<div class="nav">
+
+
+
+<button type="button" onclick="prev()">
+Précédent
+</button>
+
+
+<button type="button" onclick="next()">
+Suivant
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+const WEBAPP_URL =
+"https://script.google.com/macros/s/AKfycbyOI5bSMYMewaUTTt0Dr3_r0JNpn3gleILBfzJdC0uJjtyYEJ5bt8SApDgstdqONpgRDg/exec";
+
+    
+const names=[
+"Localisation",
+"Illustration",
+"Désignation",
+"Propriété",
+"Description",
+"Historique",
+"Observations"
+];
+
+let cur=0;
+
+const pages=
+document.querySelectorAll(".page");
+
+const steps=
+document.getElementById("steps");
+
+function renderSteps(){
+
+    steps.innerHTML="";
+
+    names.forEach((n,i)=>{
+
+        const d=
+        document.createElement("div");
+
+        d.className=
+        i===cur
+        ? "step active-step"
+        : "step";
+
+        d.textContent=
+        (i+1)+". "+n;
+
+        steps.appendChild(d);
+
+    });
+
+}
+
+
+
+
+
+
+function show(){
+
+    pages.forEach((p,i)=>{
+
+        p.classList.toggle(
+            "active",
+            i===cur
+        );
+
+    });
+
+    renderSteps();
+
+    setTimeout(() => {
+        map.invalidateSize();
+    }, 200);
+
+    const nextBtn =
+        document.querySelector(".nav button:last-child");
+
+
+
+
+
+
+
+if(cur===6){
+
+    nextBtn.textContent =
+        "Ajouter une autre contribution";
+
+    nextBtn.style.background =
+        "#205ba4";
+
+const data =
+    Object.fromEntries(
+        new FormData(
+            document.getElementById("f")
+        )
+    );
+
+
+
+  
+document.getElementById("r-coords").textContent =
+    `${data.latitude || ""}, ${data.longitude || ""}`;
+
+document.getElementById("r-commune").textContent =
+    data.commune || "-";
+
 document.getElementById("r-adresse").textContent =
     data.adresse || "-";
+
+document.getElementById("r-photo").textContent =
+    photoInput.files.length
+    ? photoInput.files[0].name
+    : "Aucune photo";
+
+document.getElementById("r-legende").textContent =
+    data.legende || "-";
+
+document.getElementById("r-credit").textContent =
+    data.credit_photo || "-";
+
+document.getElementById("r-categorie").textContent =
+    data.categorie || "-";
+
+document.getElementById("r-nom").textContent =
+    data.nom || "-";
 
 document.getElementById("r-proprietaire").textContent =
     data.proprietaire || "-";
 
+document.getElementById("r-acces").textContent =
+    data.acces || "-";
+
+document.getElementById("r-description").textContent =
+    data.description || "-";
+
+document.getElementById("r-materiaux").textContent =
+    data.materiaux || "-";
+
+document.getElementById("r-periode").textContent =
+    data.periode || "-";
+
+document.getElementById("r-historique").textContent =
+    data.historique || "-";
+
+document.getElementById("r-commentaires").textContent =
+    data.commentaires || "-";
 
 
+    
     
 }else{
 
