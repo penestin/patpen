@@ -425,41 +425,9 @@ placeholder="Commentaires"></textarea>
 
     <!-- 2. Illustration -->
 
-<div class="info-item">
-  <strong>📷 Photo</strong>
-  <span id="r-photo">Aucune photo</span>
-</div>
-
-<div class="info-item">
-  <strong>📝 Légende photo</strong>
-  <span id="r-legende">-</span>
-</div>
-
-<div class="info-item">
-  <strong>📸 Crédit photo</strong>
-  <span id="r-credit">-</span>
-</div>
 
 
-
-      
-
-      
-
-    <div class="info-item">
-      <strong>📷 Photo</strong>
-      <span id="r-photo">Aucune photo</span>
-    </div>
-
-    <div class="info-item">
-      <strong>📝 Légende photo</strong>
-      <span id="r-legende">-</span>
-    </div>
-
-    <div class="info-item">
-      <strong>📸 Crédit photo</strong>
-      <span id="r-credit">-</span>
-    </div>
+    
 
     <!-- 3. Désignation -->
 
@@ -724,19 +692,19 @@ document.getElementById("r-historique").textContent =
 document.getElementById("r-commentaires").textContent =
     data.commentaires || "-";
 
+}else{
 
+    nextBtn.textContent =
+        "Suivant";
 
+    nextBtn.style.background =
+        "#009588";
 
-
-
-
-
+}
+}
 
 
     
-
-
-
     
 <button
 type="button"
@@ -868,7 +836,7 @@ const data =
         )
     );
 
-
+console.log(data);
 
   
 document.getElementById("r-coords").textContent =
