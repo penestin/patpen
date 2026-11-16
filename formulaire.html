@@ -559,34 +559,26 @@ if(cur===6){
     nextBtn.style.background =
         "#205ba4";
 
-    const data =
+const data =
     Object.fromEntries(
         new FormData(
             document.getElementById("f")
         )
     );
 
-
-
-
-console.log("formData =", formData);
-console.log("objet =", objet);
-
-
+console.log("data =", data);
 
 document.getElementById("r-categorie").textContent =
-objet.categorie || "-";
+    data.categorie || "-";
 
 document.getElementById("r-commune").textContent =
-objet.commune || "-";
+    data.commune || "-";
 
 document.getElementById("r-acces").textContent =
-objet.acces || "-";
+    data.acces || "-";
 
 document.getElementById("r-coords").textContent =
-`${objet.latitude || ""}, ${objet.longitude || ""}`;
-
-
+    `${data.latitude || ""}, ${data.longitude || ""}`;
 
 
 
