@@ -568,6 +568,8 @@ const data =
 
 console.log("data =", data);
 
+    alert(JSON.stringify(data, null, 2));
+
 document.getElementById("r-categorie").textContent =
     data.categorie || "-";
 
