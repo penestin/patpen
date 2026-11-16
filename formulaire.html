@@ -442,25 +442,6 @@ placeholder="Commentaires"></textarea>
 
 
 
-      
-
-      
-
-    <div class="info-item">
-      <strong>📷 Photo</strong>
-      <span id="r-photo">Aucune photo</span>
-    </div>
-
-    <div class="info-item">
-      <strong>📝 Légende photo</strong>
-      <span id="r-legende">-</span>
-    </div>
-
-    <div class="info-item">
-      <strong>📸 Crédit photo</strong>
-      <span id="r-credit">-</span>
-    </div>
-
     <!-- 3. Désignation -->
 
     <div class="info-item">
@@ -651,11 +632,6 @@ function show(){
         document.querySelector(".nav button:last-child");
 
 
-
-
-
-
-
 if(cur===6){
 
     nextBtn.textContent =
@@ -664,65 +640,67 @@ if(cur===6){
     nextBtn.style.background =
         "#205ba4";
 
-const data =
-    Object.fromEntries(
-        new FormData(
-            document.getElementById("f")
-        )
-    );
+    const data =
+        Object.fromEntries(
+            new FormData(
+                document.getElementById("f")
+            )
+        );
 
+    const photoInput =
+        document.querySelector(
+            'input[name="photos"]'
+        );
 
+    document.getElementById("r-coords").textContent =
+        `${data.latitude || ""}, ${data.longitude || ""}`;
 
-  
-document.getElementById("r-coords").textContent =
-    `${data.latitude || ""}, ${data.longitude || ""}`;
+    document.getElementById("r-commune").textContent =
+        data.commune || "-";
 
-document.getElementById("r-commune").textContent =
-    data.commune || "-";
+    document.getElementById("r-adresse").textContent =
+        data.adresse || "-";
 
-document.getElementById("r-adresse").textContent =
-    data.adresse || "-";
+    document.getElementById("r-photo").textContent =
+        photoInput.files.length
+        ? photoInput.files[0].name
+        : "Aucune photo";
 
-const photoInput =
-    document.querySelector('input[name="photos"]');
+    document.getElementById("r-legende").textContent =
+        data.legende || "-";
 
-document.getElementById("r-photo").textContent =
-    photoInput.files.length
-    ? photoInput.files[0].name
-    : "Aucune photo";
+    document.getElementById("r-credit").textContent =
+        data.credit_photo || "-";
 
-document.getElementById("r-legende").textContent =
-    data.legende || "-";
+    document.getElementById("r-categorie").textContent =
+        data.categorie || "-";
 
-document.getElementById("r-credit").textContent =
-    data.credit_photo || "-";
+    document.getElementById("r-nom").textContent =
+        data.nom || "-";
 
-document.getElementById("r-categorie").textContent =
-    data.categorie || "-";
+    document.getElementById("r-proprietaire").textContent =
+        data.proprietaire || "-";
 
-document.getElementById("r-nom").textContent =
-    data.nom || "-";
+    document.getElementById("r-acces").textContent =
+        data.acces || "-";
 
-document.getElementById("r-proprietaire").textContent =
-    data.proprietaire || "-";
+    document.getElementById("r-description").textContent =
+        data.description || "-";
 
-document.getElementById("r-acces").textContent =
-    data.acces || "-";
+    document.getElementById("r-materiaux").textContent =
+        data.materiaux || "-";
 
-document.getElementById("r-description").textContent =
-    data.description || "-";
+    document.getElementById("r-periode").textContent =
+        data.periode || "-";
 
-document.getElementById("r-materiaux").textContent =
-    data.materiaux || "-";
+    document.getElementById("r-historique").textContent =
+        data.historique || "-";
 
-document.getElementById("r-periode").textContent =
-    data.periode || "-";
+    document.getElementById("r-commentaires").textContent =
+        data.commentaires || "-";
 
-document.getElementById("r-historique").textContent =
-    data.historique || "-";
+}
 
-document.getElementById("r-commentaires").textContent =
-    data.commentaires || "-";
 
 
 
