@@ -606,11 +606,6 @@ function renderSteps(){
 
 }
 
-
-
-
-
-
 function show(){
 
     pages.forEach((p,i)=>{
@@ -631,89 +626,149 @@ function show(){
     const nextBtn =
         document.querySelector(".nav button:last-child");
 
+    if(cur===6){
 
-if(cur===6){
+        nextBtn.textContent =
+            "Ajouter une autre contribution";
 
-    nextBtn.textContent =
-        "Ajouter une autre contribution";
+        nextBtn.style.background =
+            "#205ba4";
 
-    nextBtn.style.background =
-        "#205ba4";
+        const data = {
+            latitude: document.getElementById("lat").value,
+            longitude: document.getElementById("lng").value,
 
-    const data =
-        Object.fromEntries(
-            new FormData(
-                document.getElementById("f")
-            )
-        );
+            commune: document.querySelector('[name="commune"]').value,
+            adresse: document.querySelector('[name="adresse"]').value,
 
-    const photoInput =
-        document.querySelector(
-            'input[name="photos"]'
-        );
+            legende: document.querySelector('[name="legende"]').value,
+            credit_photo: document.querySelector('[name="credit_photo"]').value,
 
-    document.getElementById("r-coords").textContent =
-        `${data.latitude || ""}, ${data.longitude || ""}`;
+            categorie: document.querySelector('[name="categorie"]').value,
+            nom: document.querySelector('[name="nom"]').value,
 
-    document.getElementById("r-commune").textContent =
-        data.commune || "-";
+            proprietaire: document.querySelector('[name="proprietaire"]').value,
+            acces: document.querySelector('[name="acces"]').value,
 
-    document.getElementById("r-adresse").textContent =
-        data.adresse || "-";
+            description: document.querySelector('[name="description"]').value,
+            materiaux: document.querySelector('[name="materiaux"]').value,
 
-    document.getElementById("r-photo").textContent =
-        photoInput.files.length
-        ? photoInput.files[0].name
-        : "Aucune photo";
+            periode: document.querySelector('[name="periode"]').value,
+            historique: document.querySelector('[name="historique"]').value,
 
-    document.getElementById("r-legende").textContent =
-        data.legende || "-";
+            commentaires: document.querySelector('[name="commentaires"]').value
+        };
+
+        const photoInput =
+            document.querySelector(
+                'input[name="photos"]'
+            );
+
+        document.getElementById("r-coords").textContent =
+            `${data.latitude}, ${data.longitude}`;
+
+        document.getElementById("r-commune").textContent =
+            data.commune || "-";
+
+        document.getElementById("r-adresse").textContent =
+            data.adresse || "-";
+
+        document.getElementById("r-photo").textContent =
+            photoInput.files.length
+            ? photoInput.files[0].name
+            : "Aucune photo";
+
+        document.getElementById("r-legende").textContent =
+            data.legende || "-";
+
+        document.getElementById("r-credit").textContent =
+            data.credit_photo || "-";
+
+       
+        
 
 
-console.log(data);
 
-    alert(JSON.stringify(data,null,2));
+
+
+
+        console.log("DATA =", data);
+
+console.log(
+    "r-categorie =",
+    document.getElementById("r-categorie")
+);
+
+console.log(
+    "categorie =",
+    data.categorie
+);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        document.getElementById("r-categorie").textContent =
+            data.categorie || "-";
+
+        document.getElementById("r-nom").textContent =
+            data.nom || "-";
+
+        document.getElementById("r-proprietaire").textContent =
+            data.proprietaire || "-";
+
+        document.getElementById("r-acces").textContent =
+            data.acces || "-";
+
+        document.getElementById("r-description").textContent =
+            data.description || "-";
+
+        document.getElementById("r-materiaux").textContent =
+            data.materiaux || "-";
+
+        document.getElementById("r-periode").textContent =
+            data.periode || "-";
+
+        document.getElementById("r-historique").textContent =
+            data.historique || "-";
+
+        document.getElementById("r-commentaires").textContent =
+            data.commentaires || "-";
+
+    } else {
+
+        nextBtn.textContent =
+            "Suivant";
+
+        nextBtn.style.background =
+            "#9b4b82";
+
+    }
+}
+
+
+
+
+
 
 
     
-    document.getElementById("r-credit").textContent =
-        data.credit_photo || "-";
-
-    document.getElementById("r-categorie").textContent =
-        data.categorie || "-";
-
-    document.getElementById("r-nom").textContent =
-        data.nom || "-";
-
-    document.getElementById("r-proprietaire").textContent =
-        data.proprietaire || "-";
-
-    document.getElementById("r-acces").textContent =
-        data.acces || "-";
-
-    document.getElementById("r-description").textContent =
-        data.description || "-";
-
-    document.getElementById("r-materiaux").textContent =
-        data.materiaux || "-";
-
-    document.getElementById("r-periode").textContent =
-        data.periode || "-";
-
-    document.getElementById("r-historique").textContent =
-        data.historique || "-";
-
-    document.getElementById("r-commentaires").textContent =
-        data.commentaires || "-";
-
-}
-
-
-}
 
 
 
 
+
+
+
+
+    
+
+    
 
 
 
