@@ -10,43 +10,66 @@
 
 <style>
 
-:root{
-    --bleu:#205ba4;
-    --violet:#9b4b82;
-}
-
 body{
     margin:0;
     font-family:Arial,sans-serif;
     background:#aad3df;
+    display:flex;
+    justify-content:center;
+    padding:30px;
+    box-sizing:border-box;
 }
 
-.container{
-    max-width:900px;
-    margin:30px auto;
+.app{
+    width:95%;
+    max-width:1000px;
     background:white;
     border-radius:15px;
-    padding:30px;
-    box-shadow:0 10px 30px rgba(0,0,0,.15);
+    overflow:hidden;
+    box-shadow:0 12px 40px rgba(0,0,0,.15);
+    display:flex;
 }
 
-.header{
+.sidebar{
+    width:180px;
+    background:#f7f7f7;
+    border-right:1px solid #ddd;
+    padding:15px;
+}
+
+.sidebar h2{
+    margin-top:0;
     text-align:center;
-    margin-bottom:30px;
+}
+
+.step{
+    padding:6px;
+    font-size:12px;
+}
+
+.active-step{
+    font-weight:bold;
+    color:#9b4b82;
+}
+
+.content{
+    flex:1;
+    padding:30px;
 }
 
 .logo{
     width:120px;
-    height:auto;
+    display:block;
+    margin:auto;
 }
 
 h1{
-    color:var(--bleu);
-    margin:10px 0;
+    text-align:center;
+    color:#205ba4;
 }
 
 h2{
-    color:var(--violet);
+    color:#9b4b82;
     margin-top:30px;
 }
 
@@ -58,11 +81,19 @@ ul{
     line-height:1.8;
 }
 
+.encadre{
+    background:#f5f8fc;
+    border-left:5px solid #205ba4;
+    border-radius:8px;
+    padding:20px;
+    margin-top:25px;
+}
+
 .btn-retour{
     display:inline-block;
-    margin-top:20px;
+    margin-top:30px;
     padding:12px 20px;
-    background:var(--bleu);
+    background:#205ba4;
     color:white;
     text-decoration:none;
     border-radius:8px;
@@ -73,10 +104,44 @@ ul{
     background:#184b88;
 }
 
-footer{
-    margin-top:30px;
+.footer{
+    margin-top:40px;
     text-align:center;
-    color:#666;
+    border-top:1px solid #ddd;
+    padding-top:20px;
+}
+
+.footer h3{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    margin:0;
+}
+
+.footer img{
+    height:40px;
+}
+
+@media (max-width:768px){
+
+    body{
+        padding:5px;
+    }
+
+    .app{
+        display:block;
+        width:100%;
+    }
+
+    .sidebar{
+        display:none;
+    }
+
+    .content{
+        padding:15px;
+    }
+
 }
 
 </style>
@@ -84,107 +149,8 @@ footer{
 
 <body>
 
-<div class="container">
+<div class="app">
 
-    <div class="header">
+    <div class="sidebar">
 
-        <img src="logo-PATPEN7.svg"
-             alt="PATPEN"
-             class="logo">
-
-        <h1>PATPEN</h1>
-
-        <p>
-            Patrimoine et Mémoire de Pénestin
-        </p>
-
-    </div>
-
-    <h2>Présentation</h2>
-
-    <p>
-        PATPEN est un projet participatif destiné à recenser,
-        localiser, documenter et valoriser le patrimoine de la commune
-        de Pénestin.
-    </p>
-
-    <p>
-        Il permet aux habitants, associations et passionnés du patrimoine
-        de contribuer à la connaissance collective des richesses locales.
-    </p>
-
-    <h2>Quels patrimoines peuvent être recensés ?</h2>
-
-    <ul>
-        <li>Puits</li>
-        <li>Fontaines</li>
-        <li>Lavoirs</li>
-        <li>Fours à pain</li>
-        <li>Croix et calvaires</li>
-        <li>Moulins</li>
-        <li>Maisons remarquables</li>
-        <li>Arbres remarquables</li>
-        <li>Autres éléments présentant un intérêt patrimonial</li>
-    </ul>
-
-    <h2>Comment participer ?</h2>
-
-    <p>
-        Chaque contributeur peut proposer une fiche patrimoniale en
-        précisant la localisation, des photographies, une description,
-        l'historique connu et tout élément utile à la compréhension
-        du patrimoine concerné.
-    </p>
-
-    <h2>Objectifs de PATPEN</h2>
-
-    <ul>
-        <li>Préserver la mémoire locale.</li>
-        <li>Favoriser la transmission des connaissances.</li>
-        <li>Valoriser le patrimoine matériel et immatériel.</li>
-        <li>Créer un inventaire collaboratif accessible à tous.</li>
-        <li>Accompagner les initiatives de découverte du territoire.</li>
-    </ul>
-
-    <h2>Données et responsabilité</h2>
-
-    <p>
-        Les contributions sont fournies sous la responsabilité de leurs auteurs.
-        Elles peuvent être vérifiées, complétées ou corrigées avant leur
-        intégration définitive dans l'inventaire patrimonial.
-    </p>
-<p>
-    Chaque contribution permet d'améliorer la connaissance et
-    la valorisation des richesses patrimoniales de la commune.
-    <p>
-    Les informations collectées ont une vocation documentaire,
-    culturelle et patrimoniale.
-</p>
-
-<p>
-    La commune de Pénestin se réserve la possibilité de compléter,
-    corriger ou retirer une contribution lorsque cela s'avère nécessaire
-    pour garantir la qualité et la fiabilité de l'inventaire.
-</p>
-
-<h2>Remerciements</h2>
-
-<p>
-    La commune remercie l'ensemble des habitants, associations,
-    bénévoles et partenaires qui participent à la connaissance,
-    à la sauvegarde et à la valorisation du patrimoine communal.
-</p>
-    <a href="contribuer.html" class="btn-retour">
-        ← Retour à PATPEN
-    </a>
-
-    <footer>
-        <p>
-            © PATPEN 2026 - Patrimoine et Mémoire de Pénestin
-        </p>
-    </footer>
-
-</div>
-
-</body>
-</html>
+        
