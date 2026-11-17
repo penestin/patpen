@@ -143,7 +143,42 @@ ul{
     }
 
 }
+.footer{
+    margin-top:40px;
+    text-align:center;
+    border-top:1px solid #ddd;
+    padding-top:20px;
+}
 
+.footer-logos{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:30px;
+    flex-wrap:wrap;
+}
+
+.copyright{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:2rem;
+    font-weight:bold;
+}
+
+.logo-patpen{
+    height:55px;
+}
+
+.logo-footer{
+    height:55px;
+    width:auto;
+    transition:.2s;
+}
+
+.logo-footer:hover{
+    transform:scale(1.05);
+}
 </style>
 </head>
 
@@ -284,23 +319,51 @@ ul{
             ← Retour à PATPEN
         </a>
 
-        <div class="footer">
 
-            <h3>
-                ©
-                <img src="logo-PATPEN7.svg" alt="PATPEN">
-                2026
-            </h3>
+        
+        
+        
+        
+<div class="footer">
 
-            <p>
-                Projet participatif de valorisation du patrimoine local de Pénestin
-            </p>
+    <div class="footer-logos">
 
+        <a href="https://vivrepenestin.fr/"
+           target="_blank">
+            <img src="VP-500.png"
+                 alt="Vivre Pénestin"
+                 class="logo-footer">
+        </a>
+
+        <div class="copyright">
+            <span>©</span>
+
+            <img src="logo-PATPEN7.svg"
+                 alt="PATPEN"
+                 class="logo-patpen">
+
+            <span>2026</span>
         </div>
+
+        <a href="https://www.penestin.fr/"
+           target="_blank">
+            <img src="header-logo.png"
+                 alt="Ville de Pénestin"
+                 class="logo-footer">
+        </a>
 
     </div>
 
+    <p>
+        Projet participatif de valorisation du patrimoine local de Pénestin
+    </p>
+
 </div>
 
+
+
+
+
+    
 </body>
 </html>
