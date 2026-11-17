@@ -256,27 +256,6 @@ button:hover{
     font-weight:bold;
 }
 
-.actions-fin{
-    display:flex;
-    gap:12px;
-    justify-content:center;
-    flex-wrap:wrap;
-}
-
-.btn-home{
-    background:#205ba4;
-    color:#fff;
-    text-decoration:none;
-    padding:12px 20px;
-    border-radius:8px;
-    font-weight:bold;
-}
-
-.btn-new{
-    background:#009688;
-    color:#fff;
-    font-weight:bold;
-}
 
     
 </style>
@@ -434,169 +413,26 @@ placeholder="Historique"></textarea>
 
 <div class="page">
 
-    <h2>7. Observations</h2>
+<h2>7. Observations</h2>
 
-    <textarea
-        name="commentaires"
-        placeholder="Commentaires"></textarea>
+<textarea
+name="commentaires"
+placeholder="Commentaires"></textarea>
 
-</div>
 
-<!-- PAGE 8 -->
+<h3>Résumé</h3>
 
-<!-- PAGE 8 -->
+<div id="resume-card" class="resume-card">
+  <div class="resume-grid">
 
-<div class="page">
 
-    <h2>8. Vérification et envoi</h2>
 
-    <h3>Résumé de la contribution</h3>
 
-    <div id="resume-card" class="resume-card">
 
-        <div class="resume-grid">
 
-            <div class="info-item">
-                <strong>📍 Coordonnées</strong>
-                <span id="r-coords">-</span>
-            </div>
 
-            <div class="info-item">
-                <strong>🏘️ Commune</strong>
-                <span id="r-commune">-</span>
-            </div>
 
-            <div class="info-item">
-                <strong>📮 Adresse</strong>
-                <span id="r-adresse">-</span>
-            </div>
-
-            <div class="info-item">
-                <strong>📷 Photo</strong>
-                <span id="r-photo">Aucune photo</span>
-            </div>
-
-            <div class="info-item">
-                <strong>📝 Légende photo</strong>
-                <span id="r-legende">-</span>
-            </div>
-
-            <div class="info-item">
-                <strong>📸 Crédit photo</strong>
-                <span id="r-credit">-</span>
-            </div>
-
-            <div class="info-item">
-                <strong>📂 Catégorie</strong>
-                <span id="r-categorie">-</span>
-            </div>
-
-            <div class="info-item">
-                <strong>🏷️ Nom</strong>
-                <span id="r-nom">-</span>
-            </div>
-
-            <div class="info-item">
-                <strong>🏠 Propriétaire</strong>
-                <span id="r-proprietaire">-</span>
-            </div>
-
-            <div class="info-item">
-                <strong>🚶 Accès</strong>
-                <span id="r-acces">-</span>
-            </div>
-
-            <div class="info-item">
-                <strong>📄 Description</strong>
-                <span id="r-description">-</span>
-            </div>
-
-            <div class="info-item">
-                <strong>🧱 Matériaux</strong>
-                <span id="r-materiaux">-</span>
-            </div>
-
-            <div class="info-item">
-                <strong>📅 Période</strong>
-                <span id="r-periode">-</span>
-            </div>
-
-            <div class="info-item">
-                <strong>📜 Historique</strong>
-                <span id="r-historique">-</span>
-            </div>
-
-            <div class="info-item">
-                <strong>💬 Commentaires</strong>
-                <span id="r-commentaires">-</span>
-            </div>
-
-        </div>
-
-    </div>
-
-    <button
-        type="button"
-        id="sendBtn"
-        class="send-btn">
-
-        📤 Envoyer la contribution
-
-    </button>
-
-    <div id="success" class="success">
-        ✅ Contribution enregistrée dans PATPEN.
-    </div>
-
-    <div id="error" class="error">
-        ❌ Erreur pendant l'envoi.
-    </div>
-
-    <div
-        id="actions-fin"
-        class="actions-fin"
-        style="display:none;">
-
-        <a
-            href="index.html"
-            class="btn-home">
-
-            🏠 Retour à l'accueil
-
-        </a>
-
-        <button
-            type="button"
-            id="newContribution"
-            class="btn-new">
-
-            ➕ Nouvelle contribution
-
-        </button>
-
- </form>
-
-<div class="nav">
-
-    <button
-        type="button"
-        onclick="prev()">
-
-        Précédent
-
-    </button>
-
-    <button
-        type="button"
-        onclick="next()"
-        id="nextBtn">
-
-        Suivant
-
-    </button>
-
-</div>
-
+      
 
     <!-- 1. Localisation -->
 
@@ -691,24 +527,18 @@ placeholder="Historique"></textarea>
 
   </div>
 </div>
+</div>
+
+<!-- PAGE 8 -->
+
+<div class="page">
+
+    <h2>8. Vérification et envoi</h2>
+
+    <h3>Résumé</h3>
 
 
 
-    
-
-
-
-
-
-
-
-
-    
-
-    
-
-
-    
 
 
 
@@ -789,8 +619,7 @@ const names=[
 "Propriété",
 "Description",
 "Historique",
-"Observations",
-"Vérification"
+"Observations"
 ];
 
 let cur=0;
@@ -844,7 +673,7 @@ function show(){
     const nextBtn =
         document.querySelector(".nav button:last-child");
 
-    if(cur===7){
+    if(cur===6){
 
         nextBtn.textContent =
             "Ajouter une autre contribution";
@@ -1265,9 +1094,6 @@ try{
     document.getElementById("success")
     .style.display="block";
 
-    document.getElementById("actions-fin")
-.style.display="flex";
-
     document.getElementById("error")
     .style.display="none";
 
@@ -1294,36 +1120,7 @@ catch(error){
 });
 
 show();
-document
-.getElementById("newContribution")
-?.addEventListener("click",()=>{
 
-    document.getElementById("f").reset();
-
-    document.getElementById("lat").value =
-        "47.483000";
-
-    document.getElementById("lng").value =
-        "-2.480000";
-
-    marker.setLatLng([47.483,-2.48]);
-
-    map.setView([47.483,-2.48],14);
-
-    document.getElementById("success")
-        .style.display="none";
-
-    document.getElementById("error")
-        .style.display="none";
-
-    document.getElementById("actions-fin")
-        .style.display="none";
-
-    cur=0;
-
-    show();
-
-});
 </script>
 
 </body>
