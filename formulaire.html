@@ -444,11 +444,13 @@ placeholder="Historique"></textarea>
 
 <!-- PAGE 8 -->
 
+<!-- PAGE 8 -->
+
 <div class="page">
 
     <h2>8. Vérification et envoi</h2>
 
-    <h3>Résumé</h3>
+    <h3>Résumé de la contribution</h3>
 
     <div id="resume-card" class="resume-card">
 
@@ -550,11 +552,14 @@ placeholder="Historique"></textarea>
         ❌ Erreur pendant l'envoi.
     </div>
 
-    <div id="actions-fin"
-         style="display:none;margin-top:15px;">
+    <div
+        id="actions-fin"
+        class="actions-fin"
+        style="display:none;">
 
-        <a href="index.html"
-           class="btn-home">
+        <a
+            href="index.html"
+            class="btn-home">
 
             🏠 Retour à l'accueil
 
@@ -569,15 +574,29 @@ placeholder="Historique"></textarea>
 
         </button>
 
-    </div>
+ </form>
+
+<div class="nav">
+
+    <button
+        type="button"
+        onclick="prev()">
+
+        Précédent
+
+    </button>
+
+    <button
+        type="button"
+        onclick="next()"
+        id="nextBtn">
+
+        Suivant
+
+    </button>
 
 </div>
 
-
-<h3>Résumé</h3>
-
-<div id="resume-card" class="resume-card">
-  <div class="resume-grid">
 
     <!-- 1. Localisation -->
 
