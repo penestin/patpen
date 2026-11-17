@@ -515,29 +515,146 @@ placeholder="Commentaires"></textarea>
 
 <div class="page">
 
-<h2>7. Observations</h2>
+    <h2>7. Observations</h2>
 
-<textarea
-name="commentaires"
-placeholder="Commentaires"></textarea>
+    <textarea
+        name="commentaires"
+        placeholder="Commentaires"></textarea>
 
 </div>
 
-      <!-- PAGE 8 -->
+
+<!-- PAGE 8 -->
 
 <div class="page">
 
-<h2>8. Vérification et envoi</h2>
+    <h2>8. Vérification et envoi</h2>
 
-<h3>Résumé</h3>
+    <h3>Résumé</h3>
 
-<div id="resume-card" class="resume-card">
+    <div id="resume-card" class="resume-card">
 
-...
-tout le résumé
-...
+        <div class="resume-grid">
+
+            <div class="info-item">
+                <strong>📍 Coordonnées</strong>
+                <span id="r-coords">-</span>
+            </div>
+
+            <div class="info-item">
+                <strong>🏘️ Commune</strong>
+                <span id="r-commune">-</span>
+            </div>
+
+            <div class="info-item">
+                <strong>📮 Adresse</strong>
+                <span id="r-adresse">-</span>
+            </div>
+
+            <div class="info-item">
+                <strong>📷 Photo</strong>
+                <span id="r-photo">-</span>
+            </div>
+
+            <div class="info-item">
+                <strong>📝 Légende photo</strong>
+                <span id="r-legende">-</span>
+            </div>
+
+            <div class="info-item">
+                <strong>📸 Crédit photo</strong>
+                <span id="r-credit">-</span>
+            </div>
+
+            <div class="info-item">
+                <strong>📂 Catégorie</strong>
+                <span id="r-categorie">-</span>
+            </div>
+
+            <div class="info-item">
+                <strong>🏷️ Nom</strong>
+                <span id="r-nom">-</span>
+            </div>
+
+            <div class="info-item">
+                <strong>🏠 Propriétaire</strong>
+                <span id="r-proprietaire">-</span>
+            </div>
+
+            <div class="info-item">
+                <strong>🚶 Accès</strong>
+                <span id="r-acces">-</span>
+            </div>
+
+            <div class="info-item">
+                <strong>📄 Description</strong>
+                <span id="r-description">-</span>
+            </div>
+
+            <div class="info-item">
+                <strong>🧱 Matériaux</strong>
+                <span id="r-materiaux">-</span>
+            </div>
+
+            <div class="info-item">
+                <strong>📅 Période</strong>
+                <span id="r-periode">-</span>
+            </div>
+
+            <div class="info-item">
+                <strong>📜 Historique</strong>
+                <span id="r-historique">-</span>
+            </div>
+
+            <div class="info-item">
+                <strong>💬 Commentaires</strong>
+                <span id="r-commentaires">-</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <button
+        type="button"
+        id="sendBtn"
+        class="send-btn">
+
+        📤 Envoyer la contribution
+
+    </button>
+
+    <div id="success" class="success">
+        ✅ Contribution enregistrée dans PATPEN.
+    </div>
+
+    <div id="error" class="error">
+        ❌ Erreur pendant l'envoi.
+    </div>
+
+    <div id="actions-fin"
+         style="display:none;margin-top:15px;">
+
+        <a href="index.html"
+           class="btn-home">
+
+           🏠 Retour à l'accueil
+
+        </a>
+
+        <button
+            type="button"
+            id="newContribution"
+            class="btn-new">
+
+            ➕ Nouvelle contribution
+
+        </button>
+
+    </div>
 
 </div>
+
 
 <button
 type="button"
@@ -623,18 +740,23 @@ Envoyer la contribution
 
 <div class="nav">
 
+    <button
+        type="button"
+        onclick="prev()">
 
+        ⬅ Précédent
 
-<button type="button" onclick="prev()">
-Précédent
-</button>
+    </button>
 
+    <button
+        type="button"
+        onclick="next()"
+        id="nextBtn">
 
-<button type="button" onclick="next()">
-Suivant
-</button>
+        Suivant ➡
 
-</div>
+    </button>
+
 
 </div>
 
