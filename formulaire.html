@@ -306,7 +306,8 @@ value="Pénestin">
 <input
 id="adresse"
 name="adresse"
-placeholder="Adresse">
+placeholder="Adresse"
+onchange="rechercherAdresse()">
 
 
 </div>
@@ -878,27 +879,63 @@ L.tileLayer(
 {
  attribution:'© OpenStreetMap'
 }
-).addTo(map);
-
-let marker=
-L.marker(
-[47.483,-2.48]
-).addTo(map);
+let marker =
+L.marker([47.483,-2.48]).addTo(map);
 
 document.getElementById("lat").value="47.483000";
 document.getElementById("lng").value="-2.480000";
 
+/* clic sur la carte */
+
 map.on("click",e=>{
 
-    document.getElementById("lat").value=
-    e.latlng.lat.toFixed(6);
+    document.getElementById("lat").value =
+        e.latlng.lat.toFixed(6);
 
-    document.getElementById("lng").value=
-    e.latlng.lng.toFixed(6);
+    document.getElementById("lng").value =
+        e.latlng.lng.toFixed(6);
 
     marker.setLatLng(e.latlng);
 
 });
+
+/* adresse -> GPS */
+
+document.getElementById("adresse")
+.addEventListener("change", rechercherAdresse);
+
+function rechercherAdresse(){
+
+    const adresse =
+        document.getElementById("adresse").value;
+
+    if(!adresse) return;
+
+    fetch(
+        "https://nominatim.openstreetmap.org/search?format=jsonv2&q="
+        + encodeURIComponent(adresse + ", Pénestin")
+    )
+    .then(r => r.json())
+    .then(data => {
+
+        if(!data.length) return;
+
+        const lat = parseFloat(data[0].lat);
+        const lng = parseFloat(data[0].lon);
+
+        document.getElementById("lat").value =
+            lat.toFixed(6);
+
+        document.getElementById("lng").value =
+            lng.toFixed(6);
+
+        marker.setLatLng([lat,lng]);
+
+        map.setView([lat,lng],18);
+
+    });
+
+}
 
 function fileToBase64(file){
 
