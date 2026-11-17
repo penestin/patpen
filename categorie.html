@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Catégorie PATPEN</title>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f7fb;
+}
+
+header{
+    background:#344e94;
+    color:white;
+    padding:20px;
+}
+
+header h1{
+    margin:0;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:20px;
+}
+
+.compteur{
+    color:#344e94;
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.liste{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:white;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+
+.card img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+}
+
+.card-body{
+    padding:15px;
+}
+
+.card-body h3{
+    margin-top:0;
+    color:#344e94;
+}
+
+.categorie{
+    display:inline-block;
+    background:#eaf6ef;
+    color:#344e94;
+    border-radius:20px;
+    padding:6px 12px;
+    margin-bottom:10px;
+}
+
+.btn{
+    display:inline-block;
+    background:#344e94;
+    color:white;
+    text-decoration:none;
+    padding:10px 15px;
+    border-radius:8px;
+    margin-top:10px;
+}
+
+.btn:hover{
+    background:#20386f;
+}
+
+.retour{
+    margin-bottom:20px;
+}
+
+.retour a{
+    color:#344e94;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+@media(max-width:768px){
+
+    .liste{
+        grid-template-columns:1fr;
+    }
+
+    .card img{
+        height:200px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+    <h1 id="titreCategorie">PATPEN</h1>
+</header>
+
+<div class="container">
+
+    <div class="retour">
+        <a href="index.html">← Retour à l'accueil</a>
+    </div>
+
+    <div id="compteur" class="compteur">
+        Chargement...
+    </div>
+
+    <div id="liste" class="liste"></div>
+
+</div>
+
+<script>
+
+const CSV_URL =
+"https://docs.google.com/spreadsheets/d/12Zo6EKHmgA-NlKnUbjerfRS78BH34dO-dhYuq5RcNls/gviz/tq?tqx=out:csv&gid=545961012";
+
+const params = new URLSearchParams(window.location.search);
+
+const categorieDemandee =
+    params.get("cat") || "";
+
+document.getElementById("titreCategorie")
+    .textContent = categorieDemandee;
+
+function getDriveImage(url){
+
+    if(!url) return "";
+
+    let fileId = "";
+
+    let match = url.match(/\/d\/([^\/]+)/);
+
+    if(match){
+        fileId = match[1];
+    }
+
+    if(!fileId){
+
+        match = url.match(/[?&]id=([^&]+)/);
+
+        if(match){
+            fileId = match[1];
+        }
+    }
+
+    if(fileId){
+        return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
+    }
+
+    return url;
+}
+
+Papa.parse(CSV_URL,{
+
+    download:true,
+
+    header:true,
+
+    skipEmptyLines:true,
+
+    complete:function(results){
+
+        const fiches = results.data.filter(f =>
+
+            (f.categorie || "").trim()
+            .toLowerCase() ===
+            categorieDemandee.trim().toLowerCase()
+        );
+
+        document.getElementById("compteur")
+            .textContent =
+            fiches.length +
+            " fiche(s) trouvée(s)";
+
+        const liste =
+            document.getElementById("liste");
+
+        liste.innerHTML = "";
+
+        fiches.sort((a,b)=>
+            (a.nom||"")
+            .localeCompare(b.nom||"")
+        );
+
+        fiches.forEach(fiche => {
+
+            const photo =
+                getDriveImage(
+                    fiche.photos || ""
+                );
+
+            liste.innerHTML += `
+
+            <div class="card">
+
+                ${
+                    photo
+                    ? `<img src="${photo}" alt="">`
+                    : ''
+                }
+
+                <div class="card-body">
+
+                    <div class="categorie">
+                        ${fiche.categorie || ''}
+                    </div>
+
+                    <h3>
+                        ${fiche.nom || ''}
+                    </h3>
+
+                    <p>
+                        ${fiche.commune || ''}
+                    </p>
+
+                    <p>
+                        ${fiche.adresse || ''}
+                    </p>
+
+                    <a
+                      class="btn"
+                      href="fiche-test.html?id=${fiche.id}">
+                        Voir la fiche
+                    </a>
+
+                </div>
+
+            </div>
+
+            `;
+
+        });
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
