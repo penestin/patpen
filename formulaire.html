@@ -256,6 +256,16 @@ button:hover{
     font-weight:bold;
 }
 
+.btn-home{
+    display:inline-block;
+    margin-top:15px;
+    background:#205ba4;
+    color:white;
+    text-decoration:none;
+    padding:12px 20px;
+    border-radius:6px;
+    font-weight:bold;
+}
 
     
 </style>
@@ -541,10 +551,6 @@ placeholder="Commentaires"></textarea>
 <div id="resume8"></div>
 
 
-
-
-
-
     
 <button
 type="button"
@@ -572,7 +578,17 @@ Envoyer la contribution
 ❌ Erreur pendant l'envoi.
 </div>
 
-    
+<div id="actions-fin" style="display:none;">
+
+    <a
+        href="index.html"
+        class="btn-home">
+
+        🏠 Retour à l'accueil
+
+    </a>
+
+</div>    
 
 
 
@@ -1108,6 +1124,9 @@ try{
     document.getElementById("success")
     .style.display="block";
 
+    document.getElementById("actions-fin")
+.style.display="block";
+
     document.getElementById("error")
     .style.display="none";
 
@@ -1123,11 +1142,6 @@ catch(error){
     .style.display="block";
 
 }
-
-
-
-
-
 
 
 
