@@ -511,16 +511,53 @@ placeholder="Commentaires"></textarea>
       <span id="r-historique">-</span>
     </div>
 
-    <!-- 7. Observations -->
+<!-- PAGE 7 -->
 
-    <div class="info-item">
-      <strong>💬 Commentaires</strong>
-      <span id="r-commentaires">-</span>
-    </div>
+<div class="page">
 
-  </div>
+<h2>7. Observations</h2>
+
+<textarea
+name="commentaires"
+placeholder="Commentaires"></textarea>
+
 </div>
 
+      <!-- PAGE 8 -->
+
+<div class="page">
+
+<h2>8. Vérification et envoi</h2>
+
+<h3>Résumé</h3>
+
+<div id="resume-card" class="resume-card">
+
+...
+tout le résumé
+...
+
+</div>
+
+<button
+type="button"
+id="sendBtn"
+class="send-btn">
+
+Envoyer la contribution
+
+</button>
+
+<div id="success" class="success">
+✅ Contribution enregistrée dans PATPEN.
+</div>
+
+<div id="error" class="error">
+❌ Erreur pendant l'envoi.
+</div>
+
+</div>
+      
 
 
     
@@ -618,7 +655,8 @@ const names=[
 "Propriété",
 "Description",
 "Historique",
-"Observations"
+"Observations",
+"Vérification"
 ];
 
 let cur=0;
@@ -672,7 +710,7 @@ function show(){
     const nextBtn =
         document.querySelector(".nav button:last-child");
 
-    if(cur===6){
+    if(cur===7){
 
         nextBtn.textContent =
             "Ajouter une autre contribution";
