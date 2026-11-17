@@ -867,7 +867,7 @@ function prev(){
 
 renderSteps();
 
-const map=
+const map =
 L.map("map")
 .setView(
     [47.483,-2.48],
@@ -875,14 +875,20 @@ L.map("map")
 );
 
 L.tileLayer(
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-{
- attribution:'© OpenStreetMap'
-}
-let marker =
-L.marker([47.483,-2.48]).addTo(map);
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        attribution:'© OpenStreetMap'
+    }
+).addTo(map);
 
-document.getElementById("lat").value="47.483000";
+let marker =
+L.marker([47.483,-2.48])
+.addTo(map);
+
+    
+    
+    
+    document.getElementById("lat").value="47.483000";
 document.getElementById("lng").value="-2.480000";
 
 /* clic sur la carte */
