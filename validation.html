@@ -143,9 +143,22 @@ function charger(){
     .then(r => r.json())
     .then(data => {
 
-       const fiches = data;
+const fiches = data.filter(f => {
 
-        );
+    const statut = String(
+        f.statut || ""
+    )
+    .trim()
+    .toLowerCase();
+
+    return (
+        statut === "en attente" ||
+        statut === "a valider" ||
+        statut === "à valider" ||
+        statut === "valider"
+    );
+
+});
 
         document.getElementById("compteur").innerHTML =
             fiches.length + " contribution(s) à valider";
