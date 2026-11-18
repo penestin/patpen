@@ -94,6 +94,7 @@ button{
 
 
 
+    
 <script>
 
 const API_URL =
@@ -180,10 +181,12 @@ function charger(){
     .then(data=>{
 
         const fiches =
-            data.filter(
-                f =>
-                f.statut === "En attente"
-            );
+  data.filter(
+    f =>
+      f.statut === "En attente" ||
+      f.statut === "A valider" ||
+      f.statut === "valider"
+  );
 
         document.getElementById("compteur")
         .innerHTML =
