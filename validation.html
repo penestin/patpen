@@ -289,12 +289,6 @@ const fiches = data.filter(f => {
 
 function changerStatut(id, statut){
 
-    if(!confirm("Confirmer : " + statut + " ?")){
-        return;
-    }
-
-    alert("Envoi de " + id + " vers Apps Script");
-
     fetch(API_URL,{
         method:"POST",
         headers:{
@@ -307,11 +301,7 @@ function changerStatut(id, statut){
         })
     })
     .then(response => response.text())
-    .then(result => {
-
-        console.log(result);
-
-        alert("Réponse serveur : " + result);
+    .then(() => {
 
         charger();
 
@@ -320,15 +310,9 @@ function changerStatut(id, statut){
 
         console.error(error);
 
-        alert(
-            "Erreur d'envoi vers Apps Script : "
-            + error
-        );
-
     });
 
 }
-
     
 
 </script>
