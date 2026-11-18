@@ -91,6 +91,62 @@ button{
     font-weight:bold;
 }
 
+
+
+
+<script>
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbx4n1FdZuN-jMrM3myRBQzR8PNpPQP6CvVGW1boaHH07MkEtvzHYd9PX7c40mepltmc7w/exec";
+    
+
+charger();
+
+function charger() {
+
+    fetch(API_URL)
+    .then(r => r.json())
+    .then(data => {
+        // traitement
+    });
+
+}
+
+function changerStatut(id, statut) {
+
+    fetch(API_URL,{
+        method:"POST",
+        body:JSON.stringify({
+            id:id,
+            statut:statut,
+            valideur:"Noël JOLY"
+        })
+    });
+
+}
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 </style>
 </head>
 
