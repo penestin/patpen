@@ -143,12 +143,7 @@ function charger(){
     .then(r => r.json())
     .then(data => {
 
-        const fiches = data.filter(f =>
-
-            f.statut === "En attente" ||
-            f.statut === "A valider" ||
-            f.statut === "À valider" ||
-            f.statut === "valider"
+       const fiches = data;
 
         );
 
