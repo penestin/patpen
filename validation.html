@@ -1,1 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
 
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Validation PATPEN</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#f5f5f5;
+}
+
+header{
+    background:#0b5394;
+    color:white;
+    padding:15px;
+    text-align:center;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+.card{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+    margin-bottom:25px;
+}
+
+.photo{
+    width:100%;
+    max-height:350px;
+    object-fit:cover;
+}
+
+.content{
+    padding:20px;
+}
+
+h2{
+    margin-top:0;
+}
+
+.meta{
+    color:#666;
+    margin-bottom:10px;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+    flex-wrap:wrap;
+}
+
+button{
+    border:none;
+    padding:12px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.valider{
+    background:#1b8f3d;
+    color:white;
+}
+
+.refuser{
+    background:#c62828;
+    color:white;
+}
+
+.revoir{
+    background:#ff9800;
+    color:white;
+}
+
+.compteur{
+    margin:20px 0;
+    font-size:18px;
+    font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Validation des contributions PATPEN</h1>
+</header>
+
+<div class="container">
+
+    <div class="compteur" id="compteur">
+        Chargement...
+    </div>
+
+    <div id="liste"></div>
+
+</div>
+
+<script>
+
+const API_URL =
+"https://script.google.com/macros/s/VOTRE_SCRIPT/exec";
+
+charger();
+
+function charger(){
+
+    fetch(API_URL)
+    .then(r=>r.json())
+    .then(data=>{
+
+        const fiches =
+            data.filter(
+                f =>
+                f.statut === "En attente"
+            );
+
+        document.getElementById("compteur")
+        .innerHTML =
+            fiches.length +
+            " contribution(s) à valider";
+
+        const liste =
+            document.getElementById("liste");
+
+        liste.innerHTML="";
+
+        fiches.forEach(fiche=>{
+
+            liste.innerHTML += `
+
+            <div class="card">
+
+                ${
+                    fiche.photos
+                    ?
+                    `<img
+                        class="photo"
+                        src="${fiche.photos}">
+                    `
+                    :
+                    ""
+                }
+
+                <div class="content">
+
+                    <h2>${fiche.nom}</h2>
+
+                    <div class="meta">
+                        ${fiche.categorie}
+                        •
+                        ${fiche.commune}
+                    </div>
+
+                    <p>
+                        <strong>Adresse :</strong>
+                        ${fiche.adresse || "-"}
+                    </p>
+
+                    <p>
+                        <strong>Description :</strong><br>
+                        ${fiche.description || "-"}
+                    </p>
+
+                    <p>
+                        <strong>Historique :</strong><br>
+                        ${fiche.historique || "-"}
+                    </p>
+
+                    <div class="actions">
+
+                        <button
+                            class="valider"
+                            onclick="changerStatut('${fiche.id}','Validé')">
+                            ✅ Valider
+                        </button>
+
+                        <button
+                            class="refuser"
+                            onclick="changerStatut('${fiche.id}','Refusé')">
+                            ❌ Refuser
+                        </button>
+
+                        <button
+                            class="revoir"
+                            onclick="changerStatut('${fiche.id}','À revoir')">
+                            🔄 À revoir
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            `;
+
+        });
+
+    });
+
+}
+
+function changerStatut(id,statut){
+
+    if(!confirm(
+      "Confirmer : " + statut + " ?"
+    )){
+      return;
+    }
+
+    fetch(API_URL,{
+        method:"POST",
+        body:JSON.stringify({
+            id:id,
+            statut:statut,
+            valideur:"Noël JOLY"
+        })
+    })
+    .then(()=>{
+        charger();
+    });
+
+}
+
+</script>
+
+</body>
+</html>
