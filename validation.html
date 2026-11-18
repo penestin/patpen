@@ -293,13 +293,12 @@ function changerStatut(id, statut){
         return;
     }
 
-    console.log("ID envoyé :", id);
-    console.log("Statut envoyé :", statut);
+    alert("Envoi de " + id + " vers Apps Script");
 
     fetch(API_URL,{
         method:"POST",
         headers:{
-            "Content-Type":"application/json"
+            "Content-Type":"text/plain;charset=utf-8"
         },
         body:JSON.stringify({
             id:id,
@@ -307,26 +306,28 @@ function changerStatut(id, statut){
             valideur:"Noël JOLY"
         })
     })
-    .then(r => r.text())
+    .then(response => response.text())
     .then(result => {
 
-        console.log("Réponse serveur :", result);
+        console.log(result);
 
-        alert(result);
+        alert("Réponse serveur : " + result);
 
         charger();
 
     })
-    .catch(err => {
+    .catch(error => {
 
-        console.error(err);
+        console.error(error);
 
-        alert("Erreur : " + err);
+        alert(
+            "Erreur d'envoi vers Apps Script : "
+            + error
+        );
 
     });
+
 }
-
-
 
     
 
