@@ -283,6 +283,8 @@ const fiches = data.filter(f => {
             "Erreur de chargement";
 
     });
+
+
 }
 
 function changerStatut(id, statut){
@@ -291,24 +293,42 @@ function changerStatut(id, statut){
         return;
     }
 
+    console.log("ID envoyé :", id);
+    console.log("Statut envoyé :", statut);
+
     fetch(API_URL,{
         method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
         body:JSON.stringify({
             id:id,
             statut:statut,
             valideur:"Noël JOLY"
         })
     })
-    .then(r => r.json())
-    .then(() => {
+    .then(r => r.text())
+    .then(result => {
+
+        console.log("Réponse serveur :", result);
+
+        alert(result);
+
         charger();
+
     })
     .catch(err => {
-        console.error(err);
-        alert("Erreur lors de la mise à jour.");
-    });
 
+        console.error(err);
+
+        alert("Erreur : " + err);
+
+    });
 }
+
+
+
+    
 
 </script>
 
