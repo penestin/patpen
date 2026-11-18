@@ -1066,7 +1066,15 @@ Papa.parse(CSV_URL,{
 
     complete:function(results){
 
-        results.data.forEach(function(fiche){
+      results.data.forEach(function(fiche){
+
+ const statut = String(
+   fiche.statut || ""
+ ).trim().toLowerCase();
+
+ if (statut !== "valider") {
+   return;
+ }
 
               console.log(fiche);
 
