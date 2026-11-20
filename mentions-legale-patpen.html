@@ -1,139 +1,411 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Validation des contributions PATPEN</title>
+<title>PATPEN - Contribuer</title>
 
+    <link rel="icon" type="image/png" href="favicon-PATPEN6.png">
+
+    
 <style>
+
+:root{
+    --bleu:#205ba4;
+    --bleu-fonce:#184b88;
+    --fond:#f5f8fc;
+}
+
+*{
+    box-sizing:border-box;
+}
 
 body{
     margin:0;
-    font-family:Arial, sans-serif;
-    background:#f5f5f5;
+    font-family:Arial,sans-serif;
+    background:var(--fond);
 }
 
-header{
-    background:#0b5394;
+
+  
+.header{
+    background:var(--bleu);
     color:white;
     text-align:center;
-    padding:20px;
-}
+    padding:25px 20px;
 
-header h1{
-    margin:0;
-}
-
-.container{
-    max-width:1200px;
-    margin:auto;
-    padding:20px;
-}
-
-.compteur{
-    font-size:20px;
-    font-weight:bold;
-    margin-bottom:20px;
-}
-
-.card{
-    background:white;
-    border-radius:12px;
-    overflow:hidden;
-    box-shadow:0 2px 8px rgba(0,0,0,0.15);
-    margin-bottom:30px;
-}
-
-.photo{
-    width:100%;
-    max-height:400px;
-    object-fit:cover;
-    display:block;
-}
-
-.content{
-    padding:20px;
-}
-
-.content h2{
-    margin-top:0;
-    color:#0b5394;
-}
-
-.meta{
-    color:#666;
-    margin-bottom:15px;
-}
-
-.info{
-    margin:8px 0;
-}
-
-.actions{
     display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:20px;
+    flex-direction:column;
+    align-items:center;
 }
 
-button{
-    border:none;
-    padding:12px 18px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:bold;
+.logo-header{
+    width:60px;
+    height:60px;
+    object-fit:contain;
+    margin-bottom:8px;
 }
 
-.valider{
-    background:#1b8f3d;
-    color:white;
+    
+
+
+    
+.header h1{
+    margin:0;
+    font-size:2rem;
 }
 
-.refuser{
-    background:#c62828;
-    color:white;
+.header p{
+    margin-top:10px;
+    opacity:.95;
 }
 
-
-.revoir{
-    background:#ff9800;
-    color:white;
+.menu{
+    padding:20px;
+    max-width:700px;
+    margin:auto;
 }
 
-button:hover{
-    opacity:0.9;
-}
+.btn{
+    display:flex;
+    align-items:center;
+    gap:15px;
 
-.vide{
-    text-align:center;
-    padding:40px;
+    width:100%;
+
     background:white;
-    border-radius:12px;
+
+    padding:22px;
+
+    margin-bottom:15px;
+
+    border-radius:18px;
+
+    text-decoration:none;
+
+    color:#333;
+
+    font-size:1.15rem;
+
+    font-weight:bold;
+
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+
+    transition:.2s;
 }
 
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.emoji{
+    font-size:2rem;
+}
+
+.footer{
+    text-align:center;
+    padding:30px 20px;
+    color:#666;
+    font-size:.9rem;
+}
+footer{
+    text-align:center;
+    padding:30px 20px;
+    color:#666;
+    font-size:.9rem;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+
+.mentions-legales {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px;
+    line-height: 1.7;
+    color: #333;
+}
+
+.mentions-legales h1 {
+    color: #205BA4;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.mentions-legales h2 {
+    color: #205BA4;
+    margin-top: 35px;
+    border-bottom: 2px solid #205BA4;
+    padding-bottom: 5px;
+}
+
+.mentions-legales h3 {
+    margin-top: 20px;
+    color: #444;
+}
+
+.mentions-legales ul {
+    margin-left: 25px;
+}
+
+.mentions-legales a {
+    color: #205BA4;
+    text-decoration: none;
+}
+
+.mentions-legales a:hover {
+    text-decoration: underline;
+}
+
+.important {
+    margin-top: 40px;
+    padding: 15px;
+    background: #f3f7fc;
+    border-left: 5px solid #205BA4;
+}
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>Validation des contributions PATPEN</h1>
-</header>
+    
+<div class="header">
 
-<div class="container">
+    <img src="logo-PATPEN7.svg"
+         alt="PATPEN"
+         class="logo-header">
 
-    <div id="compteur" class="compteur">
-        Chargement...
-    </div>
+    <h1>PATPEN</h1>
 
-    <div id="liste"></div>
+    <p>
+        Participer à l'inventaire du patrimoine de Pénestin
+    </p>
 
 </div>
 
-<script>
+<section class="mentions-legales">
 
+    <h1>MENTIONS LÉGALES</h1>
 
+    <p>Ce site Web est le site Internet de PATPEN.</p>
+
+    <h2>1. Présentation</h2>
+
+    <p>
+        Ce site Web est le site Internet de PATPEN.
+        Ce site web permet notamment :
+    </p>
+
+    <ul>
+        <li>La consultation des créations et dessins de PATPEN.</li>
+        <li>La consultation d'informations sur les services proposés par PATPEN, y compris par le biais de documents à télécharger.</li>
+        <li>La possibilité de consulter les informations diffusées par les membres utilisateurs de la plateforme.</li>
+        <li>Les commentaires publiés au pied des articles reflètent uniquement l'avis de leurs auteurs.</li>
+    </ul>
+
+    <h2>2. Mise en garde</h2>
+
+    <h3>2.1 Information</h3>
+    <p>
+        L'information contenue dans ces pages est fournie à titre informatif.
+        PATPEN décline toute responsabilité quant au contenu des présentes pages
+        et à l'utilisation qui pourrait en être faite.
+    </p>
+
+    <h3>2.2 Photographies et documents</h3>
+    <p>
+        Les photographies et documents reproduits sur le site de PATPEN sont
+        non contractuels et ne peuvent engager la responsabilité de PATPEN.
+    </p>
+
+    <h3>2.3 Acceptation des conditions</h3>
+    <p>
+        En accédant au site PATPEN et en l'utilisant, vous reconnaissez être lié
+        par les présentes Conditions d'Utilisation et vous engagez à les respecter.
+    </p>
+
+    <h2>3. Représentant légal</h2>
+
+    <p><strong>Directeur de la publication :</strong> Christian Mahé</p>
+
+    <p>
+        <strong>Éditeur du service :</strong><br>
+        Mairie de Pénestin<br>
+        44 rue du Calvaire<br>
+        56760 Pénestin - France
+    </p>
+
+    <p>
+        <strong>Hébergeur :</strong> OVH
+    </p>
+
+    <p>
+        <strong>Webmaster & Développement :</strong> Noël Joly<br>
+        <a href="https://noel-joly.ovh/" target="_blank">
+            https://noel-joly.ovh/
+        </a>
+    </p>
+
+    <h2>4. Conditions d'accès et d'utilisation</h2>
+
+    <h3>4.1 Accès au site</h3>
+    <p>
+        L'accès au site
+        <a href="https://patpen.vivrepenestin.fr/" target="_blank">
+            https://patpen.vivrepenestin.fr/
+        </a>
+        est ouvert à tous.
+    </p>
+
+    <h3>4.2 Réglementation applicable</h3>
+    <p>
+        La consultation du site est soumise à la réglementation française en vigueur.
+        Les informations publiées ne prétendent pas à l'exhaustivité.
+    </p>
+
+    <h2>5. Moyens techniques</h2>
+
+    <h3>5.1 Configuration utilisateur</h3>
+    <p>
+        Avant toute utilisation du service, il appartient aux utilisateurs
+        de se rapprocher de leur fournisseur d'accès afin de s'assurer que
+        le navigateur utilisé permet l'accès au site dans une configuration sécurisée.
+    </p>
+
+    <h3>5.2 Mise à jour des contenus</h3>
+    <p>
+        Avant toute utilisation, il appartient également à l'utilisateur de vérifier
+        que les pages consultées sont à jour, notamment après avoir vidé le cache
+        de son navigateur ou pris en compte le fonctionnement de son proxy.
+    </p>
+
+    <h3>5.3 Réalisation du site</h3>
+    <p>
+        Le site web est réalisé par PATPEN.
+    </p>
+
+    <h2>6. Mise en garde technique</h2>
+
+    <h3>6.1 Configuration informatique</h3>
+    <p>
+        L'utilisateur reconnaît avoir vérifié que la configuration informatique
+        utilisée ne contient aucun virus et qu'elle est en bon état de fonctionnement.
+    </p>
+
+    <h3>6.2 Respect des présentes mentions</h3>
+    <p>
+        L'utilisateur reconnaît avoir pris connaissance de la présente notice légale
+        et s'engage à la respecter.
+    </p>
+
+    <h3>6.3 Disponibilité du service</h3>
+    <p>
+        L'utilisateur reconnaît avoir été informé que le site est accessible
+        24h/24 et 7j/7, sauf cas de force majeure, difficultés techniques,
+        maintenance ou incidents affectant les réseaux de télécommunication.
+    </p>
+
+    <h2>7. Droits de propriété intellectuelle</h2>
+
+    <h3>7.1 Protection des contenus</h3>
+    <p>
+        La structure générale, les textes, images animées ou non ainsi que tous les
+        éléments composant ce site sont protégés par la législation française et
+        internationale relative au droit d'auteur et à la propriété intellectuelle.
+        Tous les droits de reproduction sont réservés, y compris pour les documents téléchargeables.
+    </p>
+
+    <p>
+        Tout autre matériel contenu sur ce site ne nous appartenant pas
+        (photos, textes, images, codes source, logos, noms de produits ou marques)
+        demeure la propriété de leurs détenteurs respectifs.
+    </p>
+
+    <h3>7.2 Marques et logos</h3>
+    <p>
+        Toute utilisation des marques, logos et noms commerciaux présents sur ce site,
+        notamment PATPEN, est interdite sans autorisation préalable des titulaires des droits.
+    </p>
+
+    <h3>7.3 Reproduction interdite</h3>
+    <p>
+        Toute reproduction totale ou partielle du site ou de l'un de ses éléments
+        sans autorisation expresse et préalable est interdite.
+    </p>
+
+    <h3>7.4 Contrefaçon</h3>
+    <p>
+        Toute représentation ou reproduction du site ou d'un de ses éléments,
+        par quelque procédé que ce soit, constituerait une contrefaçon.
+    </p>
+
+    <h3>7.5 Modification des contenus</h3>
+    <p>
+        Le contenu du site peut être modifié ou mis à jour sans préavis
+        et ne constitue en aucun cas un engagement contractuel.
+    </p>
+
+    <h2>8. Liens hypertextes</h2>
+
+    <h3>8.1 Liens vers des sites tiers</h3>
+    <p>
+        Les liens hypertextes présents sur le site vers d'autres ressources Internet
+        ne sauraient engager la responsabilité de PATPEN quant au contenu de ces sites.
+    </p>
+
+    <h3>8.2 Liens vers PATPEN</h3>
+    <p>
+        PATPEN n'est pas responsable des liens hypertextes pointant vers son site.
+        Toute création de lien vers une page du présent site nécessite un accord préalable.
+        PATPEN se réserve le droit d'exiger la suppression de tout lien non autorisé.
+    </p>
+
+    <h2>9. Loi Informatique et Libertés</h2>
+
+    <h3>9.1 Données personnelles</h3>
+    <p>
+        Conformément à la loi Informatique et Libertés du 6 janvier 1978,
+        vous disposez d'un droit d'accès, de modification, de rectification
+        et de suppression des données vous concernant, en adressant votre demande
+        via le formulaire de contact du site ou par courrier.
+    </p>
+
+    <h3>9.2 Protection des données</h3>
+    <p>
+        PATPEN s'engage à prendre toutes les précautions utiles afin de protéger
+        les données à caractère personnel traitées par ses services et à empêcher
+        leur altération, leur destruction ou leur communication à des tiers non autorisés.
+    </p>
+
+    <div class="important">
+        <strong>
+            Important : Nous nous réservons le droit de modifier les présentes
+            Conditions d'Utilisation du Site et vous invitons à les consulter régulièrement.
+        </strong>
+    </div>
+
+</section>
+
+    
+<footer>
+    <h3 style="display:flex; align-items:center; gap:8px; margin:0;">
+        ©
+        <img src="logo-PATPEN7.svg"
+             alt="PATPEN"
+             style="height:40px;">
+        2026
+    </h3>
+
+    <p style="margin-top:10px;">
+        Projet participatif de valorisation du patrimoine local de Pénestin
+    </p>
+</footer>
 
 </body>
 </html>
+
+
