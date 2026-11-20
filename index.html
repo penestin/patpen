@@ -5,12 +5,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PATPEN | Patrimoine & Mémoire de Pénestin</title>
+<title>PATPEN | Patrimoine et Mémoire de Pénestin</title>
 
 <link rel="icon" type="image/png" href="favicon-PATPEN6.png">
-<div class="bandeau-construction">
-    🚧 • Site en construction • 🚧
-</div>
+
 <style>
 
 *{
@@ -24,20 +22,21 @@ body{
     background:white;
     color:#333;
 }
-<style>
+
 /* =====================================================
    BANDEAU CONSTRUCTION
-   ===================================================== */
+===================================================== */
+
 .bandeau-construction{
     background:#fff273;
-    color:#fff273;
+    color:#333;
     text-align:center;
     font-weight:bold;
-    font-size:50px;
+    font-size:22px;
     padding:12px;
-    margin:0 auto 20px auto;
+    margin:10px auto 20px auto;
     border-radius:8px;
-    max-width:0px;
+    max-width:800px;
     box-shadow:0 3px 8px rgba(0,0,0,.25);
 }
 
@@ -121,12 +120,32 @@ header{
     gap:10px;
 }
 
+/* ======================
+   BADGES
+====================== */
+
 .badge{
+    display:inline-block;
     background:#eaf6ef;
     color:#344e94;
-    padding:8px 12px;
-    border-radius:20px;
-    font-size:.9rem;
+    text-decoration:none;
+    padding:10px 16px;
+    border-radius:25px;
+    font-weight:600;
+    transition:.2s;
+}
+
+.badge:hover{
+    background:#344e94;
+    color:white;
+}
+
+/* ======================
+   CATEGORIES
+====================== */
+
+.section-categories{
+    padding:0 30px 30px;
 }
 
 /* ======================
@@ -156,44 +175,31 @@ header{
     border:none;
 }
 
+/* ======================
+   BOUTON CONTRIBUER
+====================== */
 
-
-
-/* ==========================
-   BOUTON AJOUT FICHE
-========================== */
-
-.leaflet-control-addfiche a{
-
-    width:44px;
-    height:44px;
-
-    display:flex;
+.btn-plus{
+    display:inline-flex;
     align-items:center;
     justify-content:center;
 
-    background:#344e94;
-    color:#fff;
+    width:29px;
+    height:29px;
 
+    margin-left:10px;
+
+    background:#2f6db5;
+    color:white;
     text-decoration:none;
 
-    border-radius:8px;
-
-    font-size:24px;
+    font-size:16px;
     font-weight:bold;
 
-    box-shadow:0 2px 8px rgba(0,0,0,.25);
+    border-radius:5px;
+    box-shadow:0 2px 4px rgba(0,0,0,.25);
 }
 
-.leaflet-control-addfiche a:hover{
-
-    background:#184b88;
-}
-
-.leaflet-control-addfiche{
-
-    margin-top:10px;
-}
 /* ======================
    FOOTER
 ====================== */
@@ -203,6 +209,11 @@ footer{
     color:white;
     text-align:center;
     padding:20px;
+}
+
+footer a{
+    color:white;
+    text-decoration:underline;
 }
 
 /* ======================
@@ -222,82 +233,34 @@ footer{
     }
 
     .section-map{
-        padding:10px 20px 20px 20px; /* marges latérales */
+        padding:10px 20px 20px 20px;
     }
 
     .map-container{
-        width:95%;       /* carte un peu moins large */
-        margin:auto;     /* centrage */
+        width:95%;
+        margin:auto;
         height:65vh;
         border-radius:16px;
     }
 
-
     .titre h1{
         font-size:1.6rem;
     }
-}
-.section-categories{
 
-    padding:0 30px 30px;
-
-}
-
-.badge{
-
-    display:inline-block;
-
-    background:#eaf6ef;
-
-    color:#344e94;
-
-    text-decoration:none;
-
-    padding:10px 16px;
-
-    border-radius:25px;
-
-    font-weight:600;
-
-    transition:.2s;
+    .bandeau-construction{
+        font-size:18px;
+    }
 }
 
-.badge:hover{
-
-    background:#344e94;
-
-    color:white;
-
-}
-.btn-plus{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:29px;       /* carré plus petit */
-    height:29px;
-    margin-left:10px;
-
-    background:#2f6db5;
-    color:white;
-    text-decoration:none;
-
-    font-size:16px;   /* croix plus petite */
-    font-weight:bold;
-
-    border-radius:5px;
-    box-shadow:0 2px 4px rgba(0,0,0,.25);
-
-    line-height:40px;
-    vertical-align:middle;
-    padding:0;
-}
-
-    
 </style>
 
 </head>
 
 <body>
+
+<div class="bandeau-construction">
+    🚧 • Site en construction • 🚧
+</div>
 
 <header>
 
@@ -322,7 +285,7 @@ footer{
         PATPEN permet de localiser, documenter et partager
         les éléments du patrimoine local :
         puits, fontaines, lavoirs, fours à pain,
-        croix, mégalithe, moulins, maisons remarquables et
+        croix, mégalithes, moulins, maisons remarquables et
         autres témoins de la mémoire de la commune.
     </p>
 
@@ -347,36 +310,9 @@ footer{
 
         <p>
             Vous connaissez un élément patrimonial non recensé ?
-    Ajoutez une contribution après identification.
-    <a href="contribuer.html" class="btn-plus">✚</a>
-
+            Ajoutez une contribution après identification.
+            <a href="contribuer.html" class="btn-plus">✚</a>
         </p>
-
-    </div>
-
-   
-
-
-
-
-
-
-    
-
-    </div>
-
-</section>
-
-<section id="carte" class="section-map">
-
-    <h2>Carte du patrimoine</h2>
-
-    <div class="map-container">
-
-        <iframe
-            src="carte.html"
-            title="Carte PATPEN">
-        </iframe>
 
     </div>
 
@@ -390,27 +326,21 @@ footer{
 
         <div class="categorie">
 
-            <a class="badge" href="categorie.html?cat=Puits">
-                Puits
-            </a>
+            <a class="badge" href="categorie.html?cat=Puits">Puits</a>
 
-            <a class="badge" href="categorie.html?cat=Fontaine">
-                Fontaine
-            </a>
+            <a class="badge" href="categorie.html?cat=Fontaine">Fontaine</a>
 
-            <a class="badge" href="categorie.html?cat=Lavoir">
-                Lavoir
-            </a>
+            <a class="badge" href="categorie.html?cat=Lavoir">Lavoir</a>
 
             <a class="badge" href="categorie.html?cat=Four%20%C3%A0%20pain">
                 Four à pain
             </a>
 
             <a class="badge" href="categorie.html?cat=Croix">
-                Calvaire/Croix
+                Calvaire / Croix
             </a>
 
-            <a class="badge" href="categorie.html?cat=Calvaire">
+            <a class="badge" href="categorie.html?cat=Megalithe">
                 Mégalithe
             </a>
 
@@ -436,15 +366,29 @@ footer{
 
 </section>
 
+<section id="carte" class="section-map">
 
-    
+    <h2>Carte du patrimoine</h2>
 
-    
+    <div class="map-container">
+
+        <iframe
+            src="carte.html"
+            title="Carte PATPEN">
+        </iframe>
+
+    </div>
+
+</section>
+
 <footer>
+
     <h3>
         ©
-        <img src="logo-PATPEN7.svg" alt="PATPEN"
-             style="height:40px; vertical-align:middle;">
+        <img
+            src="logo-PATPEN7.svg"
+            alt="PATPEN"
+            style="height:40px;vertical-align:middle;">
         2026
     </h3>
 
@@ -455,19 +399,16 @@ footer{
     <p style="margin-top:10px;">
         <a href="https://patpen.vivrepenestin.fr/mentions-legale-patpen.html"
            target="_blank"
-           rel="noopener noreferrer"
-           style="color:white; text-decoration:underline;">
+           rel="noopener noreferrer">
             Mentions légales
         </a>
     </p>
-    
-    
-<p style="margin-top:10px;">
+
+    <p style="margin-top:10px;">
         <a href="https://patpen.vivrepenestin.fr/apropos.html"
            target="_blank"
-           rel="noopener noreferrer"
-           style="color:white; text-decoration:underline;">
-            A propos de PatPen
+           rel="noopener noreferrer">
+            À propos de PATPEN
         </a>
     </p>
 
@@ -475,4 +416,3 @@ footer{
 
 </body>
 </html>
-
